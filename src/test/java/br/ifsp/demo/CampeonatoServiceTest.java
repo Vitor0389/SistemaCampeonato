@@ -15,6 +15,8 @@ import static org.assertj.core.api.Assertions.*;
 
 public class CampeonatoServiceTest {
 
+    private CampeonatoService service = new CampeonatoService();
+
     @Test
     @DisplayName("Testando se há sucesso na criação do campeonato com 32 times.")
     void testingSuccessWith32Teams(){
@@ -23,7 +25,6 @@ public class CampeonatoServiceTest {
                                     new Team(UUID.randomUUID(), "Santos"),
                                     new Team(UUID.randomUUID(), "Flamengo"));
 
-        CampeonatoService service = new CampeonatoService();
         Campeonato campeonato = service.createCampeonato(teams);
 
         assertThat(campeonato.getId()).isNotNull();
