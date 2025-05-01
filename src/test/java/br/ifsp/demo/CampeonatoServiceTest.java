@@ -79,4 +79,27 @@ public class CampeonatoServiceTest {
         }
         ).isInstanceOf(IllegalStateException.class);
     }
+
+    @Test
+    @DisplayName("Testando se o campeonato exibe erro ao tentar criar times em potência diferente de 2")
+    void testingInvalidNumberOfTeams(){
+
+        List<Team> teams = List.of(
+                new Team(UUID.randomUUID(), "São Paulo"),
+                new Team(UUID.randomUUID(), "Corinthians"),
+                new Team(UUID.randomUUID(), "Santos"),
+                new Team(UUID.randomUUID(), "Palmeiras"),
+                new Team(UUID.randomUUID(), "Cruzeiro"),
+                new Team(UUID.randomUUID(), "Atletico Mineiro")
+        );
+
+        assertThatThrownBy(() -> {
+                    service.createCampeonato("Teste", teams);
+                }
+        ).isInstanceOf(IllegalArgumentException.class);
+
+
+
+
+    }
 }
