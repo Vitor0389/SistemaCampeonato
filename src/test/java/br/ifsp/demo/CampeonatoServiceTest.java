@@ -28,8 +28,8 @@ public class CampeonatoServiceTest {
         Campeonato campeonato = service.createCampeonato(teams);
 
         assertThat(campeonato.getId()).isNotNull();
-        assertThat(campeonato.getTeams).hasSize(4);
-        assertThat(campeonato.getFases().get(0).getPartidas()).hasSize(2);
+        assertThat(campeonato.getTimes()).hasSize(4);
+        assertThat(campeonato.getFasesList().next().getPartidas()).hasSize(2);
 
     }
 }

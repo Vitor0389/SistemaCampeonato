@@ -2,6 +2,8 @@ package br.ifsp.demo.model;
 
 import org.apache.tomcat.util.http.fileupload.util.LimitedInputStream;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,7 +11,7 @@ public class Campeonato {
     private UUID id;
     private String name;
     private List<Team> times;
-    private List<Fase> fasesList;
+    private List<Fase> fases;
 
 
     public void createCampeonato(String name, List<Team> times){
@@ -50,11 +52,11 @@ public class Campeonato {
         return name;
     }
 
-    public List<Team> getTimes() {
-        return times;
+    public Iterator<Team> getTimes() {
+        return times.iterator();
     }
 
-    public List<Fase> getFasesList() {
-        return fasesList;
+    public Iterator<Fase> getFasesList() {
+        return fases.iterator();
     }
 }
