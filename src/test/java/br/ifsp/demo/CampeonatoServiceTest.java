@@ -97,9 +97,18 @@ public class CampeonatoServiceTest {
                     service.createCampeonato("Teste", teams);
                 }
         ).isInstanceOf(IllegalArgumentException.class);
+    }
 
+    @Test
+    @DisplayName("Testando se o campeonato exibe erro ao tentar passar uma lista vazia de times")
+    void testingInvalidList(){
 
+        List<Team> teams = List.of();
 
+        assertThatThrownBy(() -> {
+                    service.createCampeonato("Teste", teams);
+                }
+        ).isInstanceOf(IllegalArgumentException.class);
 
     }
 }
