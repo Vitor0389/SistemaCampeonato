@@ -32,4 +32,12 @@ public class CampeonatoServiceTest {
         assertThat(campeonato.getFasesList().next().getPartidas()).hasSize(2);
 
     }
+
+    @Test
+    @DisplayName("Testando se há sucesso na criação de campeonato com 2 times.")
+    void testingSucessWith2Teams(){
+
+        assertThat(campeonatoService.createCampeonato()).isEqualTo(true);
+
+    }
 }
