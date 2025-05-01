@@ -63,4 +63,20 @@ public class CampeonatoServiceTest {
         assertThat(campeonato.getFasesList().getFirst().getPartidas()).hasSize(1);
 
     }
+
+    @Test
+    @DisplayName("Testando se o campeonato exibe erro em time lançado com erro")
+    void testingInvalidTeams(){
+
+        UUID uuid = UUID.randomUUID();
+        List<Team> teams = List.of(
+                new Team(uuid , "São Paulo"),
+                new Team(uuid, "Corinthians")
+        );
+
+        assertThatThrownBy(() -> {
+            service.createCampeonato("Teste", teams);
+        }
+        ).isInstanceOf(IllegalStateException.class);
+    }
 }
