@@ -50,8 +50,8 @@ public class Campeonato {
         return name;
     }
 
-    public Iterator<Team> getTimes() {
-        return times.iterator();
+    public List<Team> getTimes() {
+        return times;
     }
 
     public Iterator<Fase> getFasesList() {
