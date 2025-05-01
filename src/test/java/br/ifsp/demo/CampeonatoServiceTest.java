@@ -17,14 +17,4 @@ public class CampeonatoServiceTest {
 
         assertThat(campeonatoService.createCampeonato()).isEqualTo(true);
     }
-
-    @Test
-    @DisplayName("Testando se há sucesso na criação de campeonato com 2 times.")
-    void testingSucessWith2Teams(){
-
-        assertThat(campeonatoService.createCampeonato()).isEqualTo(true);
-
-    }
-
-
 }
