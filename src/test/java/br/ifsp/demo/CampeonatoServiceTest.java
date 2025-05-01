@@ -5,27 +5,41 @@ import br.ifsp.demo.model.Team;
 import br.ifsp.demo.services.CampeonatoService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
+
+
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
 
 
 public class CampeonatoServiceTest {
 
-    private CampeonatoService service = new CampeonatoService();
 
-    @Test
+    private static Stream<Arguments> provide32Teams() {
+        List<Team> teams = IntStream.range(1, 33)
+                .mapToObj(i -> new Team(UUID.randomUUID(), "Time " + i))
+                .collect(Collectors.toList());
+
+        return Stream.of(Arguments.of(teams));
+    }
+
+    private final CampeonatoService service = new CampeonatoService();
+
+    @ParameterizedTest
     @DisplayName("Testando se há sucesso na criação do campeonato com 32 times.")
-    void testingSuccessWith32Teams(){
-        List<Team> teams = List.of(new Team(UUID.randomUUID(), "Corinthians"),
-                                    new Team(UUID.randomUUID(), "São Paulo"),
-                                    new Team(UUID.randomUUID(), "Santos"),
-                                    new Team(UUID.randomUUID(), "Flamengo"));
+    @MethodSource("provide32Teams")
+    void testingSuccessWith32Teams(List<Team> teams){
 
-        Campeonato campeonato = service.createCampeonato(teams);
+
+        Campeonato campeonato = service.createCampeonato("Teste", teams);
 
         assertThat(campeonato.getId()).isNotNull();
         assertThat(campeonato.getTimes()).hasSize(4);
