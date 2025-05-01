@@ -42,6 +42,10 @@ public class Campeonato {
             throw new IllegalStateException("Dois times não podem ter o mesmo ID!");
         }
 
+        if(times.isEmpty()){
+            throw new IllegalArgumentException("O número de times deve ser no mínimo 2!");
+        }
+
     }
 
     private void crateInitialFase(List<Team> times) {
