@@ -14,7 +14,7 @@ public class Fase {
         this.partidas = partidas;
     }
 
-    public Iterator<Partida> getPartidas(){
-        return this.partidas.iterator();
+    public List<Partida> getPartidas(){
+        return this.partidas;
     }
 }
