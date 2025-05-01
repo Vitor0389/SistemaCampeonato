@@ -51,7 +51,16 @@ public class CampeonatoServiceTest {
     @DisplayName("Testando se há sucesso na criação de campeonato com 2 times.")
     void testingSucessWith2Teams(){
 
-        assertThat(campeonatoService.createCampeonato()).isEqualTo(true);
+        List<Team> teams = List.of(
+                new Team(UUID.randomUUID(), "São Paulo"),
+                new Team(UUID.randomUUID(), "Corinthians")
+        );
+
+        Campeonato campeonato = service.createCampeonato("Teste", teams);
+        assertThat(campeonato.getId()).isNotNull();
+        assertThat(campeonato.getTimes()).hasSize(2);
+        assertThat(campeonato.getFasesList().getFirst()).isNotNull();
+        assertThat(campeonato.getFasesList().getFirst().getPartidas()).hasSize(1);
 
     }
 }
