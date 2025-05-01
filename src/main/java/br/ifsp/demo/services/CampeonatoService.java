@@ -7,8 +7,6 @@ import java.util.List;
 
 public class CampeonatoService {
     public Campeonato createCampeonato(String name, List<Team> teams) {
-        Campeonato campeonato = new Campeonato();
-        campeonato.createCampeonato(name, teams);
-        return campeonato;
+        return Campeonato.createCampeonato(name, teams);
     }
 }
