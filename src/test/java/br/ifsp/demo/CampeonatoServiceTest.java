@@ -111,4 +111,14 @@ public class CampeonatoServiceTest {
         ).isInstanceOf(IllegalArgumentException.class);
 
     }
+
+    @ParameterizedTest
+    @DisplayName("Testando se um campeonato com os mesmos times de outro é criado com ID diferente")
+    @MethodSource("provide32Teams")
+    void testingSimmilarChampionship(List<Team> times){
+
+
+        assertThat(service.createCampeonato("Teste 1", times).getId()).isNotSameAs(
+                service.createCampeonato("Teste 2", times).getId());
+    }
 }
