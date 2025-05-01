@@ -2,10 +2,7 @@ package br.ifsp.demo.model;
 
 import org.apache.tomcat.util.http.fileupload.util.LimitedInputStream;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Campeonato {
     private UUID id;
@@ -22,11 +19,29 @@ public class Campeonato {
 
 
     private void validateTeams(List<Team> times) {
+        Set<UUID> idsVistos = new HashSet<>();
+        boolean possuiDuplicado = false;
+
         if(times.size() < 2 || times.size() > 32)
             throw new IllegalArgumentException("A quantidade de times inválida!");
 
         if((times.size() & (times.size() - 1))!= 0)
             throw new IllegalArgumentException("O número de times deve ser potência de 2!");
+
+
+
+        for(Team team : times){
+
+            if(!idsVistos.add(team.getId())){
+                possuiDuplicado = true;
+            }
+
+        }
+
+        if(possuiDuplicado){
+            throw new IllegalStateException("Dois times não podem ter o mesmo ID!");
+        }
+
     }
 
     private void crateInitialFase(List<Team> times) {
