@@ -44,6 +44,7 @@ public class CampeonatoServiceTest {
         assertThat(campeonato.getId()).isNotNull();
         assertThat(campeonato.getTimes()).hasSize(32);
         assertThat(campeonato.getFasesList().getFirst()).isNotNull();
+        assertThat(campeonato.getFasesList().getFirst().getPartidas()).hasSize(8);
     }
 
     @Test
