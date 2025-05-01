@@ -1,7 +1,9 @@
 package br.ifsp.demo.services;
 
-public class CampeonatoService {
-    public boolean createCampeonato() {
+import br.ifsp.demo.model.Campeonato;
 
+public class CampeonatoService {
+    public boolean createCampeonato(List<Times> times) {
+        Campeonato campeonato = new Campeonato(times);
     }
 }
