@@ -14,11 +14,10 @@ public class Campeonato {
     private List<Fase> fases;
 
     private Campeonato(String name, List<Team> teams) {
-        validateTeams(teams);
         this.id = UUID.randomUUID();
         this.name = name;
         this.times = teams;
-        crateInitialFase(times);
+
     }
 
 
@@ -54,12 +53,15 @@ public class Campeonato {
         return times;
     }
 
-    public Iterator<Fase> getFasesList() {
-        return fases.iterator();
+    public List<Fase> getFasesList() {
+        return fases;
     }
 
-    public static Campeonato createCampeonato(String name, List<Team> teams){
+    public Campeonato createCampeonato(String name, List<Team> times){
 
-        return new Campeonato(name, teams);
+        validateTeams(times);
+        crateInitialFase(times);
+
+        return new Campeonato(name, times);
     }
 }
