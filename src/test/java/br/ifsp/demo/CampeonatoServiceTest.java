@@ -146,6 +146,6 @@ public class CampeonatoServiceTest {
 
         assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst()).isNotNull();
         assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst().getWinner()).isNotNull();
-        assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst().getIsFinished()).isEqualTo(true);
+        assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst().IsFinished()).isEqualTo(true);
     }
 }
