@@ -29,8 +29,6 @@ public class Campeonato {
         if((times.size() & (times.size() - 1))!= 0)
             throw new IllegalArgumentException("O número de times deve ser potência de 2!");
 
-
-
         for(Team team : times){
 
             if(!idsVistos.add(team.getId())){
@@ -59,6 +57,17 @@ public class Campeonato {
 
         Fase faseInicial = new Fase("Fase Inicial", partidas);
         this.fases.add(faseInicial);
+    }
+
+    public void registerResult(UUID id, Team team){
+        fases.stream()
+                .flatMap(fase -> fase.getPartidas().stream())
+                .filter(partida -> partida.getId().equals(id))
+                .findFirst()
+                .ifPresentOrElse(
+                        partida -> partida.setWinner(team),
+                        () -> { throw new IllegalArgumentException("Partida com ID " + id + " não encontrada."); }
+                );
     }
 
     public UUID getId() {

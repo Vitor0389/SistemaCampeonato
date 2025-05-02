@@ -153,43 +153,33 @@ public class CampeonatoServiceTest {
         assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst().IsFinished()).isEqualTo(true);
     }
 
-
-    /*
-    Dado que duas partidas de uma chave foram vencidas por Time A e Time C
-
-    Quando ambas são finalizadas
-
-    Então o sistema cria automaticamente a próxima partida entre Time A e Time C
-     */
-
     @Tag("TDD")
     @Tag("Unit Test")
+    @Test
     @DisplayName("Testando se o sistema cria nova fase a partir dos resultados")
-    public void testingCreateOfNewPhase(List<Team> times){
+    public void testingCreateOfNewPhase(){
         List<Team> teams = List.of(
                 new Team(UUID.randomUUID(), "São Paulo"),
                 new Team(UUID.randomUUID(), "Corinthians"),
                 new Team(UUID.randomUUID(), "Santos"),
                 new Team(UUID.randomUUID(), "Flamengo")
         );
+
         Campeonato campeonato = Campeonato.createCampeonato("Teste", teams);
         Fase fase1 = campeonato.getFasesList().get(0);
         Partida partida1 = fase1.getPartidas().get(0);
         Partida partida2 = fase1.getPartidas().get(1);
         campeonato.registerResult(partida1.getId(), partida1.getTeamA());
-        campeonato.registerResult(partida2.getId(), partida2.getTeamB());
+        campeonato.registerResult(partida2.getId(), partida2.getTimeB());
 
         assertThat(campeonato.getFasesList()).hasSize(2);
         Fase fase2 = campeonato.getFasesList().get(1);
         assertThat(fase2.getPartidas()).hasSize(1);
 
         Partida novaPartida = fase2.getPartidas().get(0);
-        assertThat(novaPartida.getTeamA()).isEqualTo(timeA);
-        assertThat(novaPartida.getTimeB()).isEqualTo(timeB);
+        assertThat(novaPartida.getTeamA()).isEqualTo(partida1.getTeamA());
+        assertThat(novaPartida.getTimeB()).isEqualTo(partida2.getTimeB());
         assertThat(novaPartida.IsFinished()).isFalse();
-
-
-
 
     }
 }
