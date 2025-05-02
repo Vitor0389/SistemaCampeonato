@@ -4,6 +4,7 @@ import br.ifsp.demo.model.Campeonato;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.services.CampeonatoService;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -33,6 +34,8 @@ public class CampeonatoServiceTest {
 
     private final CampeonatoService service = new CampeonatoService();
 
+    @Tag("TDD")
+    @Tag("Unit Test")
     @ParameterizedTest
     @DisplayName("Testando se há sucesso na criação do campeonato com 32 times.")
     @MethodSource("provide32Teams")
@@ -47,6 +50,8 @@ public class CampeonatoServiceTest {
         assertThat(campeonato.getFasesList().getFirst().getPartidas()).hasSize(8);
     }
 
+    @Tag("TDD")
+    @Tag("Unit Test")
     @Test
     @DisplayName("Testando se há sucesso na criação de campeonato com 2 times.")
     void testingSucessWith2Teams(){
@@ -64,6 +69,8 @@ public class CampeonatoServiceTest {
 
     }
 
+    @Tag("TDD")
+    @Tag("Unit Test")
     @Test
     @DisplayName("Testando se o campeonato exibe erro em time lançado com erro")
     void testingInvalidTeams(){
@@ -80,6 +87,8 @@ public class CampeonatoServiceTest {
         ).isInstanceOf(IllegalStateException.class);
     }
 
+    @Tag("TDD")
+    @Tag("Unit Test")
     @Test
     @DisplayName("Testando se o campeonato exibe erro ao tentar criar times em potência diferente de 2")
     void testingInvalidNumberOfTeams(){
@@ -99,6 +108,8 @@ public class CampeonatoServiceTest {
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Tag("TDD")
+    @Tag("Unit Test")
     @Test
     @DisplayName("Testando se o campeonato exibe erro ao tentar passar uma lista vazia de times")
     void testingInvalidList(){
@@ -112,6 +123,8 @@ public class CampeonatoServiceTest {
 
     }
 
+    @Tag("TDD")
+    @Tag("Unit Test")
     @ParameterizedTest
     @DisplayName("Testando se um campeonato com os mesmos times de outro é criado com ID diferente")
     @MethodSource("provide32Teams")
