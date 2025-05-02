@@ -14,11 +14,11 @@ public class Campeonato {
         this.id = UUID.randomUUID();
         this.name = name;
         this.times = teams;
-
+        crateInitialFase(times);
     }
 
 
-    private void validateTeams(List<Team> times) {
+    private static void validateTeams(List<Team> times) {
         Set<UUID> idsVistos = new HashSet<>();
         boolean possuiDuplicado = false;
 
@@ -76,10 +76,9 @@ public class Campeonato {
         return fases;
     }
 
-    public Campeonato createCampeonato(String name, List<Team> times){
+    public static Campeonato createCampeonato(String name, List<Team> times){
 
         validateTeams(times);
-        crateInitialFase(times);
 
         return new Campeonato(name, times);
     }
