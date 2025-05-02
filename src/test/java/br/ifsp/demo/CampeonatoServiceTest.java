@@ -134,4 +134,18 @@ public class CampeonatoServiceTest {
         assertThat(service.createCampeonato("Teste 1", times).getId()).isNotSameAs(
                 service.createCampeonato("Teste 2", times).getId());
     }
+
+    @Tag("TDD")
+    @Tag("Unit Test")
+    @ParameterizedTest
+    @DisplayName("Testando se o sistema registra vitória simples")
+    @MethodSource("provide32Teams")
+    void testingRegisteringWinner(List<Team> times){
+
+        Campeonato campeonato = service.createCampeonato("Teste", times);
+
+        assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst()).isNotNull();
+        assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst().getWinner()).isNotNull();
+        assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst().getIsFinished()).isEqualTo(true);
+    }
 }
