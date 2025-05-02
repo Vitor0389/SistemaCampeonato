@@ -47,7 +47,7 @@ public class CampeonatoServiceTest {
         assertThat(campeonato.getId()).isNotNull();
         assertThat(campeonato.getTimes()).hasSize(32);
         assertThat(campeonato.getFasesList().getFirst()).isNotNull();
-        assertThat(campeonato.getFasesList().getFirst().getPartidas()).hasSize(8);
+        assertThat(campeonato.getFasesList().getFirst().getPartidas()).hasSize(16);
     }
 
     @Tag("TDD")
@@ -143,6 +143,8 @@ public class CampeonatoServiceTest {
     void testingRegisteringWinner(List<Team> times){
 
         Campeonato campeonato = service.createCampeonato("Teste", times);
+        Team winner = campeonato.getTimes().get(0);
+        campeonato.getFasesList().getFirst().getPartidas().get(0).setWinner(winner);
 
         assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst()).isNotNull();
         assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst().getWinner()).isNotNull();

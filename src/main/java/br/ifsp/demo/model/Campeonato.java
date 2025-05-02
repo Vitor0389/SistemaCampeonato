@@ -14,6 +14,7 @@ public class Campeonato {
         this.id = UUID.randomUUID();
         this.name = name;
         this.times = teams;
+        this.fases = new ArrayList<>();
         crateInitialFase(times);
     }
 
