@@ -196,7 +196,7 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Testando se com apenas 1 partida vencida a próxima fase ja aparece com o vencedor cadastrado.")
     @MethodSource("provide4Teams")
-    void testingNextPhase(List <Team> times){
+    public void testingNextPhase(List <Team> times){
 
         Campeonato campeonato = service.createCampeonato("Teste", times);
         Fase fase1 = campeonato.getFasesList().getFirst();
@@ -218,7 +218,7 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Testando se o sistema lança erro ao tentar registrar resultado em partida já finalizada")
     @MethodSource("provide4Teams")
-    void testingIfThrowsErrorOnFinishedGame(List<Team> times){
+    public void testingIfThrowsErrorOnFinishedGame(List<Team> times){
 
         Campeonato campeonato = service.createCampeonato("Teste", times);
         Fase fase1 = campeonato.getFasesList().getFirst();
@@ -233,4 +233,22 @@ public class CampeonatoServiceTest {
         ).isInstanceOf(IllegalStateException.class);
 
     }
+
+    @Tag("TDD")
+    @Tag("Unit Test")
+    @ParameterizedTest
+    @DisplayName("Testando se uma partida aceita vencedor nulo (empate)")
+    @MethodSource("provide4Teams")
+    public void testingIfAcceptsDraw(List<Team> teams){
+        Campeonato campeonato = Campeonato.createCampeonato("Teste", teams);
+        Partida partida = campeonato.getFasesList().getFirst().getPartidas().getFirst();
+
+        campeonato.registerResult(partida.getId(), null);
+
+        assertThatThrownBy(() -> {
+            campeonato.registerResult(partida.getId(), null);
+        }
+        ).isInstanceOf(IllegalArgumentException.class).hasMessage("Partidas não podem terminar empatadas, deve haver um vencedor!");
+    }
+
 }
