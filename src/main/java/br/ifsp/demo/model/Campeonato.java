@@ -79,7 +79,7 @@ public class Campeonato {
 
         if(team == null) throw new IllegalArgumentException("Partidas não podem terminar empatadas, deve haver um vencedor!");
 
-        if (partida.isEmpty()) throw new NoSuchElementException("Id não corresponde a nenhuma partida.");
+        if (partida.isEmpty()) throw new NoSuchElementException("Partida não encontrada, por favor informe um ID de partida válido!");
 
         if(partida.get().isFinished()){
             throw new IllegalStateException("Partida já está finalizada!");
