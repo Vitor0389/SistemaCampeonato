@@ -13,7 +13,7 @@ public class Fase {
 
     private  List<Team> vencedores = new ArrayList<>();
 
-    
+
     public Fase(String name, List<Partida> partidas) {
         this.name = name;
         this.partidas = partidas;

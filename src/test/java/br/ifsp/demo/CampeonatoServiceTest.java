@@ -210,7 +210,7 @@ public class CampeonatoServiceTest {
         assertThat(campeonato.getFasesList().get(1)).isNotNull();
         assertThat(campeonato.getFasesList().get(1).getPartidas().getFirst().getTeamA()).isNotNull();
         assertThat(campeonato.getFasesList().get(1).getPartidas().getFirst().getTeamB()).isNotNull();
-        assertThat(campeonato.getFasesList().get(1).getTimes()).hasSize(2);
+        assertThat(campeonato.getFasesList().get(1).getPartidas()).hasSize(1);
     }
 
     @Tag("TDD")
