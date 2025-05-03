@@ -36,6 +36,14 @@ public class CampeonatoServiceTest {
         return Stream.of(Arguments.of(teams));
     }
 
+    private static Stream<Arguments> provide16Teams() {
+        List<Team> teams = IntStream.range(1, 17)
+                .mapToObj(i -> new Team(UUID.randomUUID(), "Time " + i))
+                .collect(Collectors.toList());
+
+        return Stream.of(Arguments.of(teams));
+    }
+
     private static Stream<Arguments> provide4Teams() {
         List<Team> teams = IntStream.range(1, 5)
                 .mapToObj(i -> new Team(UUID.randomUUID(), "Time " + i))
@@ -175,7 +183,7 @@ public class CampeonatoServiceTest {
                 new Team(UUID.randomUUID(), "Flamengo")
         );
 
-        Campeonato campeonato = Campeonato.createCampeonato("Teste", teams);
+        Campeonato campeonato = service.createCampeonato("Teste", teams);
         Fase fase1 = campeonato.getFasesList().getFirst();
         Partida partida1 = fase1.getPartidas().get(0);
         Partida partida2 = fase1.getPartidas().get(1);
@@ -242,7 +250,7 @@ public class CampeonatoServiceTest {
     @DisplayName("Testando se uma partida aceita vencedor nulo (empate)")
     @MethodSource("provide4Teams")
     public void testingIfAcceptsDraw(List<Team> teams){
-        Campeonato campeonato = Campeonato.createCampeonato("Teste", teams);
+        Campeonato campeonato = service.createCampeonato("Teste", teams);
         Partida partida = campeonato.getFasesList().getFirst().getPartidas().getFirst();
 
         assertThatThrownBy(() -> {
@@ -257,7 +265,7 @@ public class CampeonatoServiceTest {
     @DisplayName("Testando registro de resultado em partida de id inexistente")
     @MethodSource("provide4Teams")
     public void testingRegisterResultInInvalidMatch(List<Team> teams){
-        Campeonato campeonato = Campeonato.createCampeonato("Teste", teams);
+        Campeonato campeonato = service.createCampeonato("Teste", teams);
         Team teamA = teams.get(0);
         Team teamB = teams.get(1);
         Partida partida = new Partida(teamA, teamB);
@@ -266,8 +274,24 @@ public class CampeonatoServiceTest {
             campeonato.registerResult(partida.getId(), teamA);
                 }
         ).isInstanceOf(NoSuchElementException.class).hasMessage("Partida não encontrada, por favor informe um ID de partida válido!");
-
-
-
     }
+
+    @Tag("TDD")
+    @Tag("Unit Test")
+    @ParameterizedTest
+    @DisplayName("Testando visualização do campeonato em fase inicial!")
+    @MethodSource("provide16Teams")
+    public void testingCampeonatoInitialView(List<Team> teams){
+        Campeonato campeonato = service.createCampeonato("Teste", teams);
+
+        CampeonatoDTO dto = service.viewDetails(campeonato.getId());
+
+        assertThat(dto).isNotNull();
+        assertThat(dto.getFases()).hasSize(1);
+        assertThat(dto.getFases().getFirst().getPartidas()).hasSize(8);
+
+        assertThat(dto.getFases().get(0).getPartidas())
+                .allSatisfy(partida -> assertThat(partida.getVencedor()).isNull());
+    }
+
 }
