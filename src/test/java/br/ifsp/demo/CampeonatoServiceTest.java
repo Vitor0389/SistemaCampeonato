@@ -174,7 +174,7 @@ public class CampeonatoServiceTest {
         );
 
         Campeonato campeonato = Campeonato.createCampeonato("Teste", teams);
-        Fase fase1 = campeonato.getFasesList().get(0);
+        Fase fase1 = campeonato.getFasesList().getFirst();
         Partida partida1 = fase1.getPartidas().get(0);
         Partida partida2 = fase1.getPartidas().get(1);
         campeonato.registerResult(partida1.getId(), partida1.getTeamA());
@@ -184,10 +184,28 @@ public class CampeonatoServiceTest {
         Fase fase2 = campeonato.getFasesList().get(1);
         assertThat(fase2.getPartidas()).hasSize(1);
 
-        Partida novaPartida = fase2.getPartidas().get(0);
+        Partida novaPartida = fase2.getPartidas().getFirst();
         assertThat(novaPartida.getTeamA()).isEqualTo(partida1.getTeamA());
         assertThat(novaPartida.getTimeB()).isEqualTo(partida2.getTimeB());
         assertThat(novaPartida.isFinished()).isFalse();
 
+    }
+
+    @Tag("TDD")
+    @Tag("Unit Test")
+    @ParameterizedTest
+    @DisplayName("Testando se com apenas 1 partida vencida a próxima fase ja aparece com o vencedor cadastrado.")
+    @MethodSource("provide4Teams")
+    void testingNextPhase(List <Team> times){
+
+        Campeonato campeonato = service.createCampeonato("Teste", times);
+        Fase fase1 = campeonato.getFasesList().getFirst();
+        Partida partida1 = fase1.getPartidas().getFirst();
+
+        campeonato.registerResult(partida1.getId(), partida1.getTeamA());
+
+
+        assertThat(campeonato.getFasesList().get(1)).isNotNull();
+        assertThat(campeonato.getFasesList().get(1).getPartidas()).hasSize(1);
     }
 }
