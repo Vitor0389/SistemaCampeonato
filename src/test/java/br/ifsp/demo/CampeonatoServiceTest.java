@@ -1,5 +1,6 @@
 package br.ifsp.demo;
 
+import br.ifsp.demo.DTOs.CampeonatoDTO;
 import br.ifsp.demo.model.Campeonato;
 import br.ifsp.demo.model.Fase;
 import br.ifsp.demo.model.Partida;
