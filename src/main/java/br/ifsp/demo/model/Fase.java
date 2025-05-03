@@ -13,15 +13,11 @@ public class Fase {
 
     private  List<Team> vencedores = new ArrayList<>();
 
-    private List<Team> times = new ArrayList<>();
-
+    
     public Fase(String name, List<Partida> partidas) {
         this.name = name;
         this.partidas = partidas;
-        for (Partida partida : partidas) {
-            this.times.add(partida.getTeamA());
-            this.times.add(partida.getTeamB());
-        }
+
     }
 
     public List<Partida> getPartidas(){
@@ -36,7 +32,7 @@ public class Fase {
 
     }
 
-    public List<Team> getTimes() {return this.times;}
+
 
 
 

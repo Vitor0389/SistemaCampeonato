@@ -100,7 +100,9 @@ public class Campeonato {
             this.fases.set(indexProxima, novaFase);
         }
         else{
-            this.fases.add(novaFase);
+            if(vencedores.size() >= 2){
+                this.fases.add(novaFase);
+            }
         }
         if (isCurrentFaseFinished() && vencedores.size() > 1) {
             this.currentFase = novaFase;
