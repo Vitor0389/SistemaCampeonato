@@ -5,6 +5,7 @@ import br.ifsp.demo.model.Fase;
 import br.ifsp.demo.model.Partida;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.services.CampeonatoService;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -249,4 +251,23 @@ public class CampeonatoServiceTest {
         ).isInstanceOf(IllegalArgumentException.class).hasMessage("Partidas não podem terminar empatadas, deve haver um vencedor!");
     }
 
+    @Tag("TDD")
+    @Tag("Unit Test")
+    @ParameterizedTest
+    @DisplayName("Testando registro de resultado em partida de id inexistente")
+    @MethodSource("provide4Teams")
+    public void testingRegisterResultInInvalidMatch(List<Team> teams){
+        Campeonato campeonato = Campeonato.createCampeonato("Teste", teams);
+        Team teamA = teams.get(0);
+        Team teamB = teams.get(1);
+        Partida partida = new Partida(teamA, teamB);
+
+        assertThatThrownBy(() -> {
+            campeonato.registerResult(partida.getId(), teamA);
+                }
+        ).isInstanceOf(NoSuchElementException.class).hasMessage("Partida não encontrada, por favor informe um ID de partida válido!");
+
+
+
+    }
 }
