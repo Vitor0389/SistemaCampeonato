@@ -178,7 +178,7 @@ public class CampeonatoServiceTest {
         Partida partida1 = fase1.getPartidas().get(0);
         Partida partida2 = fase1.getPartidas().get(1);
         campeonato.registerResult(partida1.getId(), partida1.getTeamA());
-        campeonato.registerResult(partida2.getId(), partida2.getTimeB());
+        campeonato.registerResult(partida2.getId(), partida2.getTeamB());
 
         assertThat(campeonato.getFasesList()).hasSize(2);
         Fase fase2 = campeonato.getFasesList().get(1);
@@ -186,7 +186,7 @@ public class CampeonatoServiceTest {
 
         Partida novaPartida = fase2.getPartidas().getFirst();
         assertThat(novaPartida.getTeamA()).isEqualTo(partida1.getTeamA());
-        assertThat(novaPartida.getTimeB()).isEqualTo(partida2.getTimeB());
+        assertThat(novaPartida.getTeamB()).isEqualTo(partida2.getTeamB());
         assertThat(novaPartida.isFinished()).isFalse();
 
     }

@@ -50,7 +50,7 @@ public class Partida {
         return teamA;
     }
 
-    public Team getTimeB() {
+    public Team getTeamB() {
         return teamB;
     }
 }
