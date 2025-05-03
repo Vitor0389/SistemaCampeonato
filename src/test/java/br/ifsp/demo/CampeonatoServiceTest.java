@@ -208,4 +208,25 @@ public class CampeonatoServiceTest {
         assertThat(campeonato.getFasesList().get(1)).isNotNull();
         assertThat(campeonato.getFasesList().get(1).getTimes()).hasSize(1);
     }
+
+    @Tag("TDD")
+    @Tag("Unit Test")
+    @ParameterizedTest
+    @DisplayName("Testando se o sistema lança erro ao tentar registrar resultado em partida já finalizada")
+    @MethodSource("provide4Teams")
+    void testingIfThrowsErrorOnFinishedGame(List<Team> times){
+
+        Campeonato campeonato = service.createCampeonato("Teste", times);
+        Fase fase1 = campeonato.getFasesList().getFirst();
+        Partida partida1 = fase1.getPartidas().getFirst();
+
+        campeonato.registerResult(partida1.getId(), partida1.getTeamA());
+
+
+        assertThatThrownBy(() -> {
+            campeonato.registerResult(partida1.getId(), partida1.getTeamA());
+                }
+        ).isInstanceOf(IllegalStateException.class);
+        
+    }
 }
