@@ -34,6 +34,14 @@ public class CampeonatoServiceTest {
         return Stream.of(Arguments.of(teams));
     }
 
+    private static Stream<Arguments> provide4Teams() {
+        List<Team> teams = IntStream.range(1, 5)
+                .mapToObj(i -> new Team(UUID.randomUUID(), "Time " + i))
+                .collect(Collectors.toList());
+
+        return Stream.of(Arguments.of(teams));
+    }
+
     private final CampeonatoService service = new CampeonatoService();
 
     @Tag("TDD")

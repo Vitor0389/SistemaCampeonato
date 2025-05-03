@@ -4,6 +4,7 @@ import jakarta.servlet.http.Part;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Fase {
     private final String name;
@@ -16,5 +17,11 @@ public class Fase {
 
     public List<Partida> getPartidas(){
         return this.partidas;
+    }
+
+    public List<Team> getVencedores() {
+        return partidas.stream()
+                .map(Partida::getWinner)
+                .collect(Collectors.toList());
     }
 }

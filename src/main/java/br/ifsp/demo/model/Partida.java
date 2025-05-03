@@ -37,7 +37,7 @@ public class Partida {
         }
     }
 
-    public boolean IsFinished() {
+    public boolean isFinished() {
 
         return this.isFinished;
     }

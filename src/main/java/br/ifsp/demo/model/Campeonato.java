@@ -1,6 +1,6 @@
 package br.ifsp.demo.model;
 
-import org.apache.tomcat.util.http.fileupload.util.LimitedInputStream;
+import jakarta.servlet.http.Part;
 
 import java.util.*;
 
@@ -9,6 +9,7 @@ public class Campeonato {
     private String name;
     private List<Team> times;
     private List<Fase> fases;
+    private Fase currentFase;
 
     private Campeonato(String name, List<Team> teams) {
         this.id = UUID.randomUUID();
@@ -17,7 +18,6 @@ public class Campeonato {
         this.fases = new ArrayList<>();
         crateInitialFase(times);
     }
-
 
     private static void validateTeams(List<Team> times) {
         Set<UUID> idsVistos = new HashSet<>();
@@ -57,17 +57,36 @@ public class Campeonato {
 
         Fase faseInicial = new Fase("Fase Inicial", partidas);
         this.fases.add(faseInicial);
+        this.currentFase = faseInicial;
     }
 
     public void registerResult(UUID id, Team team){
-        fases.stream()
+        Optional<Partida> partida = findPartidaByid(id);
+
+        if (partida.isEmpty()) throw new NoSuchElementException("Id não corresponde a nenhuma partida.");
+        partida.get().setWinner(team);
+    }
+
+    private void createNewFase(Partida partida){
+        if (isCurrentFaseFinished()) {
+            List<Team> vencedores = currentFase.getVencedores();
+            if (vencedores.size() > 1) {
+                Fase novaFase = Fase.criarComTimes(vencedores);
+                novaFase.associarAoCampeonato(this);
+                fases.add(novaFase);
+            }
+        }
+    }
+
+    private boolean isCurrentFaseFinished(){
+        return currentFase.getPartidas().stream().allMatch(Partida::isFinished);
+    };
+
+    private Optional<Partida> findPartidaByid(UUID id){
+       return fases.stream()
                 .flatMap(fase -> fase.getPartidas().stream())
                 .filter(partida -> partida.getId().equals(id))
-                .findFirst()
-                .ifPresentOrElse(
-                        partida -> partida.setWinner(team),
-                        () -> { throw new IllegalArgumentException("Partida com ID " + id + " não encontrada."); }
-                );
+                .findFirst();
     }
 
     public UUID getId() {
