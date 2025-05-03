@@ -201,12 +201,16 @@ public class CampeonatoServiceTest {
         Campeonato campeonato = service.createCampeonato("Teste", times);
         Fase fase1 = campeonato.getFasesList().getFirst();
         Partida partida1 = fase1.getPartidas().getFirst();
+        Partida partida2 = fase1.getPartidas().get(1);
 
         campeonato.registerResult(partida1.getId(), partida1.getTeamA());
+        campeonato.registerResult(partida2.getId(), partida2.getTeamB());
 
 
         assertThat(campeonato.getFasesList().get(1)).isNotNull();
-        assertThat(campeonato.getFasesList().get(1).getTimes()).hasSize(1);
+        assertThat(campeonato.getFasesList().get(1).getPartidas().getFirst().getTeamA()).isNotNull();
+        assertThat(campeonato.getFasesList().get(1).getPartidas().getFirst().getTeamB()).isNotNull();
+        assertThat(campeonato.getFasesList().get(1).getTimes()).hasSize(2);
     }
 
     @Tag("TDD")
@@ -227,6 +231,6 @@ public class CampeonatoServiceTest {
             campeonato.registerResult(partida1.getId(), partida1.getTeamA());
                 }
         ).isInstanceOf(IllegalStateException.class);
-        
+
     }
 }
