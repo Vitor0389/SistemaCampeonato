@@ -243,8 +243,6 @@ public class CampeonatoServiceTest {
         Campeonato campeonato = Campeonato.createCampeonato("Teste", teams);
         Partida partida = campeonato.getFasesList().getFirst().getPartidas().getFirst();
 
-        campeonato.registerResult(partida.getId(), null);
-
         assertThatThrownBy(() -> {
             campeonato.registerResult(partida.getId(), null);
         }

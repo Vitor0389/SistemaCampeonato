@@ -77,6 +77,8 @@ public class Campeonato {
     public void registerResult(UUID id, Team team){
         Optional<Partida> partida = findPartidaByid(id);
 
+        if(team == null) throw new IllegalArgumentException("Partidas não podem terminar empatadas, deve haver um vencedor!");
+
         if (partida.isEmpty()) throw new NoSuchElementException("Id não corresponde a nenhuma partida.");
 
         if(partida.get().isFinished()){
