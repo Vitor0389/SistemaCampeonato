@@ -79,6 +79,10 @@ public class Campeonato {
 
         if (partida.isEmpty()) throw new NoSuchElementException("Id não corresponde a nenhuma partida.");
 
+        if(partida.get().isFinished()){
+            throw new IllegalStateException("Partida já está finalizada!");
+        }
+
         partida.get().setWinner(team);
         createNewFase();
     }
