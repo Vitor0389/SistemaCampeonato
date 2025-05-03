@@ -11,6 +11,7 @@ public class Campeonato {
     private List<Fase> fases;
     private Fase currentFase;
 
+
     private Campeonato(String name, List<Team> teams) {
         this.id = UUID.randomUUID();
         this.name = name;
@@ -82,18 +83,24 @@ public class Campeonato {
         createNewFase();
     }
 
-    private boolean createNewFase(){
-        if (isCurrentFaseFinished()) {
-            List<Team> vencedores = currentFase.getVencedores();
-            if (vencedores.size() > 1) {
-                List<Partida> partidasNovaFase = createPartidas(vencedores);
-                Fase novaFase = new Fase("Fase subsequente" ,partidasNovaFase);
-                this.fases.add(novaFase);
-                this.currentFase = novaFase;
-                return true;
-            }
+    private void createNewFase(){
+
+        List <Team> vencedores = currentFase.getVencedores();
+        int indexAtual = this.fases.indexOf(currentFase);
+        int indexProxima = indexAtual + 1;
+
+        List <Partida> partidasNovaFase = createPartidas(vencedores);
+        Fase novaFase = new Fase("Fase subsequente" ,partidasNovaFase);
+
+        if(indexProxima < this.fases.size()){
+            this.fases.set(indexProxima, novaFase);
         }
-        return false;
+        else{
+            this.fases.add(novaFase);
+        }
+        if (isCurrentFaseFinished() && vencedores.size() > 1) {
+            this.currentFase = novaFase;
+        }
     }
 
     private boolean isCurrentFaseFinished(){
