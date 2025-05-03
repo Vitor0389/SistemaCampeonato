@@ -153,12 +153,12 @@ public class CampeonatoServiceTest {
     void testingRegisteringWinner(List<Team> times){
 
         Campeonato campeonato = service.createCampeonato("Teste", times);
-        Team winner = campeonato.getTimes().get(0);
-        campeonato.getFasesList().getFirst().getPartidas().get(0).setWinner(winner);
+        Team winner = campeonato.getTimes().getFirst();
+        campeonato.getFasesList().getFirst().getPartidas().getFirst().setWinner(winner);
 
         assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst()).isNotNull();
         assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst().getWinner()).isNotNull();
-        assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst().IsFinished()).isEqualTo(true);
+        assertThat(campeonato.getFasesList().getFirst().getPartidas().getFirst().isFinished()).isEqualTo(true);
     }
 
     @Tag("TDD")
@@ -187,7 +187,7 @@ public class CampeonatoServiceTest {
         Partida novaPartida = fase2.getPartidas().get(0);
         assertThat(novaPartida.getTeamA()).isEqualTo(partida1.getTeamA());
         assertThat(novaPartida.getTimeB()).isEqualTo(partida2.getTimeB());
-        assertThat(novaPartida.IsFinished()).isFalse();
+        assertThat(novaPartida.isFinished()).isFalse();
 
     }
 }
