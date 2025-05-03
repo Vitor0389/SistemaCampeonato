@@ -19,6 +19,13 @@ public class Campeonato {
         crateInitialFase(times);
     }
 
+    public static Campeonato createCampeonato(String name, List<Team> times){
+
+        validateTeams(times);
+
+        return new Campeonato(name, times);
+    }
+
     private static void validateTeams(List<Team> times) {
         Set<UUID> idsVistos = new HashSet<>();
         boolean possuiDuplicado = false;
@@ -48,6 +55,14 @@ public class Campeonato {
     }
 
     private void crateInitialFase(List<Team> times) {
+        List<Partida> partidas = createPartidas(times);
+
+        Fase faseInicial = new Fase("Fase Inicial", partidas);
+        this.fases.add(faseInicial);
+        this.currentFase = faseInicial;
+    }
+
+    private List<Partida> createPartidas(List<Team> times){
         List<Partida> partidas = new ArrayList<>();
 
         for (int i = 0; i < times.size(); i += 2) {
@@ -55,31 +70,35 @@ public class Campeonato {
             partidas.add(partida);
         }
 
-        Fase faseInicial = new Fase("Fase Inicial", partidas);
-        this.fases.add(faseInicial);
-        this.currentFase = faseInicial;
+        return partidas;
     }
 
     public void registerResult(UUID id, Team team){
         Optional<Partida> partida = findPartidaByid(id);
 
         if (partida.isEmpty()) throw new NoSuchElementException("Id não corresponde a nenhuma partida.");
+
         partida.get().setWinner(team);
+        createNewFase();
     }
 
-    private void createNewFase(Partida partida){
+    private boolean createNewFase(){
         if (isCurrentFaseFinished()) {
             List<Team> vencedores = currentFase.getVencedores();
             if (vencedores.size() > 1) {
-                Fase novaFase = Fase.criarComTimes(vencedores);
-                novaFase.associarAoCampeonato(this);
-                fases.add(novaFase);
+                List<Partida> partidasNovaFase = createPartidas(vencedores);
+                Fase novaFase = new Fase("Fase subsequente" ,partidasNovaFase);
+                this.fases.add(novaFase);
+                this.currentFase = novaFase;
+                return true;
             }
         }
+        return false;
     }
 
     private boolean isCurrentFaseFinished(){
         return currentFase.getPartidas().stream().allMatch(Partida::isFinished);
+
     };
 
     private Optional<Partida> findPartidaByid(UUID id){
@@ -103,12 +122,5 @@ public class Campeonato {
 
     public List<Fase> getFasesList() {
         return fases;
-    }
-
-    public static Campeonato createCampeonato(String name, List<Team> times){
-
-        validateTeams(times);
-
-        return new Campeonato(name, times);
     }
 }

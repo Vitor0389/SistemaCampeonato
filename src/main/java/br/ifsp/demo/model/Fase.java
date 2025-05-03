@@ -24,4 +24,5 @@ public class Fase {
                 .map(Partida::getWinner)
                 .collect(Collectors.toList());
     }
+
 }
