@@ -1,6 +1,7 @@
 package br.ifsp.demo;
 
 import br.ifsp.demo.DTOs.CampeonatoDTO;
+import br.ifsp.demo.DTOs.FaseDTO;
 import br.ifsp.demo.model.Campeonato;
 import br.ifsp.demo.model.Fase;
 import br.ifsp.demo.model.Partida;
@@ -295,4 +296,33 @@ public class CampeonatoServiceTest {
                 .allSatisfy(partida -> assertThat(partida.vencedor()).isNull());
     }
 
+    @Tag("TDD")
+    @Tag("Unit Test")
+    @ParameterizedTest
+    @DisplayName("Testando visualização do campeonato após uma fase concluida")
+    @MethodSource("provide4Teams")
+    public void testingNextView(List<Team> times){
+
+        Campeonato campeonato = service.createCampeonato("Teste", times);
+        CampeonatoDTO campeonatoDTO = service.viewDetails(campeonato.getId());
+
+        Fase fase1 = campeonato.getFasesList().getFirst();
+
+        Partida partida1 = fase1.getPartidas().getFirst();
+        Partida partida2 = fase1.getPartidas().get(1);
+
+        campeonato.registerResult(partida1.getId(), partida1.getTeamA());
+        campeonato.registerResult(partida2.getId(), partida2.getTeamA());
+
+        Fase fase2 = campeonato.getFasesList().get(1);
+
+        FaseDTO fase1DTO = campeonatoDTO.fases().getFirst();
+        FaseDTO fase2DTO = campeonatoDTO.currentFase();
+
+        assertThat(fase1DTO.vencedores()
+        assertThat(fase1DTO.vencedores().get(1)).isEqualTo(partida2.getWinner());
+
+        assertThat(fase2DTO.partidas()).hasSize(1);
+
+    }
 }
