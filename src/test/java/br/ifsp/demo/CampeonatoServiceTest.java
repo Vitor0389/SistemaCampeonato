@@ -7,6 +7,7 @@ import br.ifsp.demo.model.Campeonato;
 import br.ifsp.demo.model.Fase;
 import br.ifsp.demo.model.Partida;
 import br.ifsp.demo.model.Team;
+import br.ifsp.demo.repository.CampeonatoRepository;
 import br.ifsp.demo.services.CampeonatoService;
 import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +30,7 @@ import static org.assertj.core.api.Assertions.*;
 
 
 public class CampeonatoServiceTest {
+
 
 
     private static Stream<Arguments> provide32Teams() {
@@ -55,6 +57,7 @@ public class CampeonatoServiceTest {
         return Stream.of(Arguments.of(teams));
     }
 
+    private final CampeonatoRepository campeonatoRepository;
     private final CampeonatoService service = new CampeonatoService();
 
     @Tag("TDD")
@@ -287,14 +290,14 @@ public class CampeonatoServiceTest {
     public void testingCampeonatoInitialView(List<Team> teams){
         Campeonato campeonato = service.createCampeonato("Teste", teams);
 
-        CampeonatoDTO dto = service.viewDetails(campeonato.getId());
+        List<FaseDTO> dto = service.viewDetails(campeonato.getId());
 
         assertThat(dto).isNotNull();
-        assertThat(dto.fases()).hasSize(1);
-        assertThat(dto.fases().getFirst().partidas()).hasSize(8);
+        assertThat(dto).hasSize(1);
+        assertThat(dto.getFirst().partidas()).hasSize(8);
 
-        assertThat(dto.fases().get(0).partidas())
-                .allSatisfy(partida -> assertThat(partida.vencedor()).isNull());
+        assertThat(dto.getFirst().partidas())
+                .allSatisfy(partida -> assertThat(partida.winner()).isNull());
     }
 
     @Tag("TDD")
@@ -323,7 +326,7 @@ public class CampeonatoServiceTest {
         TeamDTO team1 = fases.getFirst().vencedores().getFirst();
         TeamDTO team2 = fases.getFirst().vencedores().get(1);
 
-        assertThat(fase1DTO.vencedores().getFirst()).isEqualto(team1);
+        assertThat(fase1DTO.vencedores().getFirst()).isEqualTo(team1);
         assertThat(fase1DTO.vencedores().get(1)).isEqualTo(team2);
 
         assertThat(fase2DTO.partidas()).hasSize(1);
