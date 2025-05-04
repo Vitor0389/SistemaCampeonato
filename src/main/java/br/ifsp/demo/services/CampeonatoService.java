@@ -5,14 +5,18 @@ import br.ifsp.demo.DTOs.FaseDTO;
 import br.ifsp.demo.model.Campeonato;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.repository.CampeonatoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class CampeonatoService {
 
+    @Autowired
     private final CampeonatoRepository repository;
 
     public CampeonatoService(CampeonatoRepository repository) {
