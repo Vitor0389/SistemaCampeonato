@@ -20,7 +20,9 @@ public class CampeonatoService {
     }
 
     public Campeonato createCampeonato(String name, List<Team> teams) {
-        return Campeonato.createCampeonato(name, teams);
+        Campeonato campeonato = Campeonato.createCampeonato(name, teams);
+        repository.save(campeonato);
+        return campeonato;
     }
 
     public List<FaseDTO> viewDetails(UUID id) {
