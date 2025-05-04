@@ -1,11 +1,14 @@
 package br.ifsp.demo.services;
 
 import br.ifsp.demo.DTOs.CampeonatoDTO;
+import br.ifsp.demo.DTOs.FaseDTO;
 import br.ifsp.demo.model.Campeonato;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.repository.CampeonatoRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 public class CampeonatoService {
@@ -20,8 +23,15 @@ public class CampeonatoService {
         return Campeonato.createCampeonato(name, teams);
     }
 
-    public CampeonatoDTO viewDetails(UUID id) {
-        CampeonatoDTO dto = new CampeonatoDTO(repository.findById(id));
-        return dto;
+    public List<FaseDTO> viewDetails(UUID id) {
+        Optional<Campeonato> campeonatoOptional = repository.findById(id);
+
+        if(campeonatoOptional.isPresent()){
+            CampeonatoDTO dto = new CampeonatoDTO(campeonatoOptional.get());
+            return dto.fases();
+        }
+        else{
+            throw new NoSuchElementException("Campeonato deve existir!");
+        }
     }
 }
