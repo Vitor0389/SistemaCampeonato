@@ -1,22 +1,38 @@
 package br.ifsp.demo.model;
 
+import jakarta.persistence.*;
 import jakarta.servlet.http.Part;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Entity
 public class Fase {
-    private final String name;
-    private final List<Partida> partidas;
+    @Id
+    private UUID id;
+    private String name;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "fase_id")
+    private List<Partida> partidas;
 
-    private  List<Team> vencedores = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "fase_vencedores",
+            joinColumns = @JoinColumn(name = "fase_id"),
+            inverseJoinColumns = @JoinColumn(name = "time_id"))
+    private List<Team> vencedores = new ArrayList<>();
 
 
     public Fase(String name, List<Partida> partidas) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.partidas = partidas;
+
+    }
+
+    protected Fase() {
 
     }
 

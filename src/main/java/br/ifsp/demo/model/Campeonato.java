@@ -1,14 +1,23 @@
 package br.ifsp.demo.model;
 
+import jakarta.persistence.*;
 import jakarta.servlet.http.Part;
 
 import java.util.*;
 
+@Entity
 public class Campeonato {
+    @Id
     private UUID id;
     private String name;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "campeonato_id")
     private List<Team> times;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "campeonato_id")
     private List<Fase> fases;
+    @OneToOne
+    @JoinColumn(name = "fase_atual_id")
     private Fase currentFase;
 
 
@@ -19,6 +28,11 @@ public class Campeonato {
         this.fases = new ArrayList<>();
         crateInitialFase(times);
     }
+
+    protected Campeonato() {
+
+    }
+
 
     public static Campeonato createCampeonato(String name, List<Team> times){
 
