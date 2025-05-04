@@ -32,8 +32,7 @@ public class Fase {
 
     }
 
-
-
-
-
+    public String getName() {
+        return name;
+    }
 }
