@@ -27,6 +27,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 
 public class CampeonatoServiceTest {
@@ -57,8 +58,8 @@ public class CampeonatoServiceTest {
         return Stream.of(Arguments.of(teams));
     }
 
-    private final CampeonatoRepository campeonatoRepository;
-    private final CampeonatoService service = new CampeonatoService();
+    private final CampeonatoRepository campeonatoRepository = mock(CampeonatoRepository.class);
+    private final CampeonatoService service = new CampeonatoService(campeonatoRepository);
 
     @Tag("TDD")
     @Tag("Unit Test")
@@ -332,4 +333,37 @@ public class CampeonatoServiceTest {
         assertThat(fase2DTO.partidas()).hasSize(1);
 
     }
+
+    @Tag("TDD")
+    @Tag("Unit Test")
+    @ParameterizedTest
+    @DisplayName("Testando campeonato completo")
+    @MethodSource("provide4Teams")
+    public void testingFinishedChampionship(List<Team> times) {
+
+        Campeonato campeonato = service.createCampeonato("Teste", times);
+        List<FaseDTO> fases = service.viewDetails(campeonato.getId());
+
+        Fase fase1 = campeonato.getFasesList().getFirst();
+
+        Partida partida1 = fase1.getPartidas().getFirst();
+        Partida partida2 = fase1.getPartidas().get(1);
+
+        campeonato.registerResult(partida1.getId(), partida1.getTeamA());
+        campeonato.registerResult(partida2.getId(), partida2.getTeamA());
+
+        Fase fase2 = campeonato.getFasesList().get(1);
+
+        Partida partidaFinal = fase2.getPartidas().getFirst();
+
+        campeonato.registerResult(partidaFinal.getId(), partidaFinal.getTeamA());
+
+
+        assertThat(fases).isNotNull();
+        assertThat(fases.size()).isEqualTo(2);
+        assertThat(campeonato.getWinner()).isEqualto(partidaFinal.getWinner());
+    }
+
+
+
 }
