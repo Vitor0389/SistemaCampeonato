@@ -138,4 +138,8 @@ public class Campeonato {
     public List<Fase> getFasesList() {
         return fases;
     }
+
+    public Fase getCurrentFase() {
+        return currentFase;
+    }
 }

@@ -288,11 +288,11 @@ public class CampeonatoServiceTest {
         CampeonatoDTO dto = service.viewDetails(campeonato.getId());
 
         assertThat(dto).isNotNull();
-        assertThat(dto.getFases()).hasSize(1);
-        assertThat(dto.getFases().getFirst().getPartidas()).hasSize(8);
+        assertThat(dto.fases()).hasSize(1);
+        assertThat(dto.fases().getFirst().partidas()).hasSize(8);
 
-        assertThat(dto.getFases().get(0).getPartidas())
-                .allSatisfy(partida -> assertThat(partida.getVencedor()).isNull());
+        assertThat(dto.fases().get(0).partidas())
+                .allSatisfy(partida -> assertThat(partida.vencedor()).isNull());
     }
 
 }
