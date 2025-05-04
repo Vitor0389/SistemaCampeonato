@@ -319,7 +319,7 @@ public class CampeonatoServiceTest {
         FaseDTO fase1DTO = campeonatoDTO.fases().getFirst();
         FaseDTO fase2DTO = campeonatoDTO.currentFase();
 
-        assertThat(fase1DTO.vencedores()
+        assertThat(fase1DTO.vencedores().getFirst()).isEqualto(partida1.getWinner());
         assertThat(fase1DTO.vencedores().get(1)).isEqualTo(partida2.getWinner());
 
         assertThat(fase2DTO.partidas()).hasSize(1);
