@@ -142,4 +142,14 @@ public class Campeonato {
     public Fase getCurrentFase() {
         return currentFase;
     }
+
+    public Team getWinner() {
+
+        if(isCurrentFaseFinished() && currentFase.getPartidas().size() == 1){
+            return currentFase.getVencedores().getFirst();
+        }
+        else{
+            throw new NoSuchElementException("Campeonato ainda não terminou!");
+        }
+    }
 }
