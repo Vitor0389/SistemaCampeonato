@@ -304,7 +304,7 @@ public class CampeonatoServiceTest {
     public void testingNextView(List<Team> times){
 
         Campeonato campeonato = service.createCampeonato("Teste", times);
-        CampeonatoDTO campeonatoDTO = service.viewDetails(campeonato.getId());
+        List<FaseDTO> fases = service.viewDetails(campeonato.getId());
 
         Fase fase1 = campeonato.getFasesList().getFirst();
 
@@ -316,11 +316,11 @@ public class CampeonatoServiceTest {
 
         Fase fase2 = campeonato.getFasesList().get(1);
 
-        FaseDTO fase1DTO = campeonatoDTO.fases().getFirst();
-        FaseDTO fase2DTO = campeonatoDTO.currentFase();
+        FaseDTO fase1DTO = fases.getFirst();
+        FaseDTO fase2DTO = fases.get(1);
 
-        TeamDTO team1 = campeonatoDTO.teams().getFirst();
-        TeamDTO team2 = campeonatoDTO.teams().get(2);
+        TeamDTO team1 = fases.getFirst().vencedores().getFirst();
+        TeamDTO team2 = fases.getFirst().vencedores().get(1);
 
         assertThat(fase1DTO.vencedores().getFirst()).isEqualto(team1);
         assertThat(fase1DTO.vencedores().get(1)).isEqualTo(team2);
