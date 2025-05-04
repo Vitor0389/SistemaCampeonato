@@ -361,7 +361,7 @@ public class CampeonatoServiceTest {
 
         assertThat(fases).isNotNull();
         assertThat(fases.size()).isEqualTo(2);
-        assertThat(campeonato.getWinner()).isEqualto(partidaFinal.getWinner());
+        assertThat(campeonato.getWinner()).isEqualTo(partidaFinal.getWinner());
     }
 
 
