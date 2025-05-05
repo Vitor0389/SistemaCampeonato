@@ -36,12 +36,18 @@ public class Fase {
 
     }
 
+    public void addWinner(Team team){
+        this.vencedores.add(team);
+    }
+
     public List<Partida> getPartidas(){
         return this.partidas;
     }
 
     public List<Team> getVencedores() {
-
+        if(vencedores.isEmpty()){
+            return List.of();
+        }
         return this.vencedores = partidas.stream()
                 .map(Partida::getWinner)
                 .collect(Collectors.toList());

@@ -100,12 +100,14 @@ public class Campeonato {
         }
 
         partida.get().setWinner(team);
+
         createNewFase();
     }
 
     private void createNewFase(){
 
         List <Team> vencedores = currentFase.getVencedores();
+
         int indexAtual = this.fases.indexOf(currentFase);
         int indexProxima = indexAtual + 1;
 

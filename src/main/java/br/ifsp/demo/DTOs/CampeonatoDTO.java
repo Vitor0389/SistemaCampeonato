@@ -4,6 +4,7 @@ import br.ifsp.demo.model.Campeonato;
 import br.ifsp.demo.model.Team;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public record CampeonatoDTO(
@@ -28,7 +29,10 @@ public record CampeonatoDTO(
                 campeonato.getId(),
                 campeonato.getName(),
                 campeonato.getFasesList().stream().map(FaseDTO::new).toList(),
-                campeonato.getTimes().stream().map(TeamDTO::new).toList(),
+                campeonato.getTimes().stream()
+                        .map(TeamDTO::new)
+                        .toList()
+                ,
                 new FaseDTO(campeonato.getCurrentFase())
         );
     }

@@ -33,6 +33,7 @@ public class Partida {
         this.teamB = teamB;
         isFinished = false;
         uuid = UUID.randomUUID();
+        UUID faseID;
     }
 
     protected Partida() {
