@@ -73,7 +73,9 @@ public class Campeonato {
         List<Partida> partidas = createPartidas(times);
 
         Fase faseInicial = new Fase("Fase Inicial", partidas);
+
         this.fases.add(faseInicial);
+        setFaseEmPartidas(partidas, faseInicial);
         this.currentFase = faseInicial;
     }
 
@@ -100,7 +102,7 @@ public class Campeonato {
         }
 
         partida.get().setWinner(team);
-
+        partida.get().getFase().addWinner(team);
         createNewFase();
     }
 
@@ -113,6 +115,7 @@ public class Campeonato {
 
         List <Partida> partidasNovaFase = createPartidas(vencedores);
         Fase novaFase = new Fase("Fase subsequente" ,partidasNovaFase);
+        setFaseEmPartidas(partidasNovaFase, novaFase);
 
         if(indexProxima < this.fases.size()){
             this.fases.set(indexProxima, novaFase);
@@ -125,6 +128,9 @@ public class Campeonato {
         if (isCurrentFaseFinished() && vencedores.size() > 1) {
             this.currentFase = novaFase;
         }
+    }
+    private void setFaseEmPartidas(List<Partida> partidas, Fase fase) {
+        partidas.stream().forEach(partida -> partida.setFase(fase));
     }
 
     private boolean isCurrentFaseFinished(){

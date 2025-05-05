@@ -348,5 +348,20 @@ public class CampeonatoServiceTest {
     }
 
 
+    @Tag("Unit Test")
+    @ParameterizedTest
+    @DisplayName("Testando lista de vencedores")
+    @MethodSource("provide4Teams")
+    public void testingWinnersList(List<Team> teams){
+        Campeonato campeonato = service.createCampeonato("Teste", teams);
+        Fase fase1 = campeonato.getCurrentFase();
+        Partida partida1 = fase1.getPartidas().get(0);
+        Partida partida2 = fase1.getPartidas().get(1);
+
+        campeonato.registerResult(partida1.getId(), partida1.getTeamA());
+
+        assertThat(campeonato.getCurrentFase().getVencedores()).isEmpty();
+    }
+
 
 }

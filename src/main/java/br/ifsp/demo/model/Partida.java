@@ -24,6 +24,9 @@ public class Partida {
     @OneToOne
     @JoinColumn(name = "team_vencedor_id")
     private Team winner;
+    @OneToOne
+    @JoinColumn(name = "fase_id")
+    private Fase fase;
 
 
     private boolean isFinished;
@@ -33,7 +36,6 @@ public class Partida {
         this.teamB = teamB;
         isFinished = false;
         uuid = UUID.randomUUID();
-        UUID faseID;
     }
 
     protected Partida() {
@@ -70,5 +72,13 @@ public class Partida {
 
     public Team getTeamB() {
         return teamB;
+    }
+
+    public Fase getFase() {
+        return fase;
+    }
+
+    public void setFase(Fase fase) {
+        this.fase = fase;
     }
 }
