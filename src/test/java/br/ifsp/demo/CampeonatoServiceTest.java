@@ -373,6 +373,31 @@ public class CampeonatoServiceTest {
         assertThat(campeonato.getCurrentFase().getVencedores()).isEmpty();
     }
 
+    @Tag("Unit Test")
+    @ParameterizedTest
+    @DisplayName("Testando a visualização de campeonatos de um usuário")
+    @MethodSource("provide4Teams")
+    public void testingUserChampionshipView(List<Team> teams) {
+
+        Campeonato campeonato1 = Campeonato.createCampeonato("Teste1", teams);
+        Campeonato campeonato2 = Campeonato.createCampeonato("Teste2", teams);
+        Campeonato campeonato3 = Campeonato.createCampeonato("Teste3", teams);
+
+        campeonato1.setUser(userTest);
+        campeonato2.setUser(userTest);
+        campeonato3.setUser(userTest);
+
+        List<Campeonato> campeonatos = List.of(campeonato1, campeonato2, campeonato3);
+        when(campeonatoRepository.findAllByUserId(userTest.getId())).thenReturn(campeonatos);
+
+        // Act
+        List<CampeonatoDTO> result = service.findAllCampeonatos(userTest.getId());
+
+        // Assert
+        assertThat(result).hasSize(3);
+
+    }
+
     @MethodSource("provide4Teams")
     @ParameterizedTest
     @DisplayName("Dado um campeonato válido, quando solicito sua exclusão, então o sistema o remove junto com suas fases e partidas")
