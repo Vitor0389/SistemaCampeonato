@@ -14,10 +14,13 @@ import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 
 import java.util.List;
@@ -33,6 +36,7 @@ import static org.mockito.Mockito.*;
 
 
 
+@ExtendWith(MockitoExtension.class)
 public class CampeonatoServiceTest {
 
 
@@ -61,8 +65,11 @@ public class CampeonatoServiceTest {
         return Stream.of(Arguments.of(teams));
     }
 
-    private final CampeonatoRepository campeonatoRepository = new FakeCampeonatoRepository();
-    private final CampeonatoService service = new CampeonatoService(campeonatoRepository);
+    @Mock
+    private CampeonatoRepository campeonatoRepository;
+
+    @InjectMocks
+    private CampeonatoService service;
 
     @Tag("TDD")
     @Tag("Unit Test")
@@ -302,44 +309,40 @@ public class CampeonatoServiceTest {
     @Tag("TDD")
     @Tag("Unit Test")
     @ParameterizedTest
-    @DisplayName("Testando visualização do campeonato após uma fase concluida")
+    @DisplayName("Testando visualização do campeonato após uma fase concluída")
     @MethodSource("provide4Teams")
-    public void testingNextView(List<Team> times){
-
+    void testingNextView(List<Team> times) {
         Campeonato campeonato = service.createCampeonato("Teste", times);
+        when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
+
+
+        Fase fase1 = campeonato.getCurrentFase();
+        campeonato.registerResult(fase1.getPartidas().get(0).getId(), fase1.getPartidas().get(0).getTeamA());
+        campeonato.registerResult(fase1.getPartidas().get(1).getId(), fase1.getPartidas().get(1).getTeamA());
+
+
+        when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
+
         List<FaseDTO> fases = service.viewDetails(campeonato.getId());
 
-        Fase fase1 = campeonato.getFasesList().getFirst();
+        assertThat(fases).hasSize(2); // <- garante que há duas fases
 
-        Partida partida1 = fase1.getPartidas().getFirst();
-        Partida partida2 = fase1.getPartidas().get(1);
-
-        campeonato.registerResult(partida1.getId(), partida1.getTeamA());
-        campeonato.registerResult(partida2.getId(), partida2.getTeamA());
-
-        Fase fase2 = campeonato.getFasesList().get(1);
-
-        FaseDTO fase1DTO = fases.getFirst();
+        FaseDTO fase1DTO = fases.get(0);
         FaseDTO fase2DTO = fases.get(1);
 
-        TeamDTO team1 = fases.getFirst().vencedores().getFirst();
-        TeamDTO team2 = fases.getFirst().vencedores().get(1);
-
-        assertThat(fase1DTO.vencedores().getFirst()).isEqualTo(team1);
-        assertThat(fase1DTO.vencedores().get(1)).isEqualTo(team2);
-
+        assertThat(fase1DTO.vencedores()).hasSize(2);
         assertThat(fase2DTO.partidas()).hasSize(1);
-
     }
+
 
     @Tag("TDD")
     @Tag("Unit Test")
     @ParameterizedTest
     @DisplayName("Testando campeonato completo")
     @MethodSource("provide4Teams")
-    public void testingFinishedChampionship(List<Team> times) {
-
+    void testingFinishedChampionship(List<Team> times) {
         Campeonato campeonato = service.createCampeonato("Teste", times);
+        when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
 
         List<FaseDTO> fases = service.viewDetails(campeonato.getId());
 
@@ -352,17 +355,16 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Testando lista de vencedores")
     @MethodSource("provide4Teams")
-    public void testingWinnersList(List<Team> teams){
+    void testingWinnersList(List<Team> teams) {
         Campeonato campeonato = service.createCampeonato("Teste", teams);
-        Fase fase1 = campeonato.getCurrentFase();
-        Partida partida1 = fase1.getPartidas().get(0);
-        Partida partida2 = fase1.getPartidas().get(1);
 
-        campeonato.registerResult(partida1.getId(), partida1.getTeamA());
-        campeonato.registerResult(partida2.getId(), partida2.getTeamA());
+        Fase fase1 = campeonato.getCurrentFase();
+        campeonato.registerResult(fase1.getPartidas().get(0).getId(), fase1.getPartidas().get(0).getTeamA());
+        campeonato.registerResult(fase1.getPartidas().get(1).getId(), fase1.getPartidas().get(1).getTeamA());
 
         assertThat(campeonato.getCurrentFase().getVencedores()).isEmpty();
     }
+
 
 
 }

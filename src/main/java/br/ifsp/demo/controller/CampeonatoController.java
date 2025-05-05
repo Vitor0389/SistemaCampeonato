@@ -32,5 +32,13 @@ import java.util.UUID;
         }
 
 
+        @GetMapping
+        public ResponseEntity<List<CampeonatoDTO>> buscarCampeonatos() {
+            UUID usuarioId = authService.getAuthenticatedUserId();
+            List<CampeonatoDTO> campeonatos = campeonatoService.findAllCampeonatos(usuarioId);
+            return new ResponseEntity<>(campeonatos, HttpStatus.OK);
+        }
+
+
     }
 

@@ -43,4 +43,8 @@ public Campeonato createCampeonato(String name, List<Team> teams) {
             throw new NoSuchElementException("Campeonato deve existir!");
         }
     }
+
+    public List<CampeonatoDTO> findAllCampeonatos(UUID usuarioId) {
+        return repository.findAll().stream().map(CampeonatoDTO::new).toList();
+    }
 }
