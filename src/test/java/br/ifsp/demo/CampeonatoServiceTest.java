@@ -359,6 +359,7 @@ public class CampeonatoServiceTest {
         Partida partida2 = fase1.getPartidas().get(1);
 
         campeonato.registerResult(partida1.getId(), partida1.getTeamA());
+        campeonato.registerResult(partida2.getId(), partida2.getTeamA());
 
         assertThat(campeonato.getCurrentFase().getVencedores()).isEmpty();
     }
