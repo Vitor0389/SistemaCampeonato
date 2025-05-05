@@ -377,16 +377,20 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Dado um campeonato válido, quando solicito sua exclusão, então o sistema o remove junto com suas fases e partidas")
     public void testingCampeonatoDelete(List<Team> teams) {
-
-        Campeonato campeonato = service.createCampeonato("Paulistão", teams);
+        Campeonato campeonato = service.createCampeonato("Paulistão", teams, userTest.getId());
         UUID campeonatoId = campeonato.getId();
+
+        when(campeonatoRepository.findById(campeonatoId))
+                .thenReturn(Optional.of(campeonato));
 
         service.deleteCampeonato(campeonatoId);
 
+        when(campeonatoRepository.findById(campeonatoId))
+                .thenReturn(Optional.empty());
+
         assertThatThrownBy(() -> service.viewDetails(campeonatoId))
                 .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("Campeonato não encontrado");
+                .hasMessage("Campeonato deve existir!");
     }
-
 
 }
