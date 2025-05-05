@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface CampeonatoRepository {
+public interface CampeonatoRepository{
     Campeonato save(Campeonato campeonato);
 
     Optional<Campeonato> findById(UUID id);

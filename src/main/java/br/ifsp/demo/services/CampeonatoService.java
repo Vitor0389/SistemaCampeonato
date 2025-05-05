@@ -14,8 +14,10 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class CampeonatoService {
 
+    @Autowired
     private final CampeonatoRepository repository;
 
     public CampeonatoService(CampeonatoRepository repository) {
@@ -23,7 +25,8 @@ public class CampeonatoService {
     }
 
 
-    public Campeonato createCampeonato(String name, List<Team> teams) {
+
+public Campeonato createCampeonato(String name, List<Team> teams) {
         Campeonato campeonato = Campeonato.createCampeonato(name, teams);
         repository.save(campeonato);
         return campeonato;
