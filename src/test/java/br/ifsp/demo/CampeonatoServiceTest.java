@@ -393,4 +393,16 @@ public class CampeonatoServiceTest {
                 .hasMessage("Campeonato deve existir!");
     }
 
+    @Test
+    @DisplayName("Dado um ID inválido, quando tento excluir, então o sistema lança exceção de 'campeonato não encontrado'")
+    public void testDeleteCampeonatoWithInvalidId() {
+        UUID invalidId = UUID.randomUUID();
+
+        when(campeonatoRepository.findById(invalidId))
+                .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.deleteCampeonato(invalidId))
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
 }
