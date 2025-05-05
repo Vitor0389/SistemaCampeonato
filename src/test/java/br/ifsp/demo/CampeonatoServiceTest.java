@@ -26,10 +26,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -390,14 +387,29 @@ public class CampeonatoServiceTest {
         List<Campeonato> campeonatos = List.of(campeonato1, campeonato2, campeonato3);
         when(campeonatoRepository.findAllByUserId(userTest.getId())).thenReturn(campeonatos);
 
-        // Act
+
         List<CampeonatoDTO> result = service.findAllCampeonatos(userTest.getId());
 
-        // Assert
+
+
+
         assertThat(result).hasSize(3);
 
     }
 
+    @Tag("TDD")
+    @Tag("Unit Test")
+    @Test
+    @DisplayName("Testando visualização de campeonatos vazia para novo usuário")
+    public void testingEmptyChampionshipList() {
+
+        when(campeonatoRepository.findAllByUserId(userTest.getId())).thenReturn(Collections.emptyList());
+
+        List<CampeonatoDTO> result = service.findAllCampeonatos(userTest.getId());
+
+        assertThat(result).isEmpty();
+    }
+    
     @MethodSource("provide4Teams")
     @ParameterizedTest
     @DisplayName("Dado um campeonato válido, quando solicito sua exclusão, então o sistema o remove junto com suas fases e partidas")
