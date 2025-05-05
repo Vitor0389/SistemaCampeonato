@@ -8,5 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CampeonatoRepository extends JpaRepository<Campeonato, UUID>{
+    List<Campeonato> findAllByUserId(UUID userId);
+
 
 }

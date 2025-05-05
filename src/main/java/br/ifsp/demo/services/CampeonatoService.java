@@ -52,7 +52,10 @@ public class CampeonatoService {
     }
 
     public List<CampeonatoDTO> findAllCampeonatos(UUID usuarioId) {
-        return repository.findAll().stream().map(CampeonatoDTO::new).toList();
+        return repository.findAllByUserId(usuarioId)
+                .stream()
+                .map(CampeonatoDTO::new)
+                .toList();
     }
 
     public void deleteCampeonato(UUID id) {
