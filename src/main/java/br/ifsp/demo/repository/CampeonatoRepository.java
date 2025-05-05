@@ -7,12 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface CampeonatoRepository{
-    Campeonato save(Campeonato campeonato);
+public interface CampeonatoRepository extends JpaRepository<Campeonato, UUID>{
 
-    Optional<Campeonato> findById(UUID id);
-
-    List<Campeonato> findAll();
-
-    void deleteById(UUID id);
 }

@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.FluentQuery;
 import java.util.*;
 import java.util.function.Function;
 
-public class FakeCampeonatoRepository implements CampeonatoRepository{
+public class FakeCampeonatoRepository{
     private final Map<UUID, Campeonato> banco = new HashMap<>();
 
 

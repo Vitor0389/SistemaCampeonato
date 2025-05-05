@@ -6,6 +6,8 @@ import br.ifsp.demo.model.Campeonato;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.repository.CampeonatoRepository;
 import br.ifsp.demo.repository.FakeCampeonatoRepository;
+import br.ifsp.demo.security.user.JpaUserRepository;
+import br.ifsp.demo.security.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,15 +21,20 @@ public class CampeonatoService {
 
     @Autowired
     private final CampeonatoRepository repository;
+    @Autowired
+    private JpaUserRepository userRepository;
 
-    public CampeonatoService(CampeonatoRepository repository) {
+    public CampeonatoService(CampeonatoRepository repository, JpaUserRepository userRepository) {
         this.repository = repository;
+        this.userRepository = userRepository;
     }
 
 
 
-public Campeonato createCampeonato(String name, List<Team> teams) {
+public Campeonato createCampeonato(String name, List<Team> teams, UUID userID) {
         Campeonato campeonato = Campeonato.createCampeonato(name, teams);
+        User user = userRepository.getReferenceById(userID);
+        campeonato.setUser(user);
         repository.save(campeonato);
         return campeonato;
     }

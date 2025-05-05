@@ -9,6 +9,9 @@ import br.ifsp.demo.model.Partida;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.repository.CampeonatoRepository;
 import br.ifsp.demo.repository.FakeCampeonatoRepository;
+import br.ifsp.demo.security.user.JpaUserRepository;
+import br.ifsp.demo.security.user.Role;
+import br.ifsp.demo.security.user.User;
 import br.ifsp.demo.services.CampeonatoService;
 import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.DisplayName;
@@ -67,9 +70,13 @@ public class CampeonatoServiceTest {
 
     @Mock
     private CampeonatoRepository campeonatoRepository;
-
+    @Mock
+    private JpaUserRepository userRepository;
     @InjectMocks
     private CampeonatoService service;
+    private User userTest = new User(UUID.randomUUID(), "Teste", "da Silva", "teste@email.com", "teste123", Role.ADMIN);
+
+
 
     @Tag("TDD")
     @Tag("Unit Test")
@@ -78,8 +85,8 @@ public class CampeonatoServiceTest {
     @MethodSource("provide32Teams")
     void testingSuccessWith32Teams(List<Team> teams){
 
-
-        Campeonato campeonato = service.createCampeonato("Teste", teams);
+        when(userRepository.getReferenceById(any())).thenReturn(userTest);
+        Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
 
         assertThat(campeonato.getId()).isNotNull();
         assertThat(campeonato.getTimes()).hasSize(32);
@@ -98,7 +105,7 @@ public class CampeonatoServiceTest {
                 new Team(UUID.randomUUID(), "Corinthians")
         );
 
-        Campeonato campeonato = service.createCampeonato("Teste", teams);
+        Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
         assertThat(campeonato.getId()).isNotNull();
         assertThat(campeonato.getTimes()).hasSize(2);
         assertThat(campeonato.getFasesList().getFirst()).isNotNull();
@@ -119,7 +126,7 @@ public class CampeonatoServiceTest {
         );
 
         assertThatThrownBy(() -> {
-            service.createCampeonato("Teste", teams);
+            service.createCampeonato("Teste", teams,userTest.getId());
         }
         ).isInstanceOf(IllegalStateException.class);
     }
@@ -140,7 +147,7 @@ public class CampeonatoServiceTest {
         );
 
         assertThatThrownBy(() -> {
-                    service.createCampeonato("Teste", teams);
+                    service.createCampeonato("Teste", teams, userTest.getId());
                 }
         ).isInstanceOf(IllegalArgumentException.class);
     }
@@ -154,7 +161,7 @@ public class CampeonatoServiceTest {
         List<Team> teams = List.of();
 
         assertThatThrownBy(() -> {
-                    service.createCampeonato("Teste", teams);
+                    service.createCampeonato("Teste", teams, userTest.getId());
                 }
         ).isInstanceOf(IllegalArgumentException.class);
 
@@ -168,8 +175,8 @@ public class CampeonatoServiceTest {
     void testingSimmilarChampionship(List<Team> times){
 
 
-        assertThat(service.createCampeonato("Teste 1", times).getId()).isNotSameAs(
-                service.createCampeonato("Teste 2", times).getId());
+        assertThat(service.createCampeonato("Teste 1", times, userTest.getId()).getId()).isNotSameAs(
+                service.createCampeonato("Teste 2", times, userTest.getId()).getId());
     }
 
     @Tag("TDD")
@@ -179,7 +186,7 @@ public class CampeonatoServiceTest {
     @MethodSource("provide32Teams")
     void testingRegisteringWinner(List<Team> times){
 
-        Campeonato campeonato = service.createCampeonato("Teste", times);
+        Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
         Team winner = campeonato.getTimes().getFirst();
         campeonato.getFasesList().getFirst().getPartidas().getFirst().setWinner(winner);
 
@@ -195,7 +202,7 @@ public class CampeonatoServiceTest {
     @MethodSource("provide4Teams")
     public void testingCreateOfNewPhase(List<Team> teams){
 
-        Campeonato campeonato = service.createCampeonato("Teste", teams);
+        Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
         Fase fase1 = campeonato.getFasesList().getFirst();
         Partida partida1 = fase1.getPartidas().get(0);
         Partida partida2 = fase1.getPartidas().get(1);
@@ -220,7 +227,7 @@ public class CampeonatoServiceTest {
     @MethodSource("provide4Teams")
     public void testingNextPhase(List <Team> times){
 
-        Campeonato campeonato = service.createCampeonato("Teste", times);
+        Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
         Fase fase1 = campeonato.getFasesList().getFirst();
         Partida partida1 = fase1.getPartidas().getFirst();
         Partida partida2 = fase1.getPartidas().get(1);
@@ -242,7 +249,7 @@ public class CampeonatoServiceTest {
     @MethodSource("provide4Teams")
     public void testingIfThrowsErrorOnFinishedGame(List<Team> times){
 
-        Campeonato campeonato = service.createCampeonato("Teste", times);
+        Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
         Fase fase1 = campeonato.getFasesList().getFirst();
         Partida partida1 = fase1.getPartidas().getFirst();
 
@@ -262,7 +269,7 @@ public class CampeonatoServiceTest {
     @DisplayName("Testando se uma partida aceita vencedor nulo (empate)")
     @MethodSource("provide4Teams")
     public void testingIfAcceptsDraw(List<Team> teams){
-        Campeonato campeonato = service.createCampeonato("Teste", teams);
+        Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
         Partida partida = campeonato.getFasesList().getFirst().getPartidas().getFirst();
 
         assertThatThrownBy(() -> {
@@ -277,7 +284,7 @@ public class CampeonatoServiceTest {
     @DisplayName("Testando registro de resultado em partida de id inexistente")
     @MethodSource("provide4Teams")
     public void testingRegisterResultInInvalidMatch(List<Team> teams){
-        Campeonato campeonato = service.createCampeonato("Teste", teams);
+        Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
         Team teamA = teams.get(0);
         Team teamB = teams.get(1);
         Partida partida = new Partida(teamA, teamB);
@@ -294,9 +301,10 @@ public class CampeonatoServiceTest {
     @DisplayName("Testando visualização do campeonato em fase inicial!")
     @MethodSource("provide16Teams")
     public void testingCampeonatoInitialView(List<Team> teams){
-        Campeonato campeonato = service.createCampeonato("Teste", teams);
-
+        Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
+        when(campeonatoRepository.findById(any())).thenReturn(Optional.of(campeonato));
         List<FaseDTO> dto = service.viewDetails(campeonato.getId());
+
 
         assertThat(dto).isNotNull();
         assertThat(dto).hasSize(1);
@@ -312,7 +320,7 @@ public class CampeonatoServiceTest {
     @DisplayName("Testando visualização do campeonato após uma fase concluída")
     @MethodSource("provide4Teams")
     void testingNextView(List<Team> times) {
-        Campeonato campeonato = service.createCampeonato("Teste", times);
+        Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
         when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
 
 
@@ -325,7 +333,7 @@ public class CampeonatoServiceTest {
 
         List<FaseDTO> fases = service.viewDetails(campeonato.getId());
 
-        assertThat(fases).hasSize(2); // <- garante que há duas fases
+        assertThat(fases).hasSize(2);
 
         FaseDTO fase1DTO = fases.get(0);
         FaseDTO fase2DTO = fases.get(1);
@@ -341,7 +349,7 @@ public class CampeonatoServiceTest {
     @DisplayName("Testando campeonato completo")
     @MethodSource("provide4Teams")
     void testingFinishedChampionship(List<Team> times) {
-        Campeonato campeonato = service.createCampeonato("Teste", times);
+        Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
         when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
 
         List<FaseDTO> fases = service.viewDetails(campeonato.getId());
@@ -356,7 +364,7 @@ public class CampeonatoServiceTest {
     @DisplayName("Testando lista de vencedores")
     @MethodSource("provide4Teams")
     void testingWinnersList(List<Team> teams) {
-        Campeonato campeonato = service.createCampeonato("Teste", teams);
+        Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
 
         Fase fase1 = campeonato.getCurrentFase();
         campeonato.registerResult(fase1.getPartidas().get(0).getId(), fase1.getPartidas().get(0).getTeamA());

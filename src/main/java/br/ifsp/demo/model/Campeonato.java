@@ -1,5 +1,6 @@
 package br.ifsp.demo.model;
 
+import br.ifsp.demo.security.user.User;
 import jakarta.persistence.*;
 import jakarta.servlet.http.Part;
 
@@ -19,6 +20,10 @@ public class Campeonato {
     @OneToOne
     @JoinColumn(name = "fase_atual_id")
     private Fase currentFase;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
     private Campeonato(String name, List<Team> teams) {
@@ -173,5 +178,9 @@ public class Campeonato {
         else{
             throw new NoSuchElementException("Campeonato ainda não terminou!");
         }
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -26,8 +26,8 @@ import java.util.UUID;
 
         @PostMapping
     public ResponseEntity<CampeonatoDTO> criarCampeonato(@RequestBody String name, List<Team> teams) {
-            UUID usuarioId = authService.getAuthenticatedUserId();
-            Campeonato campeonato = campeonatoService.createCampeonato(name, teams);
+            UUID userId = authService.getAuthenticatedUserId();
+            Campeonato campeonato = campeonatoService.createCampeonato(name, teams, userId);
             return new ResponseEntity<>(new CampeonatoDTO(campeonato), HttpStatus.CREATED);
         }
 
@@ -39,6 +39,29 @@ import java.util.UUID;
             return new ResponseEntity<>(campeonatos, HttpStatus.OK);
         }
 
+        /*@GetMapping("/{id}")
+        public ResponseEntity<Campeonato> verDetalhesCampeonato(@PathVariable Long id) {
+            String usuarioId = getUsuarioIdFromToken();
+            Campeonato campeonato = campeonatoService.buscarCampeonatoPorId(id, usuarioId);
+            return new ResponseEntity<>(campeonato, HttpStatus.OK);
+        }
 
+        // Deletar campeonato
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> deletarCampeonato(@PathVariable Long id) {
+            String usuarioId = getUsuarioIdFromToken();
+            campeonatoService.deletarCampeonato(id, usuarioId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        // Registrar resultado de partida
+        @PatchMapping("/{id}/partidas/{partidaId}/resultado")
+        public ResponseEntity<Void> registrarResultadoPartida(
+                @PathVariable Long id, @PathVariable Long partidaId, @RequestBody ResultadoRequest resultadoRequest) {
+            String usuarioId = getUsuarioIdFromToken();
+            campeonatoService.registrarResultado(id, partidaId, resultadoRequest, usuarioId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+*/
     }
 
