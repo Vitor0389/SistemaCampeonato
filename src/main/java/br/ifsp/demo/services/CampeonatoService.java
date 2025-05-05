@@ -54,4 +54,13 @@ public class CampeonatoService {
     public List<CampeonatoDTO> findAllCampeonatos(UUID usuarioId) {
         return repository.findAll().stream().map(CampeonatoDTO::new).toList();
     }
+
+
+    public void deleteCampeonato(UUID id) {
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+        } else {
+            throw new NoSuchElementException("Campeonato que está tentando deletar não existe!");
+        }
+    }
 }
