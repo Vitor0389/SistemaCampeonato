@@ -21,13 +21,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
+
 
 
 public class CampeonatoServiceTest {
@@ -342,6 +344,10 @@ public class CampeonatoServiceTest {
     public void testingFinishedChampionship(List<Team> times) {
 
         Campeonato campeonato = service.createCampeonato("Teste", times);
+
+        when(campeonatoRepository.save(any())).thenReturn(campeonato);
+        when(campeonatoRepository.findById(eq(campeonato.getId()))).thenReturn(Optional.of(campeonato));
+
         List<FaseDTO> fases = service.viewDetails(campeonato.getId());
 
         Fase fase1 = campeonato.getFasesList().getFirst();
