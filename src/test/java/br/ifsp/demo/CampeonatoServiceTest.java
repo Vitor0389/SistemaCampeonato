@@ -8,6 +8,7 @@ import br.ifsp.demo.model.Fase;
 import br.ifsp.demo.model.Partida;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.repository.CampeonatoRepository;
+import br.ifsp.demo.repository.FakeCampeonatoRepository;
 import br.ifsp.demo.services.CampeonatoService;
 import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.DisplayName;
@@ -60,7 +61,7 @@ public class CampeonatoServiceTest {
         return Stream.of(Arguments.of(teams));
     }
 
-    private final CampeonatoRepository campeonatoRepository = mock(CampeonatoRepository.class);
+    private final CampeonatoRepository campeonatoRepository = new FakeCampeonatoRepository();
     private final CampeonatoService service = new CampeonatoService(campeonatoRepository);
 
     @Tag("TDD")
