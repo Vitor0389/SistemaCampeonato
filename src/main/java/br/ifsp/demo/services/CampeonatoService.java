@@ -31,7 +31,7 @@ public class CampeonatoService {
 
 
 
-public Campeonato createCampeonato(String name, List<Team> teams, UUID userID) {
+    public Campeonato createCampeonato(String name, List<Team> teams, UUID userID) {
         Campeonato campeonato = Campeonato.createCampeonato(name, teams);
         User user = userRepository.getReferenceById(userID);
         campeonato.setUser(user);

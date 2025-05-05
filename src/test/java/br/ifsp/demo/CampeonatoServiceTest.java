@@ -373,6 +373,20 @@ public class CampeonatoServiceTest {
         assertThat(campeonato.getCurrentFase().getVencedores()).isEmpty();
     }
 
+    @MethodSource("provide4Teams")
+    @ParameterizedTest
+    @DisplayName("Dado um campeonato válido, quando solicito sua exclusão, então o sistema o remove junto com suas fases e partidas")
+    public void testingCampeonatoDelete(List<Team> teams) {
+
+        Campeonato campeonato = service.createCampeonato("Paulistão", teams);
+        UUID campeonatoId = campeonato.getId();
+
+        service.deleteCampeonato(campeonatoId);
+
+        assertThatThrownBy(() -> service.viewDetails(campeonatoId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("Campeonato não encontrado");
+    }
 
 
 }
