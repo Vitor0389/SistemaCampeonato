@@ -11,6 +11,7 @@ import br.ifsp.demo.security.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -56,6 +57,16 @@ public class CampeonatoService {
                 .stream()
                 .map(CampeonatoDTO::new)
                 .toList();
+    }
+
+    public CampeonatoDTO findById(UUID campeonatoID, UUID user){
+        Optional<Campeonato> optionalCampeonato = repository.findByIdAndUserId(campeonatoID, user);
+        if(optionalCampeonato.isPresent()){
+            return new CampeonatoDTO(optionalCampeonato.get());
+        }
+        else{
+            throw new NoSuchElementException("Campeonato não existe");
+        }
     }
 
     public void deleteCampeonato(UUID id) {
