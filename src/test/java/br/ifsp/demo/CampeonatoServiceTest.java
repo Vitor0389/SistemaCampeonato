@@ -409,7 +409,28 @@ public class CampeonatoServiceTest {
 
         assertThat(result).isEmpty();
     }
-    
+
+    @Tag("Unit Test")
+    @DisplayName("Usuário deve visualizar detalhes apenas do seu próprio campeonato")
+    @ParameterizedTest
+    @MethodSource("provide4Teams")
+    public void testUserCanViewOwnChampionshipDetails(List<Team> times){
+
+        Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
+
+        when(userRepository.getReferenceById(userTest.getId())).thenReturn(userTest);
+
+        when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
+
+        List<FaseDTO> fases = service.viewDetails(campeonato.getId());
+
+        assertThat(fases).isNotNull();
+        assertThat(fases).hasSizeGreaterThan(0);
+        assertThat(fases.getFirst().partidas()).hasSizeGreaterThan(0);
+
+        assertThat(campeonato.getUser().getId()).isEqualTo(userId);
+
+    }
     @MethodSource("provide4Teams")
     @ParameterizedTest
     @DisplayName("Dado um campeonato válido, quando solicito sua exclusão, então o sistema o remove junto com suas fases e partidas")
