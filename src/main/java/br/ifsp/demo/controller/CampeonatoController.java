@@ -23,9 +23,8 @@ import java.util.UUID;
         @Autowired
         private AuthenticationInfoService authService;
 
-
         @PostMapping
-    public ResponseEntity<CampeonatoDTO> criarCampeonato(@RequestBody String name, List<Team> teams) {
+        public ResponseEntity<CampeonatoDTO> criarCampeonato(@RequestBody String name, List<Team> teams) {
             UUID userId = authService.getAuthenticatedUserId();
             Campeonato campeonato = campeonatoService.createCampeonato(name, teams, userId);
             return new ResponseEntity<>(new CampeonatoDTO(campeonato), HttpStatus.CREATED);

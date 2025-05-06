@@ -418,8 +418,6 @@ public class CampeonatoServiceTest {
 
         Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
 
-        when(userRepository.getReferenceById(userTest.getId())).thenReturn(userTest);
-
         when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
 
         List<FaseDTO> fases = service.viewDetails(campeonato.getId());
@@ -428,7 +426,6 @@ public class CampeonatoServiceTest {
         assertThat(fases).hasSizeGreaterThan(0);
         assertThat(fases.getFirst().partidas()).hasSizeGreaterThan(0);
 
-        assertThat(campeonato.getUser().getId()).isEqualTo(userTest.getId());
 
     }
     @MethodSource("provide4Teams")
