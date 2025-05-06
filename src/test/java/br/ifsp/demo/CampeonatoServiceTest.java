@@ -299,7 +299,7 @@ public class CampeonatoServiceTest {
     @MethodSource("provide16Teams")
     public void testingCampeonatoInitialView(List<Team> teams){
         Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
-        when(campeonatoRepository.findById(any())).thenReturn(Optional.of(campeonato));
+        when(campeonatoRepository.findByIdAndUserId(campeonato.getId(), userTest.getId())).thenReturn(Optional.of(campeonato));
         List<FaseDTO> dto = service.viewDetails(campeonato.getId(), userTest.getId());
 
 
@@ -318,15 +318,12 @@ public class CampeonatoServiceTest {
     @MethodSource("provide4Teams")
     void testingNextView(List<Team> times) {
         Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
-        when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
+        when(campeonatoRepository.findByIdAndUserId(campeonato.getId(), userTest.getId())).thenReturn(Optional.of(campeonato));
 
 
         Fase fase1 = campeonato.getCurrentFase();
         campeonato.registerResult(fase1.getPartidas().get(0).getId(), fase1.getPartidas().get(0).getTeamA());
         campeonato.registerResult(fase1.getPartidas().get(1).getId(), fase1.getPartidas().get(1).getTeamA());
-
-
-        when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
 
         List<FaseDTO> fases = service.viewDetails(campeonato.getId(), userTest.getId());
 
@@ -347,7 +344,7 @@ public class CampeonatoServiceTest {
     @MethodSource("provide4Teams")
     void testingFinishedChampionship(List<Team> times) {
         Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
-        when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
+        when(campeonatoRepository.findByIdAndUserId(campeonato.getId(), userTest.getId())).thenReturn(Optional.of(campeonato));
 
         List<FaseDTO> fases = service.viewDetails(campeonato.getId(), userTest.getId());
 
@@ -418,7 +415,7 @@ public class CampeonatoServiceTest {
 
         Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
 
-        when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
+        when(campeonatoRepository.findByIdAndUserId(campeonato.getId(), userTest.getId())).thenReturn(Optional.of(campeonato));
 
         List<FaseDTO> fases = service.viewDetails(campeonato.getId(), userTest.getId());
 

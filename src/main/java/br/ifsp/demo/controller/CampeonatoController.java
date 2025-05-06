@@ -50,6 +50,13 @@ import java.util.UUID;
             return new ResponseEntity<>(fases, HttpStatus.OK);
         }
 
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> deletarCampeonato(@PathVariable UUID id) {
+            UUID usuarioId = authService.getAuthenticatedUserId();
+            campeonatoService.deleteCampeonato(id, usuarioId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
 
 
     }
