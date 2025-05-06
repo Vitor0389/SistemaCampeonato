@@ -428,7 +428,7 @@ public class CampeonatoServiceTest {
         assertThat(fases).hasSizeGreaterThan(0);
         assertThat(fases.getFirst().partidas()).hasSizeGreaterThan(0);
 
-        assertThat(campeonato.getUser().getId()).isEqualTo(userId);
+        assertThat(campeonato.getUser().getId()).isEqualTo(userTest.getId());
 
     }
     @MethodSource("provide4Teams")
