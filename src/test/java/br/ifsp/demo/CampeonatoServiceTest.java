@@ -411,7 +411,7 @@ public class CampeonatoServiceTest {
     }
 
     @Tag("Unit Test")
-    @DisplayName("Usuário deve visualizar detalhes apenas do seu próprio campeonato")
+    @DisplayName("Testando usuário visualizar detalhes apenas do seu próprio campeonato")
     @ParameterizedTest
     @MethodSource("provide4Teams")
     public void testUserCanViewOwnChampionshipDetails(List<Team> times){
@@ -428,6 +428,16 @@ public class CampeonatoServiceTest {
 
 
     }
+
+    @Tag("Unit Test")
+    @Test
+    @DisplayName("Testando o retorno de campeonato inexistente")
+    void testingViewofNotCreatedChampionship()
+    {
+        assertThatThrownBy(() -> service.viewDetails(UUID.randomUUID()))
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
     @MethodSource("provide4Teams")
     @ParameterizedTest
     @DisplayName("Dado um campeonato válido, quando solicito sua exclusão, então o sistema o remove junto com suas fases e partidas")
