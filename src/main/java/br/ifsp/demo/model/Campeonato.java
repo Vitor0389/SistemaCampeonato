@@ -14,10 +14,9 @@ public class Campeonato {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "campeonato_id")
     private List<Team> times;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "campeonato_id")
+    @OneToMany(mappedBy = "campeonato", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Fase> fases;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fase_atual_id")
     private Fase currentFase;
 
@@ -79,9 +78,11 @@ public class Campeonato {
 
         Fase faseInicial = new Fase("Fase Inicial", partidas);
 
+        faseInicial.setCampeonato(this);
         this.fases.add(faseInicial);
         setFaseEmPartidas(partidas, faseInicial);
         this.currentFase = faseInicial;
+
     }
 
     private List<Partida> createPartidas(List<Team> times){
@@ -120,6 +121,7 @@ public class Campeonato {
 
         List <Partida> partidasNovaFase = createPartidas(vencedores);
         Fase novaFase = new Fase("Fase subsequente" ,partidasNovaFase);
+        novaFase.setCampeonato(this);
         setFaseEmPartidas(partidasNovaFase, novaFase);
 
         if(indexProxima < this.fases.size()){

@@ -17,6 +17,9 @@ public class Fase {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "fase_id")
     private List<Partida> partidas;
+    @ManyToOne
+    @JoinColumn(name = "campeonato_id")  // Chave estrangeira para Campeonato
+    private Campeonato campeonato;
 
     @ManyToMany
     @JoinTable(name = "fase_vencedores",
@@ -56,5 +59,9 @@ public class Fase {
 
     public String getName() {
         return name;
+    }
+
+    public void setCampeonato(Campeonato campeonato) {
+        this.campeonato = campeonato;
     }
 }

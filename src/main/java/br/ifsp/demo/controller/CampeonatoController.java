@@ -1,6 +1,7 @@
 package br.ifsp.demo.controller;
 
 import br.ifsp.demo.DTOs.CampeonatoDTO;
+import br.ifsp.demo.DTOs.CampeonatoRequestDTO;
 import br.ifsp.demo.model.Campeonato;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.security.auth.AuthenticationInfoService;
@@ -24,9 +25,11 @@ import java.util.UUID;
         private AuthenticationInfoService authService;
 
         @PostMapping
-        public ResponseEntity<CampeonatoDTO> criarCampeonato(@RequestBody String name, List<Team> teams) {
+        public ResponseEntity<CampeonatoDTO> criarCampeonato(@RequestBody CampeonatoRequestDTO request) {
             UUID userId = authService.getAuthenticatedUserId();
-            Campeonato campeonato = campeonatoService.createCampeonato(name, teams, userId);
+            List<Team> teams = request.teams().stream().map(dto -> new Team(dto.id(), dto.name()))
+                    .toList();
+            Campeonato campeonato = campeonatoService.createCampeonato(request.name(), teams, userId);
             return new ResponseEntity<>(new CampeonatoDTO(campeonato), HttpStatus.CREATED);
         }
 
