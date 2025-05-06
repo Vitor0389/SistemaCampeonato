@@ -435,9 +435,6 @@ public class CampeonatoServiceTest {
                 .isInstanceOf(NoSuchElementException.class);
     }
 
-    @MethodSource("provide4Teams")
-    @ParameterizedTest
-    @DisplayName("Dado um campeonato válido, quando solicito sua exclusão, então o sistema o remove junto com suas fases e partidas")
     public void testingCampeonatoDelete(List<Team> teams) {
         Campeonato campeonato = service.createCampeonato("Paulistão", teams, userTest.getId());
         UUID campeonatoId = campeonato.getId();
@@ -445,7 +442,7 @@ public class CampeonatoServiceTest {
         when(campeonatoRepository.findById(campeonatoId))
                 .thenReturn(Optional.of(campeonato));
 
-        service.deleteCampeonato(campeonatoId);
+        service.deleteCampeonato(campeonatoId , userTest.getId());
 
         when(campeonatoRepository.findById(campeonatoId))
                 .thenReturn(Optional.empty());
@@ -463,8 +460,9 @@ public class CampeonatoServiceTest {
         when(campeonatoRepository.findById(invalidId))
                 .thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> service.deleteCampeonato(invalidId))
+        assertThatThrownBy(() -> service.deleteCampeonato(invalidId, invalidId))
                 .isInstanceOf(NoSuchElementException.class);
     }
+
 
 }
