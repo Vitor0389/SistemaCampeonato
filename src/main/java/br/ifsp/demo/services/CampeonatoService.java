@@ -2,6 +2,7 @@ package br.ifsp.demo.services;
 
 import br.ifsp.demo.DTOs.CampeonatoDTO;
 import br.ifsp.demo.DTOs.FaseDTO;
+import br.ifsp.demo.DTOs.TeamDTO;
 import br.ifsp.demo.model.Campeonato;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.repository.CampeonatoRepository;
@@ -72,6 +73,16 @@ public class CampeonatoService {
             repository.deleteById(id);
         } else {
             throw new NoSuchElementException("Campeonato que está tentando deletar não existe!");
+        }
+    }
+    public void registerResult(UUID campId, UUID partidaId, TeamDTO teamDTO, UUID userId){
+        Optional<Campeonato> campeonato = repository.findByIdAndUserId(campId, userId);
+        if(campeonato.isPresent()){
+            Team team = new Team(teamDTO.id(), teamDTO.name());
+            campeonato.get().registerResult(partidaId, team);
+        }
+        else{
+            throw new NoSuchElementException("Campeonato não encontrado");
         }
     }
 }

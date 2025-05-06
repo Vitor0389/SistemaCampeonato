@@ -457,12 +457,11 @@ public class CampeonatoServiceTest {
     public void testDeleteCampeonatoWithInvalidId() {
         UUID invalidId = UUID.randomUUID();
 
-        when(campeonatoRepository.findById(invalidId))
-                .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> service.deleteCampeonato(invalidId, invalidId))
                 .isInstanceOf(NoSuchElementException.class);
     }
+
 
 
 }

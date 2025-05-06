@@ -62,7 +62,7 @@ import java.util.UUID;
         public ResponseEntity<Void> registrarResultadoPartida(
                 @PathVariable UUID campId, @PathVariable UUID partidaId, @RequestBody TeamDTO teamDTO) {
             UUID usuarioId = authService.getAuthenticatedUserId();
-            campeonatoService.registerResult(id, partidaId, teamDTO, usuarioId);
+            campeonatoService.registerResult(campId, partidaId, teamDTO, usuarioId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
