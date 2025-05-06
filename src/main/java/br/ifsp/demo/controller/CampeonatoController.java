@@ -2,7 +2,9 @@ package br.ifsp.demo.controller;
 
 import br.ifsp.demo.DTOs.CampeonatoDTO;
 import br.ifsp.demo.DTOs.CampeonatoRequestDTO;
+import br.ifsp.demo.DTOs.FaseDTO;
 import br.ifsp.demo.model.Campeonato;
+import br.ifsp.demo.model.Fase;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.security.auth.AuthenticationInfoService;
 import br.ifsp.demo.services.CampeonatoService;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 
-@RestController
+    @RestController
     @RequestMapping("/campeonatos")
     public class CampeonatoController {
 
@@ -41,29 +43,14 @@ import java.util.UUID;
             return new ResponseEntity<>(campeonatos, HttpStatus.OK);
         }
 
-        /*@GetMapping("/{id}")
-        public ResponseEntity<Campeonato> verDetalhesCampeonato(@PathVariable Long id) {
-            String usuarioId = getUsuarioIdFromToken();
-            Campeonato campeonato = campeonatoService.buscarCampeonatoPorId(id, usuarioId);
-            return new ResponseEntity<>(campeonato, HttpStatus.OK);
+        @GetMapping("/{id}")
+        public ResponseEntity<List<FaseDTO>> verDetalhesCampeonato(@PathVariable UUID id) {
+            UUID userId = authService.getAuthenticatedUserId();
+            List<FaseDTO> fases = campeonatoService.viewDetails(id, userId);
+            return new ResponseEntity<>(fases, HttpStatus.OK);
         }
 
-        // Deletar campeonato
-        @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deletarCampeonato(@PathVariable Long id) {
-            String usuarioId = getUsuarioIdFromToken();
-            campeonatoService.deletarCampeonato(id, usuarioId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
 
-        // Registrar resultado de partida
-        @PatchMapping("/{id}/partidas/{partidaId}/resultado")
-        public ResponseEntity<Void> registrarResultadoPartida(
-                @PathVariable Long id, @PathVariable Long partidaId, @RequestBody ResultadoRequest resultadoRequest) {
-            String usuarioId = getUsuarioIdFromToken();
-            campeonatoService.registrarResultado(id, partidaId, resultadoRequest, usuarioId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-*/
+
     }
 

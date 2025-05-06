@@ -39,8 +39,8 @@ public class CampeonatoService {
         return campeonato;
     }
 
-    public List<FaseDTO> viewDetails(UUID id) {
-        Optional<Campeonato> campeonatoOptional = repository.findById(id);
+    public List<FaseDTO> viewDetails(UUID id, UUID userID) {
+        Optional<Campeonato> campeonatoOptional = repository.findByIdAndUserId(id, userID);
 
         if(campeonatoOptional.isPresent()){
             CampeonatoDTO dto = new CampeonatoDTO(campeonatoOptional.get());

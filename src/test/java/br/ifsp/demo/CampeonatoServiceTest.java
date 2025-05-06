@@ -300,7 +300,7 @@ public class CampeonatoServiceTest {
     public void testingCampeonatoInitialView(List<Team> teams){
         Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
         when(campeonatoRepository.findById(any())).thenReturn(Optional.of(campeonato));
-        List<FaseDTO> dto = service.viewDetails(campeonato.getId());
+        List<FaseDTO> dto = service.viewDetails(campeonato.getId(), userTest.getId());
 
 
         assertThat(dto).isNotNull();
@@ -328,7 +328,7 @@ public class CampeonatoServiceTest {
 
         when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
 
-        List<FaseDTO> fases = service.viewDetails(campeonato.getId());
+        List<FaseDTO> fases = service.viewDetails(campeonato.getId(), userTest.getId());
 
         assertThat(fases).hasSize(2);
 
@@ -349,7 +349,7 @@ public class CampeonatoServiceTest {
         Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
         when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
 
-        List<FaseDTO> fases = service.viewDetails(campeonato.getId());
+        List<FaseDTO> fases = service.viewDetails(campeonato.getId(), userTest.getId());
 
         assertThat(campeonato).isNotNull();
         assertThat(fases).isNotNull();
@@ -420,7 +420,7 @@ public class CampeonatoServiceTest {
 
         when(campeonatoRepository.findById(campeonato.getId())).thenReturn(Optional.of(campeonato));
 
-        List<FaseDTO> fases = service.viewDetails(campeonato.getId());
+        List<FaseDTO> fases = service.viewDetails(campeonato.getId(), userTest.getId());
 
         assertThat(fases).isNotNull();
         assertThat(fases).hasSizeGreaterThan(0);
@@ -434,7 +434,7 @@ public class CampeonatoServiceTest {
     @DisplayName("Testando o retorno de campeonato inexistente")
     void testingViewofNotCreatedChampionship()
     {
-        assertThatThrownBy(() -> service.viewDetails(UUID.randomUUID()))
+        assertThatThrownBy(() -> service.viewDetails(UUID.randomUUID(), userTest.getId()))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
@@ -453,7 +453,7 @@ public class CampeonatoServiceTest {
         when(campeonatoRepository.findById(campeonatoId))
                 .thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> service.viewDetails(campeonatoId))
+        assertThatThrownBy(() -> service.viewDetails(campeonatoId, userTest.getId()))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("Campeonato deve existir!");
     }
