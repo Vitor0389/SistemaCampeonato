@@ -3,6 +3,7 @@ package br.ifsp.demo.controller;
 import br.ifsp.demo.DTOs.CampeonatoDTO;
 import br.ifsp.demo.DTOs.CampeonatoRequestDTO;
 import br.ifsp.demo.DTOs.FaseDTO;
+import br.ifsp.demo.DTOs.TeamDTO;
 import br.ifsp.demo.model.Campeonato;
 import br.ifsp.demo.model.Fase;
 import br.ifsp.demo.model.Team;
@@ -57,7 +58,13 @@ import java.util.UUID;
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-
+        @PatchMapping("/{id}/resultado/partida/{idPartida}")
+        public ResponseEntity<Void> registrarResultadoPartida(
+                @PathVariable UUID campId, @PathVariable UUID partidaId, @RequestBody TeamDTO teamDTO) {
+            UUID usuarioId = authService.getAuthenticatedUserId();
+            campeonatoService.registerResult(id, partidaId, teamDTO, usuarioId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
 
     }
 
