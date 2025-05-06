@@ -31,7 +31,6 @@ public class CampeonatoService {
     }
 
 
-
     public Campeonato createCampeonato(String name, List<Team> teams, UUID userID) {
         Campeonato campeonato = Campeonato.createCampeonato(name, teams);
         User user = userRepository.getReferenceById(userID);
@@ -43,11 +42,10 @@ public class CampeonatoService {
     public List<FaseDTO> viewDetails(UUID id, UUID userID) {
         Optional<Campeonato> campeonatoOptional = repository.findByIdAndUserId(id, userID);
 
-        if(campeonatoOptional.isPresent()){
+        if (campeonatoOptional.isPresent()) {
             CampeonatoDTO dto = new CampeonatoDTO(campeonatoOptional.get());
             return dto.fases();
-        }
-        else{
+        } else {
             throw new NoSuchElementException("Campeonato deve existir!");
         }
     }
@@ -59,18 +57,17 @@ public class CampeonatoService {
                 .toList();
     }
 
-    public CampeonatoDTO findById(UUID campeonatoID, UUID user){
+    public CampeonatoDTO findById(UUID campeonatoID, UUID user) {
         Optional<Campeonato> optionalCampeonato = repository.findByIdAndUserId(campeonatoID, user);
-        if(optionalCampeonato.isPresent()){
+        if (optionalCampeonato.isPresent()) {
             return new CampeonatoDTO(optionalCampeonato.get());
-        }
-        else{
+        } else {
             throw new NoSuchElementException("Campeonato não existe");
         }
     }
 
-    public void deleteCampeonato(UUID id) {
-        Optional<Campeonato> campeonatoOptional = repository.findById(id);
+    public void deleteCampeonato(UUID id, UUID user) {
+        Optional<Campeonato> campeonatoOptional = repository.findByIdAndUserId(id, user);
         if (campeonatoOptional.isPresent()) {
             repository.deleteById(id);
         } else {
