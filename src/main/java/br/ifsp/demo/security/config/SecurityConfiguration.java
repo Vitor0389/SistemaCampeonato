@@ -25,8 +25,8 @@ public class SecurityConfiguration {
             "/api/v1/api-docs/**",
             "/api/v1/openapi/**",
             "/api/v1/swagger-ui/**",
-            "/campeonatos",
-            "/teams"
+            "/api/v1/campeonatos",
+            "/api/v1/teams"
     };
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;

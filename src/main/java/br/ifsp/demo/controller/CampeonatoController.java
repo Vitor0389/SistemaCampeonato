@@ -19,7 +19,7 @@ import java.util.UUID;
 
 
     @RestController
-    @RequestMapping("/campeonatos")
+    @RequestMapping("/api/v1/campeonatos")
     public class CampeonatoController {
 
         @Autowired

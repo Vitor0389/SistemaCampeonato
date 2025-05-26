@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/teams")
+@RequestMapping("/api/v1/teams")
 public class TeamController {
 
     private final TeamRepository teamRepository;
