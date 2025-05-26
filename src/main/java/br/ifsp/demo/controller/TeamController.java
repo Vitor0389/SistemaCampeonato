@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/teams")
@@ -23,9 +25,19 @@ public class TeamController {
     }
 
     @PostMapping
-    public ResponseEntity<TeamDTO> criarTeam(@RequestBody TeamDTO teamDTO) {
-        Team team = new Team(teamDTO.id(), teamDTO.name());
-        teamRepository.save(team);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new TeamDTO(team));
+    public ResponseEntity<List<TeamDTO>> criarTeam(@RequestBody List<TeamDTO> teamDTOList) {
+        List<TeamDTO> savedTeamDTOs = teamDTOList.stream()
+                .map(teamDTO -> {
+
+                    Team team = new Team(teamDTO.id(), teamDTO.name());
+
+                    Team savedTeam = teamRepository.save(team);
+
+                    return new TeamDTO(savedTeam.getId(), savedTeam.getName());
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedTeamDTOs);
     }
+
 }
