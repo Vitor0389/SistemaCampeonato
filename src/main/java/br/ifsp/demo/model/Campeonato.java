@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.servlet.http.Part;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Campeonato {
@@ -77,12 +78,11 @@ public class Campeonato {
         List<Partida> partidas = createPartidas(times);
 
         Fase faseInicial = new Fase("Fase Inicial", partidas);
-
         faseInicial.setCampeonato(this);
-        this.fases.add(faseInicial);
         setFaseEmPartidas(partidas, faseInicial);
-        this.currentFase = faseInicial;
 
+        this.fases.add(faseInicial);
+        this.currentFase = faseInicial;
     }
 
     private List<Partida> createPartidas(List<Team> times){
@@ -90,51 +90,56 @@ public class Campeonato {
 
         for (int i = 0; i < times.size(); i += 2) {
             Partida partida = new Partida(times.get(i), times.get(i + 1));
+            partida.setChave(i / 2);
             partidas.add(partida);
         }
 
         return partidas;
     }
 
-    public void registerResult(UUID id, Team team){
+    public void registerResult(UUID id, Team team) {
         Optional<Partida> partida = findPartidaByid(id);
 
-        if(team == null) throw new IllegalArgumentException("Partidas não podem terminar empatadas, deve haver um vencedor!");
-
+        if (team == null) throw new IllegalArgumentException("Partidas não podem terminar empatadas, deve haver um vencedor!");
         if (partida.isEmpty()) throw new NoSuchElementException("Partida não encontrada, por favor informe um ID de partida válido!");
+        if (partida.get().isFinished()) throw new IllegalStateException("Partida já está finalizada!");
 
-        if(partida.get().isFinished()){
-            throw new IllegalStateException("Partida já está finalizada!");
+        Partida partidaFinal = partida.get();
+        partidaFinal.setWinner(team);
+        partidaFinal.getFase().addWinner(team);
+
+        // Só tenta criar nova fase se a fase atual terminou
+        if (isCurrentFaseFinished() && currentFase.getVencedores().size() >= 2) {
+            createNewFase();
         }
-
-        partida.get().setWinner(team);
-        partida.get().getFase().addWinner(team);
-        createNewFase();
     }
 
-    private void createNewFase(){
+    private void createNewFase() {
+        if (!isCurrentFaseFinished()) return;
 
-        List <Team> vencedores = currentFase.getVencedores();
+        List<Partida> partidasAtuais = currentFase.getPartidas()
+                .stream()
+                .sorted(Comparator.comparingInt(Partida::getChave))
+                .toList();
 
-        int indexAtual = this.fases.indexOf(currentFase);
-        int indexProxima = indexAtual + 1;
+        List<Team> vencedores = partidasAtuais.stream()
+                .map(Partida::getWinner)
+                .toList();
 
-        List <Partida> partidasNovaFase = createPartidas(vencedores);
-        Fase novaFase = new Fase("Fase subsequente" ,partidasNovaFase);
+        List<Partida> novasPartidas = new ArrayList<>();
+        for (int i = 0; i < vencedores.size(); i += 2) {
+            Team teamA = vencedores.get(i);
+            Team teamB = vencedores.get(i + 1);
+            Partida nova = new Partida(teamA, teamB);
+            nova.setChave(i / 2);
+            novasPartidas.add(nova);
+        }
+
+        Fase novaFase = new Fase("Fase " + (fases.size() + 1), novasPartidas);
         novaFase.setCampeonato(this);
-        setFaseEmPartidas(partidasNovaFase, novaFase);
-
-        if(indexProxima < this.fases.size()){
-            this.fases.set(indexProxima, novaFase);
-        }
-        else{
-            if(vencedores.size() >= 2){
-                this.fases.add(novaFase);
-            }
-        }
-        if (isCurrentFaseFinished() && vencedores.size() > 1) {
-            this.currentFase = novaFase;
-        }
+        setFaseEmPartidas(novasPartidas, novaFase);
+        this.fases.add(novaFase);
+        this.currentFase = novaFase;
     }
     private void setFaseEmPartidas(List<Partida> partidas, Fase fase) {
         partidas.stream().forEach(partida -> partida.setFase(fase));

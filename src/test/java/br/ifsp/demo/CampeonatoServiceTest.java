@@ -462,6 +462,95 @@ public class CampeonatoServiceTest {
                 .isInstanceOf(NoSuchElementException.class);
     }
 
+    @ParameterizedTest
+    @DisplayName("Testando se o campeonato funciona")
+    @MethodSource("provide16Teams")
+    public void testingIfCampeonatoWorks(List<Team> teams) {
+        Campeonato campeonato = service.createCampeonato("Champions League", teams, userTest.getId());
 
+        Team team1 = teams.get(0);
+        Team team2 = teams.get(1);
+        Team team3 = teams.get(2);
+        Team team4 = teams.get(3);
+        Team team5 = teams.get(4);
+        Team team6 = teams.get(5);
+        Team team7 = teams.get(6);
+        Team team8 = teams.get(7);
+        Team team9 = teams.get(8);
+        Team team10 = teams.get(9);
+        Team team11 = teams.get(10);
+        Team team12 = teams.get(11);
+        Team team13 = teams.get(12);
+        Team team14 = teams.get(13);
+        Team team15 = teams.get(14);
+        Team team16 = teams.get(15);
+
+        Fase fase1 = campeonato.getCurrentFase();
+        assertThat(fase1.getPartidas()).hasSize(8);
+
+        campeonato.registerResult(fase1.getPartidas().get(0).getId(), fase1.getPartidas().get(0).getTeamA());
+        campeonato.registerResult(fase1.getPartidas().get(1).getId(), fase1.getPartidas().get(1).getTeamA());
+
+        assertThat(campeonato.getFasesList()).hasSize(1);
+
+        campeonato.registerResult(fase1.getPartidas().get(2).getId(), fase1.getPartidas().get(2).getTeamA());
+        campeonato.registerResult(fase1.getPartidas().get(3).getId(), fase1.getPartidas().get(3).getTeamA());
+        campeonato.registerResult(fase1.getPartidas().get(4).getId(), fase1.getPartidas().get(4).getTeamA());
+        campeonato.registerResult(fase1.getPartidas().get(5).getId(), fase1.getPartidas().get(5).getTeamA());
+        campeonato.registerResult(fase1.getPartidas().get(6).getId(), fase1.getPartidas().get(6).getTeamA());
+        campeonato.registerResult(fase1.getPartidas().get(7).getId(), fase1.getPartidas().get(7).getTeamA());
+
+        assertThat(campeonato.getFasesList()).hasSize(2);
+
+        Fase fase2 = campeonato.getFasesList().get(1);
+        assertThat(fase2).isEqualTo(campeonato.getCurrentFase());
+        assertThat(fase2.getPartidas()).hasSize(4);
+
+        assertThat(fase2.getPartidas().get(0).getTeamA()).isEqualTo(team1);
+        assertThat(fase2.getPartidas().get(0).getTeamB()).isEqualTo(team3);
+        assertThat(fase2.getPartidas().get(1).getTeamA()).isEqualTo(team5);
+        assertThat(fase2.getPartidas().get(1).getTeamB()).isEqualTo(team7);
+        assertThat(fase2.getPartidas().get(2).getTeamA()).isEqualTo(team9);
+        assertThat(fase2.getPartidas().get(2).getTeamB()).isEqualTo(team11);
+        assertThat(fase2.getPartidas().get(3).getTeamA()).isEqualTo(team13);
+        assertThat(fase2.getPartidas().get(3).getTeamB()).isEqualTo(team15);
+
+        campeonato.registerResult(fase2.getPartidas().get(0).getId(), fase2.getPartidas().get(0).getTeamA());
+        campeonato.registerResult(fase2.getPartidas().get(1).getId(), fase2.getPartidas().get(1).getTeamA());
+        campeonato.registerResult(fase2.getPartidas().get(2).getId(), fase2.getPartidas().get(2).getTeamA());
+        campeonato.registerResult(fase2.getPartidas().get(3).getId(), fase2.getPartidas().get(3).getTeamA());
+        assertThat(campeonato.getFasesList()).hasSize(3);
+
+        Fase fase3 = campeonato.getFasesList().get(2);
+        assertThat(fase3).isEqualTo(campeonato.getCurrentFase());
+
+        assertThat(fase3.getPartidas()).hasSize(2);
+
+        assertThat(fase3.getPartidas().get(0).getTeamA()).isEqualTo(team1);
+        assertThat(fase3.getPartidas().get(0).getTeamB()).isEqualTo(team5);
+        assertThat(fase3.getPartidas().get(1).getTeamA()).isEqualTo(team9);
+        assertThat(fase3.getPartidas().get(1).getTeamB()).isEqualTo(team13);
+
+        campeonato.registerResult(fase3.getPartidas().get(0).getId(), fase3.getPartidas().get(0).getTeamA());
+        campeonato.registerResult(fase3.getPartidas().get(1).getId(), fase3.getPartidas().get(1).getTeamA());
+        assertThat(campeonato.getFasesList()).hasSize(4);
+
+        Fase fase4 = campeonato.getFasesList().get(3);
+        assertThat(fase4).isEqualTo(campeonato.getCurrentFase());
+
+        assertThat(fase4.getPartidas()).hasSize(1);
+        assertThat(fase4.getPartidas().getFirst().getTeamA()).isEqualTo(team1);
+        assertThat(fase4.getPartidas().getFirst().getTeamB()).isEqualTo(team9);
+
+        campeonato.registerResult(fase4.getPartidas().getFirst().getId(), fase4.getPartidas().get(0).getTeamA());
+        assertThat(campeonato.getWinner()).isEqualTo(team1);
+
+
+
+
+
+
+
+    }
 
 }

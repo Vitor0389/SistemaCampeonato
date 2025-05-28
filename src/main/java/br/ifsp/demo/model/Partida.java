@@ -27,6 +27,7 @@ public class Partida {
     @OneToOne
     @JoinColumn(name = "fase_id")
     private Fase fase;
+    private int chave;
 
 
     private boolean isFinished;
@@ -80,5 +81,9 @@ public class Partida {
 
     public void setFase(Fase fase) {
         this.fase = fase;
+    }
+    public int getChave() {return chave;}
+    public void setChave(int chave) {
+        this.chave = chave;
     }
 }
