@@ -115,7 +115,6 @@ public class Campeonato {
     }
 
     private void createNewFase() {
-        if (!isCurrentFaseFinished()) return;
 
         List<Partida> partidasAtuais = currentFase.getPartidas()
                 .stream()

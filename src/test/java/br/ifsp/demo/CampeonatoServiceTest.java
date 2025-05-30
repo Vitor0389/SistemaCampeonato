@@ -65,6 +65,14 @@ public class CampeonatoServiceTest {
         return Stream.of(Arguments.of(teams));
     }
 
+    private static Stream<Arguments> provide2Teams() {
+        List<Team> teams = IntStream.range(1, 3)
+                .mapToObj(i -> new Team(UUID.randomUUID(), "Time " + i))
+                .collect(Collectors.toList());
+
+        return Stream.of(Arguments.of(teams));
+    }
+
     @Mock
     private CampeonatoRepository campeonatoRepository;
     @Mock
@@ -509,13 +517,11 @@ public class CampeonatoServiceTest {
 
     @Tag("Unit Test")
     @Tag("Structural")
-    @Test
+    @ParameterizedTest
     @DisplayName("Testando criação de nova fase com apenas um time na lista de vencedores")
-    public void testingCreateNewFaseWithJustOneWinner() {
-        List<Team> teams = List.of(
-                new Team(UUID.randomUUID(), "time 1"),
-                new Team(UUID.randomUUID(), "time 2")
-        );
+    @MethodSource("provide2Teams")
+    public void testingCreateNewFaseAfterFinal(List<Team> teams) {
+
         Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
 
         Fase fase1 = campeonato.getCurrentFase();
@@ -524,5 +530,23 @@ public class CampeonatoServiceTest {
 
 
         assertThat(campeonato.getFasesList()).hasSize(1);
+    }
+
+    @Tag("Unit Test")
+    @Tag("Structural")
+    @ParameterizedTest
+    @DisplayName("Testando ver vencedor de campeonato")
+    @MethodSource("provide2Teams")
+    public void testingGetWinner(List<Team> teams) {
+        Team team1 = teams.get(0);
+        Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
+        assertThatThrownBy(() -> campeonato.getWinner()).isInstanceOf(NoSuchElementException.class);
+
+        Fase fase1 = campeonato.getCurrentFase();
+
+        campeonato.registerResult(fase1.getPartidas().getFirst().getId(), fase1.getPartidas().getFirst().getTeamA());
+
+
+        assertThat(campeonato.getWinner()).isEqualTo(team1);
     }
 }
