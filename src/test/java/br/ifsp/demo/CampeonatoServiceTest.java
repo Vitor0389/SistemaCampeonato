@@ -40,7 +40,6 @@ import static org.mockito.Mockito.*;
 public class CampeonatoServiceTest {
 
 
-
     private static Stream<Arguments> provide32Teams() {
         List<Team> teams = IntStream.range(1, 33)
                 .mapToObj(i -> new Team(UUID.randomUUID(), "Time " + i))
@@ -82,14 +81,13 @@ public class CampeonatoServiceTest {
     private User userTest = new User(UUID.randomUUID(), "Teste", "da Silva", "teste@email.com", "teste123", Role.ADMIN);
 
 
-
     @Tag("TDD")
     @Tag("Unit Test")
     @Tag("Functional")
     @ParameterizedTest
     @DisplayName("Testando se há sucesso na criação do campeonato com 32 times.")
     @MethodSource("provide32Teams")
-    void testingSuccessWith32Teams(List<Team> teams){
+    void testingSuccessWith32Teams(List<Team> teams) {
 
         when(userRepository.getReferenceById(any())).thenReturn(userTest);
         Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
@@ -105,7 +103,7 @@ public class CampeonatoServiceTest {
     @Tag("Functional")
     @Test
     @DisplayName("Testando se há sucesso na criação de campeonato com 2 times.")
-    void testingSucessWith2Teams(){
+    void testingSucessWith2Teams() {
 
         List<Team> teams = List.of(
                 new Team(UUID.randomUUID(), "São Paulo"),
@@ -125,17 +123,17 @@ public class CampeonatoServiceTest {
     @Tag("Functional")
     @Test
     @DisplayName("Testando se o campeonato exibe erro em time lançado com erro")
-    void testingInvalidTeams(){
+    void testingInvalidTeams() {
 
         UUID uuid = UUID.randomUUID();
         List<Team> teams = List.of(
-                new Team(uuid , "São Paulo"),
+                new Team(uuid, "São Paulo"),
                 new Team(uuid, "Corinthians")
         );
 
         assertThatThrownBy(() -> {
-            service.createCampeonato("Teste", teams,userTest.getId());
-        }
+                    service.createCampeonato("Teste", teams, userTest.getId());
+                }
         ).isInstanceOf(IllegalStateException.class);
     }
 
@@ -144,7 +142,7 @@ public class CampeonatoServiceTest {
     @Tag("Functional")
     @Test
     @DisplayName("Testando se o campeonato exibe erro ao tentar criar times em potência diferente de 2")
-    void testingInvalidNumberOfTeams(){
+    void testingInvalidNumberOfTeams() {
 
         List<Team> teams = List.of(
                 new Team(UUID.randomUUID(), "São Paulo"),
@@ -166,7 +164,7 @@ public class CampeonatoServiceTest {
     @Tag("Functional")
     @Test
     @DisplayName("Testando se o campeonato exibe erro ao tentar passar uma lista vazia de times")
-    void testingInvalidList(){
+    void testingInvalidList() {
 
         List<Team> teams = List.of();
 
@@ -183,7 +181,7 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Testando se um campeonato com os mesmos times de outro é criado com ID diferente")
     @MethodSource("provide32Teams")
-    void testingSimmilarChampionship(List<Team> times){
+    void testingSimmilarChampionship(List<Team> times) {
 
 
         assertThat(service.createCampeonato("Teste 1", times, userTest.getId()).getId()).isNotSameAs(
@@ -196,7 +194,7 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Testando se o sistema registra vitória simples")
     @MethodSource("provide32Teams")
-    void testingRegisteringWinner(List<Team> times){
+    void testingRegisteringWinner(List<Team> times) {
 
         Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
         Team winner = campeonato.getTimes().getFirst();
@@ -213,7 +211,7 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Testando se o sistema cria nova fase a partir dos resultados")
     @MethodSource("provide4Teams")
-    public void testingCreateOfNewPhase(List<Team> teams){
+    public void testingCreateOfNewPhase(List<Team> teams) {
 
         Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
         Fase fase1 = campeonato.getFasesList().getFirst();
@@ -239,7 +237,7 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Testando se com apenas 1 partida vencida a próxima fase ja aparece com o vencedor cadastrado.")
     @MethodSource("provide4Teams")
-    public void testingNextPhase(List <Team> times){
+    public void testingNextPhase(List<Team> times) {
 
         Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
         Fase fase1 = campeonato.getFasesList().getFirst();
@@ -262,7 +260,7 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Testando se o sistema lança erro ao tentar registrar resultado em partida já finalizada")
     @MethodSource("provide4Teams")
-    public void testingIfThrowsErrorOnFinishedGame(List<Team> times){
+    public void testingIfThrowsErrorOnFinishedGame(List<Team> times) {
 
         Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
         Fase fase1 = campeonato.getFasesList().getFirst();
@@ -272,7 +270,7 @@ public class CampeonatoServiceTest {
 
 
         assertThatThrownBy(() -> {
-            campeonato.registerResult(partida1.getId(), partida1.getTeamA());
+                    campeonato.registerResult(partida1.getId(), partida1.getTeamA());
                 }
         ).isInstanceOf(IllegalStateException.class);
 
@@ -284,13 +282,13 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Testando se uma partida aceita vencedor nulo (empate)")
     @MethodSource("provide4Teams")
-    public void testingIfAcceptsDraw(List<Team> teams){
+    public void testingIfAcceptsDraw(List<Team> teams) {
         Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
         Partida partida = campeonato.getFasesList().getFirst().getPartidas().getFirst();
 
         assertThatThrownBy(() -> {
-            campeonato.registerResult(partida.getId(), null);
-        }
+                    campeonato.registerResult(partida.getId(), null);
+                }
         ).isInstanceOf(IllegalArgumentException.class).hasMessage("Partidas não podem terminar empatadas, deve haver um vencedor!");
     }
 
@@ -300,14 +298,14 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Testando registro de resultado em partida de id inexistente")
     @MethodSource("provide4Teams")
-    public void testingRegisterResultInInvalidMatch(List<Team> teams){
+    public void testingRegisterResultInInvalidMatch(List<Team> teams) {
         Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
         Team teamA = teams.get(0);
         Team teamB = teams.get(1);
         Partida partida = new Partida(teamA, teamB);
 
         assertThatThrownBy(() -> {
-            campeonato.registerResult(partida.getId(), teamA);
+                    campeonato.registerResult(partida.getId(), teamA);
                 }
         ).isInstanceOf(NoSuchElementException.class).hasMessage("Partida não encontrada, por favor informe um ID de partida válido!");
     }
@@ -318,7 +316,7 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Testando visualização do campeonato em fase inicial!")
     @MethodSource("provide16Teams")
-    public void testingCampeonatoInitialView(List<Team> teams){
+    public void testingCampeonatoInitialView(List<Team> teams) {
         Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
         when(campeonatoRepository.findByIdAndUserId(campeonato.getId(), userTest.getId())).thenReturn(Optional.of(campeonato));
         List<FaseDTO> dto = service.viewDetails(campeonato.getId(), userTest.getId());
@@ -413,8 +411,6 @@ public class CampeonatoServiceTest {
         List<CampeonatoDTO> result = service.findAllCampeonatos(userTest.getId());
 
 
-
-
         assertThat(result).hasSize(3);
 
     }
@@ -438,7 +434,7 @@ public class CampeonatoServiceTest {
     @DisplayName("Testando usuário visualizar detalhes apenas do seu próprio campeonato")
     @ParameterizedTest
     @MethodSource("provide4Teams")
-    public void testUserCanViewOwnChampionshipDetails(List<Team> times){
+    public void testUserCanViewOwnChampionshipDetails(List<Team> times) {
 
         Campeonato campeonato = service.createCampeonato("Teste", times, userTest.getId());
 
@@ -457,8 +453,7 @@ public class CampeonatoServiceTest {
     @Tag("Functional")
     @Test
     @DisplayName("Testando o retorno de campeonato inexistente")
-    void testingViewofNotCreatedChampionship()
-    {
+    void testingViewofNotCreatedChampionship() {
         assertThatThrownBy(() -> service.viewDetails(UUID.randomUUID(), userTest.getId()))
                 .isInstanceOf(NoSuchElementException.class);
     }
@@ -470,7 +465,7 @@ public class CampeonatoServiceTest {
         when(campeonatoRepository.findById(campeonatoId))
                 .thenReturn(Optional.of(campeonato));
 
-        service.deleteCampeonato(campeonatoId , userTest.getId());
+        service.deleteCampeonato(campeonatoId, userTest.getId());
 
         when(campeonatoRepository.findById(campeonatoId))
                 .thenReturn(Optional.empty());
@@ -501,7 +496,7 @@ public class CampeonatoServiceTest {
         Team team33 = new Team(UUID.randomUUID(), "Time 33");
         teams.add(team33);
 
-       assertThatThrownBy(() -> service.createCampeonato("Time", teams, userTest.getId())).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> service.createCampeonato("Time", teams, userTest.getId())).isInstanceOf(IllegalArgumentException.class);
 
     }
 
@@ -556,7 +551,7 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("testando get user")
     @MethodSource("provide2Teams")
-    public void testingGetUser(List<Team> teams){
+    public void testingGetUser(List<Team> teams) {
 
         when(userRepository.getReferenceById(userTest.getId())).thenReturn(userTest);
         Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
@@ -577,7 +572,7 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("testando registrar vencedor de um dos times fora da partida")
     @MethodSource("provide4Teams")
-    public void testingDifferentWinnerOnTheMatch(List<Team> teams){
+    public void testingDifferentWinnerOnTheMatch(List<Team> teams) {
 
         Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
         Fase fase1 = campeonato.getCurrentFase();
@@ -606,7 +601,7 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Testando findByIdAndUserId")
     @MethodSource("provide2Teams")
-    public void testingNotFindByIdAndUserId(List<Team> teams){
+    public void testingNotFindByIdAndUserId(List<Team> teams) {
         Campeonato campeonatoCriado = service.createCampeonato("Champions League", teams, userTest.getId());
 
         assertThatThrownBy(() -> service.findByIdAndUserId(UUID.randomUUID(), userTest.getId())).isInstanceOf(NoSuchElementException.class);
@@ -617,24 +612,24 @@ public class CampeonatoServiceTest {
     @ParameterizedTest
     @DisplayName("Testando deletar campeonato do BD")
     @MethodSource("provide2Teams")
-    public void testingDeleteCampeonato(List<Team> teams){
+    public void testingDeleteCampeonato(List<Team> teams) {
 
         Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
-
         Optional<Campeonato> optionalCampeonato = Optional.of(campeonato);
 
-
-
+        
         when(campeonatoRepository.findByIdAndUserId(eq(userTest.getId()), eq(campeonato.getId())))
-                .thenReturn(optionalCampeonato);
+                .thenReturn(optionalCampeonato)
+                .thenReturn(Optional.empty());
+
 
         service.deleteCampeonato(campeonato.getId(), userTest.getId());
+
 
         verify(campeonatoRepository).deleteById(campeonato.getId());
 
         assertThatThrownBy(() -> {
             service.deleteCampeonato(campeonato.getId(), userTest.getId());
         }).isInstanceOf(NoSuchElementException.class);
-
     }
 }
