@@ -602,7 +602,7 @@ public class CampeonatoServiceTest {
     @DisplayName("Testando findByIdAndUserId")
     @MethodSource("provide2Teams")
     public void testingNotFindByIdAndUserId(List<Team> teams) {
-        Campeonato campeonatoCriado = service.createCampeonato("Champions League", teams, userTest.getId());
+        service.createCampeonato("Champions League", teams, userTest.getId());
 
         assertThatThrownBy(() -> service.findByIdAndUserId(UUID.randomUUID(), userTest.getId())).isInstanceOf(NoSuchElementException.class);
     }
@@ -617,8 +617,8 @@ public class CampeonatoServiceTest {
         Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
         Optional<Campeonato> optionalCampeonato = Optional.of(campeonato);
 
-        
-        when(campeonatoRepository.findByIdAndUserId(eq(userTest.getId()), eq(campeonato.getId())))
+
+        when(campeonatoRepository.findByIdAndUserId(campeonato.getId(), userTest.getId()))
                 .thenReturn(optionalCampeonato)
                 .thenReturn(Optional.empty());
 
@@ -635,23 +635,43 @@ public class CampeonatoServiceTest {
 
     @Tag("Unit Test")
     @Tag("Structural")
+    @ParameterizedTest
+    @DisplayName("testando se registra resultado quando o campeonato existe")
+    @MethodSource("provide2Teams")
+    void testingIfRegisterResultWhenCampeonatoExists(List<Team> teams) {
+        Campeonato campeonato = service.createCampeonato("teste", teams, userTest.getId());
+        Partida partida = campeonato.getCurrentFase().getPartidas().getFirst();
+
+        TeamDTO teamDTO = new TeamDTO(partida.getTeamA().getId(), partida.getTeamA().getName());
+
+
+
+        when(campeonatoRepository.findByIdAndUserId(campeonato.getId(), userTest.getId())).thenReturn(Optional.of(campeonato));
+
+        service.registerResult(campeonato.getId(), partida.getId(), teamDTO, userTest.getId());
+
+        verify(campeonato).registerResult(eq(partida.getId()), argThat(team ->
+                team.getId().equals(teamDTO.id()) && team.getName().equals(teamDTO.name())
+        ));
+    }
+
+    @Tag("Unit Test")
+    @Tag("Structural")
     @Test
-    @DisplayName("testando se registras resultado quando o campeonato existe")
-    void testingIfRegisterResultWhenCampeonatoExists() {
+    @DisplayName("testando se RegisterResult lança exception quando o campeonato não existe")
+    void testingIfRegisterResultTrhowExceptionWhenCampeonatoNotExists() {
 
         UUID campId = UUID.randomUUID();
         UUID partidaId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
-        TeamDTO teamDTO = new TeamDTO(UUID.randomUUID(), "Team A");
+        TeamDTO teamDTO = new TeamDTO(UUID.randomUUID(), "Time 1");
 
-        Campeonato campeonatoMock = mock(Campeonato.class);
-        when(campeonatoRepository.findByIdAndUserId(campId, userId)).thenReturn(Optional.of(campeonatoMock));
+        when(campeonatoRepository.findByIdAndUserId(campId, userId)).thenReturn(Optional.empty());
 
-        service.registerResult(campId, partidaId, teamDTO, userId);
 
-        verify(campeonatoMock).registerResult(eq(partidaId), argThat(team ->
-                team.getId().equals(teamDTO.id()) && team.getName().equals(teamDTO.name())
-        ));
+        assertThatThrownBy( () ->
+                service.registerResult(campId, partidaId, teamDTO, userId)
+        ).isInstanceOf(NoSuchElementException.class);
     }
 
 

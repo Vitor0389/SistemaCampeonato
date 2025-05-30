@@ -72,8 +72,6 @@ public class Campeonato {
             throw new IllegalStateException("Dois times não podem ter o mesmo ID!");
         }
 
-
-
     }
 
     private void crateInitialFase(List<Team> times) {
