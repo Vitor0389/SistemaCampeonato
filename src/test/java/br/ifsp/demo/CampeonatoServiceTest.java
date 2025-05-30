@@ -550,6 +550,7 @@ public class CampeonatoServiceTest {
         assertThat(campeonato.getWinner()).isEqualTo(team1);
     }
 
+    @Deprecated //user teste nao está no banco
     @Tag("Unit Test")
     @Tag("Structural")
     @ParameterizedTest
@@ -558,8 +559,16 @@ public class CampeonatoServiceTest {
     public void testingGetUser(List<Team> teams){
         Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
 
+
         assertThat(campeonato.getUser()).isEqualTo(userTest);
     }
 
+    @Tag("Unit Test")
+    @Tag("Structural")
+    @Test
+    @DisplayName("Testando criar campeonato com lista de times nula")
+    public void testingCreateCampeonatoWithNullTeams() {
+        assertThatThrownBy(() -> service.createCampeonato("Time", null, userTest.getId())).isInstanceOf(NullPointerException.class);
+    }
     
 }

@@ -50,6 +50,10 @@ public class Campeonato {
         Set<UUID> idsVistos = new HashSet<>();
         boolean possuiDuplicado = false;
 
+        if(times == null){
+            throw new NullPointerException("A lista de times não pode ser nula!");
+        }
+
         if(times.size() < 2 || times.size() > 32)
             throw new IllegalArgumentException("A quantidade de times inválida!");
 
@@ -68,9 +72,7 @@ public class Campeonato {
             throw new IllegalStateException("Dois times não podem ter o mesmo ID!");
         }
 
-        if(times.isEmpty()){
-            throw new IllegalArgumentException("O número de times deve ser no mínimo 2!");
-        }
+
 
     }
 
