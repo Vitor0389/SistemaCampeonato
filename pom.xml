@@ -169,8 +169,8 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <targetClasses></targetClasses>
-                    <targetTests></targetTests>
+                    <targetClasses>**</targetClasses>
+                    <targetTests>**</targetTests>
                 </configuration>
             </plugin>
             <plugin>

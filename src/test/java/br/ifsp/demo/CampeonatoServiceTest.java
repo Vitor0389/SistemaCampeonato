@@ -549,4 +549,17 @@ public class CampeonatoServiceTest {
 
         assertThat(campeonato.getWinner()).isEqualTo(team1);
     }
+
+    @Tag("Unit Test")
+    @Tag("Structural")
+    @Test
+    @DisplayName("testando get user")
+    public void testingGetUser(){
+        List<Team> teams = List.of();
+        Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
+
+        assertThat(campeonato.getUser()).isEqualTo(userTest);
+    }
+
+    
 }
