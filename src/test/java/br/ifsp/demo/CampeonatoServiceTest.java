@@ -570,5 +570,21 @@ public class CampeonatoServiceTest {
     public void testingCreateCampeonatoWithNullTeams() {
         assertThatThrownBy(() -> service.createCampeonato("Time", null, userTest.getId())).isInstanceOf(NullPointerException.class);
     }
+
+    @Tag("Unit Test")
+    @Tag("Structural")
+    @ParameterizedTest
+    @DisplayName("testando registrar vencedor de um dos times fora da partida")
+    @MethodSource("provide4Teams")
+    public void testingDifferentWinnerOnTheMatch(List<Team> teams){
+
+        Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
+        Fase fase1 = campeonato.getCurrentFase();
+        Team team = teams.get(2);
+
+        assertThatThrownBy(() -> {
+            campeonato.registerResult(fase1.getPartidas().getFirst().getId(), team);
+        }).isInstanceOf(IllegalArgumentException.class);
+    }
     
 }
