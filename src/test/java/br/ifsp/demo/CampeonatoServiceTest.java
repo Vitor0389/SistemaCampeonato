@@ -625,7 +625,8 @@ public class CampeonatoServiceTest {
 
 
 
-        when(campeonatoRepository.findByIdAndUserId(userTest.getId(), any())).thenReturn(optionalCampeonato);
+        when(campeonatoRepository.findByIdAndUserId(eq(userTest.getId()), eq(campeonato.getId())))
+                .thenReturn(optionalCampeonato);
 
         service.deleteCampeonato(campeonato.getId(), userTest.getId());
 
