@@ -497,4 +497,32 @@ public class CampeonatoServiceTest {
 
     }
 
+
+    @Tag("Unit Test")
+    @Tag("Structural")
+    @Test
+    @DisplayName("Testando criação com lista de times vazia")
+    public void testingCreateCampeonatoWithEmptyList() {
+        List<Team> teams = Collections.emptyList();
+        assertThatThrownBy(() -> service.createCampeonato("Time", teams, userTest.getId())).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Tag("Unit Test")
+    @Tag("Structural")
+    @Test
+    @DisplayName("Testando criação de nova fase com apenas um time na lista de vencedores")
+    public void testingCreateNewFaseWithJustOneWinner() {
+        List<Team> teams = List.of(
+                new Team(UUID.randomUUID(), "time 1"),
+                new Team(UUID.randomUUID(), "time 2")
+        );
+        Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
+
+        Fase fase1 = campeonato.getCurrentFase();
+
+        campeonato.registerResult(fase1.getPartidas().getFirst().getId(), fase1.getPartidas().getFirst().getTeamA());
+
+
+        assertThat(campeonato.getFasesList()).hasSize(1);
+    }
 }
