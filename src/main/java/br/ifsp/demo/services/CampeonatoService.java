@@ -58,7 +58,7 @@ public class CampeonatoService {
                 .toList();
     }
 
-    public CampeonatoDTO findById(UUID campeonatoID, UUID user) {
+    public CampeonatoDTO findByIdAndUserId(UUID campeonatoID, UUID user) {
         Optional<Campeonato> optionalCampeonato = repository.findByIdAndUserId(campeonatoID, user);
         if (optionalCampeonato.isPresent()) {
             return new CampeonatoDTO(optionalCampeonato.get());

@@ -550,15 +550,16 @@ public class CampeonatoServiceTest {
         assertThat(campeonato.getWinner()).isEqualTo(team1);
     }
 
-    @Deprecated //user teste nao está no banco
+
     @Tag("Unit Test")
     @Tag("Structural")
     @ParameterizedTest
     @DisplayName("testando get user")
     @MethodSource("provide2Teams")
     public void testingGetUser(List<Team> teams){
-        Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
 
+        when(userRepository.getReferenceById(userTest.getId())).thenReturn(userTest);
+        Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
 
         assertThat(campeonato.getUser()).isEqualTo(userTest);
     }
@@ -586,5 +587,17 @@ public class CampeonatoServiceTest {
             campeonato.registerResult(fase1.getPartidas().getFirst().getId(), team);
         }).isInstanceOf(IllegalArgumentException.class);
     }
-    
+
+    @Tag("Unit Test")
+    @Tag("Structural")
+    @ParameterizedTest
+    @DisplayName("Testando findByIdAndUserId")
+    @MethodSource("provide2Teams")
+    public void testingFindByIdAndUserId(List<Team> teams) {
+        Campeonato campeonatoCriado = service.createCampeonato("Champions League", teams, userTest.getId());
+
+        when(campeonatoRepository.findByIdAndUserId(campeonatoCriado.getId(), userTest.getId())).thenReturn(Optional.of(campeonatoCriado));
+        CampeonatoDTO campeonatoRecebido = service.findByIdAndUserId(campeonatoCriado.getId(), userTest.getId());
+        assertThat(campeonatoRecebido).isNotNull();
+    }
 }
