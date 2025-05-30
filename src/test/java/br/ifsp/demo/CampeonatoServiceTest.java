@@ -600,4 +600,15 @@ public class CampeonatoServiceTest {
         CampeonatoDTO campeonatoRecebido = service.findByIdAndUserId(campeonatoCriado.getId(), userTest.getId());
         assertThat(campeonatoRecebido).isNotNull();
     }
+
+    @Tag("Unit Test")
+    @Tag("Structural")
+    @ParameterizedTest
+    @DisplayName("Testando findByIdAndUserId")
+    @MethodSource("provide2Teams")
+    public void testingNotFindByIdAndUserId(List<Team> teams){
+        Campeonato campeonatoCriado = service.createCampeonato("Champions League", teams, userTest.getId());
+
+        assertThatThrownBy(() -> service.findByIdAndUserId(UUID.randomUUID(), userTest.getId())).isInstanceOf(NoSuchElementException.class);
+    }
 }
