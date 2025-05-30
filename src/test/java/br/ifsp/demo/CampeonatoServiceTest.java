@@ -632,4 +632,27 @@ public class CampeonatoServiceTest {
             service.deleteCampeonato(campeonato.getId(), userTest.getId());
         }).isInstanceOf(NoSuchElementException.class);
     }
+
+    @Tag("Unit Test")
+    @Tag("Structural")
+    @Test
+    @DisplayName("testando se registras resultado quando o campeonato existe")
+    void testingIfRegisterResultWhenCampeonatoExists() {
+
+        UUID campId = UUID.randomUUID();
+        UUID partidaId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        TeamDTO teamDTO = new TeamDTO(UUID.randomUUID(), "Team A");
+
+        Campeonato campeonatoMock = mock(Campeonato.class);
+        when(campeonatoRepository.findByIdAndUserId(campId, userId)).thenReturn(Optional.of(campeonatoMock));
+
+        service.registerResult(campId, partidaId, teamDTO, userId);
+
+        verify(campeonatoMock).registerResult(eq(partidaId), argThat(team ->
+                team.getId().equals(teamDTO.id()) && team.getName().equals(teamDTO.name())
+        ));
+    }
+
+
 }
