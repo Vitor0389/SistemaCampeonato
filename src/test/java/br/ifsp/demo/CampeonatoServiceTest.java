@@ -552,10 +552,10 @@ public class CampeonatoServiceTest {
 
     @Tag("Unit Test")
     @Tag("Structural")
-    @Test
+    @ParameterizedTest
     @DisplayName("testando get user")
-    public void testingGetUser(){
-        List<Team> teams = List.of();
+    @MethodSource("provide2Teams")
+    public void testingGetUser(List<Team> teams){
         Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
 
         assertThat(campeonato.getUser()).isEqualTo(userTest);
