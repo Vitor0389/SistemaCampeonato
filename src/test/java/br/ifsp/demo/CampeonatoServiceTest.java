@@ -484,6 +484,17 @@ public class CampeonatoServiceTest {
                 .isInstanceOf(NoSuchElementException.class);
     }
 
+    @Tag("Unit Test")
+    @Tag("Structural")
+    @ParameterizedTest
+    @DisplayName("Testando criação com mais de 32 times")
+    @MethodSource("provide32Teams")
+    public void testingCreateCamepeonatoWithMoreThan32Times(List<Team> teams) {
+        Team team33 = new Team(UUID.randomUUID(), "Time 33");
+        teams.add(team33);
 
+       assertThatThrownBy(() -> service.createCampeonato("Time", teams, userTest.getId())).isInstanceOf(IllegalArgumentException.class);
+
+    }
 
 }
