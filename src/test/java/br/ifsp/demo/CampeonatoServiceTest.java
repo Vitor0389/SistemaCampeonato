@@ -611,4 +611,29 @@ public class CampeonatoServiceTest {
 
         assertThatThrownBy(() -> service.findByIdAndUserId(UUID.randomUUID(), userTest.getId())).isInstanceOf(NoSuchElementException.class);
     }
+
+    @Tag("Unit Test")
+    @Tag("Structural")
+    @ParameterizedTest
+    @DisplayName("Testando deletar campeonato do BD")
+    @MethodSource("provide2Teams")
+    public void testingDeleteCampeonato(List<Team> teams){
+
+        Campeonato campeonato = service.createCampeonato("Time", teams, userTest.getId());
+
+        Optional<Campeonato> optionalCampeonato = Optional.of(campeonato);
+
+
+
+        when(campeonatoRepository.findByIdAndUserId(userTest.getId(), any())).thenReturn(optionalCampeonato);
+
+        service.deleteCampeonato(campeonato.getId(), userTest.getId());
+
+        verify(campeonatoRepository).deleteById(campeonato.getId());
+
+        assertThatThrownBy(() -> {
+            service.deleteCampeonato(campeonato.getId(), userTest.getId());
+        }).isInstanceOf(NoSuchElementException.class);
+
+    }
 }
