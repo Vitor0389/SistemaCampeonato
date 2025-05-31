@@ -56,6 +56,14 @@ public class CampeonatoServiceTest {
         return Stream.of(Arguments.of(teams));
     }
 
+    private static Stream<Arguments> provide8Teams() {
+        List<Team> teams = IntStream.range(1, 9)
+                .mapToObj(i -> new Team(UUID.randomUUID(), "Time " + i))
+                .collect(Collectors.toList());
+
+        return Stream.of(Arguments.of(teams));
+    }
+
     private static Stream<Arguments> provide4Teams() {
         List<Team> teams = IntStream.range(1, 5)
                 .mapToObj(i -> new Team(UUID.randomUUID(), "Time " + i))
@@ -707,7 +715,7 @@ public class CampeonatoServiceTest {
     @MethodSource("provide2Teams")
     void testingIfFaseHasCampeonatoAssociated(List<Team> teams) {
 
-        Campeonato campeonato = Campeonato.createCampeonato("Campeonato Teste", teams);
+        Campeonato campeonato = service.createCampeonato("Campeonato Teste", teams, userTest.getId());
         Fase fase = campeonato.getCurrentFase();
 
         assertThat(fase.getCampeonato()).isEqualTo(campeonato);
@@ -721,7 +729,7 @@ public class CampeonatoServiceTest {
     @MethodSource("provide4Teams")
     void testingIfSetChaveInFirstPartidas(List<Team> teams) {
 
-        Campeonato campeonato = Campeonato.createCampeonato("Teste", teams);
+        Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
         List<Partida> partidas = campeonato.getCurrentFase().getPartidas();
 
         assertThat(partidas.get(0).getChave()).isEqualTo(0);
@@ -732,24 +740,53 @@ public class CampeonatoServiceTest {
     @Tag("Mutation")
     @ParameterizedTest
     @DisplayName("Deve atribuir corretamente o número da chave às partidas")
-    @MethodSource("provide4Teams")
+    @MethodSource("provide8Teams")
     void testingIfSetChaveInPartidas(List<Team> teams) {
 
-        Campeonato campeonato = Campeonato.createCampeonato("Teste", teams);
+        Campeonato campeonato = service.createCampeonato("Teste", teams, userTest.getId());
 
         List<Partida> partidas = campeonato.getCurrentFase().getPartidas();
         campeonato.registerResult(partidas.get(0).getId(), partidas.get(0).getTeamA());
         campeonato.registerResult(partidas.get(1).getId(), partidas.get(1).getTeamA());
+        campeonato.registerResult(partidas.get(2).getId(), partidas.get(2).getTeamA());
+        campeonato.registerResult(partidas.get(3).getId(), partidas.get(3).getTeamA());
 
 
         Fase novaFase = campeonato.getCurrentFase();
         List<Partida> partidasNovaFase = novaFase.getPartidas();
 
         assertThat(partidasNovaFase.getFirst().getChave()).isEqualTo(0);
+        assertThat(partidasNovaFase.get(1).getChave()).isEqualTo(1);
 
 
     }
 
+    @Tag("Unit Test")
+    @Tag("Mutation")
+    @ParameterizedTest
+    @DisplayName("Deve criar nova fase corretamente com nome, referência e partidas")
+    @MethodSource("provide4Teams")
+    void deveCriarNovaFaseComNomeEReferenciasCorretas(List<Team> teams) {
+
+        Campeonato campeonato = service.createCampeonato("Copa", teams, userTest.getId());
+
+        List<Partida> partidas = campeonato.getCurrentFase().getPartidas();
+        for (Partida partida : partidas) {
+            campeonato.registerResult(partida.getId(), partida.getTeamA());
+        }
+
+        Fase novaFase = campeonato.getCurrentFase();
+
+
+        assertThat(novaFase.getName()).isEqualTo("Fase 2");
+
+
+        assertThat(novaFase.getCampeonato()).isEqualTo(campeonato);
+
+
+        assertThat(novaFase.getPartidas().getFirst().getFase()).isEqualTo(novaFase);
+
+    }
 
 
 }
