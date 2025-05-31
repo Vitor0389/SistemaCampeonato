@@ -787,6 +787,29 @@ public class CampeonatoServiceTest {
         assertThat(novaFase.getPartidas().getFirst().getFase()).isEqualTo(novaFase);
 
     }
+    @Tag("Unit Test")
+    @Tag("Mutation")
+    @ParameterizedTest
+    @DisplayName("Deve retornar corretamente o nome do campeonato")
+    @MethodSource("provide2Teams")
+    void shouldReturnCorrectCampeonatoName(List<Team> teams) {
+
+
+        Campeonato campeonato = service.createCampeonato("Copa IFSP", teams, userTest.getId());
+
+        assertThat(campeonato.getName()).isEqualTo("Copa IFSP");
+    }
+
+    @Tag("Unit Test")
+    @Tag("Mutation")
+    @Test
+    @DisplayName("Deve retornar corretamente o nome do time")
+    void shouldReturnCorrectTeamName() {
+        UUID teamId = UUID.randomUUID();
+        Team team = new Team(teamId, "São Paulo");
+
+        assertThat(team.getName()).isEqualTo("São Paulo");
+    }
 
 
 }

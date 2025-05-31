@@ -2,11 +2,13 @@ package br.ifsp.demo.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
+@EqualsAndHashCode(callSuper=false)
 public class Team {
     @Id
     private UUID id;
@@ -29,15 +31,5 @@ public class Team {
         return name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Team team = (Team) o;
-        return Objects.equals(id, team.id);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
 }
