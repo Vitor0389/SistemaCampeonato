@@ -169,8 +169,11 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <targetClasses>**</targetClasses>
-                    <targetTests>**</targetTests>
+                    <targetClasses>
+                        <param>br.ifsp.demo.services.*</param>
+                        <param>br.ifsp.demo.model.*</param>
+                    </targetClasses>
+                    <targetTests>br.ifsp.demo.CampeonatoServiceTest</targetTests>
                 </configuration>
             </plugin>
             <plugin>

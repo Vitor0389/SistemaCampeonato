@@ -695,7 +695,24 @@ public class CampeonatoServiceTest {
                 .thenReturn(Optional.of(campeonato));
 
         assertThatThrownBy(() -> service.registerResult(campeonato.getId(), partida.getId(), teamDTO, userTest.getId())).isInstanceOf(IllegalArgumentException.class);
+
+
     }
+
+
+    @Tag("Unit Test")
+    @Tag("Mutation")
+    @ParameterizedTest
+    @DisplayName("Deve criar fase inicial com referência ao campeonato")
+    @MethodSource("provide2Teams")
+    void testingIfFaseHasCampeonatoAssociated(List<Team> teams) {
+
+        Campeonato campeonato = Campeonato.createCampeonato("Campeonato Teste", teams);
+        Fase fase = campeonato.getCurrentFase();
+
+        assertThat(fase.getCampeonato()).isEqualTo(campeonato);
+    }
+
 
 
 }

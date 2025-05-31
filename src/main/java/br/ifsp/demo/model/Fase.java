@@ -64,4 +64,8 @@ public class Fase {
     public void setCampeonato(Campeonato campeonato) {
         this.campeonato = campeonato;
     }
+
+    public Campeonato getCampeonato() {
+        return campeonato;
+    }
 }
