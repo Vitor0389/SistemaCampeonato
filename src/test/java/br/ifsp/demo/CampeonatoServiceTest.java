@@ -717,15 +717,37 @@ public class CampeonatoServiceTest {
     @Tag("Unit Test")
     @Tag("Mutation")
     @ParameterizedTest
-    @DisplayName("Deve atribuir corretamente o número da chave às partidas")
+    @DisplayName("Deve atribuir corretamente o número da chave às partidas iniciais")
     @MethodSource("provide4Teams")
-    void deveAtribuirChavesCorretamenteNasPartidas(List<Team> teams) {
+    void testingIfSetChaveInFirstPartidas(List<Team> teams) {
 
         Campeonato campeonato = Campeonato.createCampeonato("Teste", teams);
         List<Partida> partidas = campeonato.getCurrentFase().getPartidas();
 
         assertThat(partidas.get(0).getChave()).isEqualTo(0);
         assertThat(partidas.get(1).getChave()).isEqualTo(1);
+    }
+
+    @Tag("Unit Test")
+    @Tag("Mutation")
+    @ParameterizedTest
+    @DisplayName("Deve atribuir corretamente o número da chave às partidas")
+    @MethodSource("provide4Teams")
+    void testingIfSetChaveInPartidas(List<Team> teams) {
+
+        Campeonato campeonato = Campeonato.createCampeonato("Teste", teams);
+
+        List<Partida> partidas = campeonato.getCurrentFase().getPartidas();
+        campeonato.registerResult(partidas.get(0).getId(), partidas.get(0).getTeamA());
+        campeonato.registerResult(partidas.get(1).getId(), partidas.get(1).getTeamA());
+
+
+        Fase novaFase = campeonato.getCurrentFase();
+        List<Partida> partidasNovaFase = novaFase.getPartidas();
+
+        assertThat(partidasNovaFase.getFirst().getChave()).isEqualTo(0);
+
+
     }
 
 
