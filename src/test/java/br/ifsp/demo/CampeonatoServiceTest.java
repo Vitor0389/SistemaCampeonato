@@ -639,21 +639,25 @@ public class CampeonatoServiceTest {
     @DisplayName("testando se registra resultado quando o campeonato existe")
     @MethodSource("provide2Teams")
     void testingIfRegisterResultWhenCampeonatoExists(List<Team> teams) {
+
         Campeonato campeonato = service.createCampeonato("teste", teams, userTest.getId());
         Partida partida = campeonato.getCurrentFase().getPartidas().getFirst();
 
-        TeamDTO teamDTO = new TeamDTO(partida.getTeamA().getId(), partida.getTeamA().getName());
+        Team teamA = partida.getTeamA();
 
+        TeamDTO teamDTO = new TeamDTO(teamA.getId(), teamA.getName());
 
+        when(campeonatoRepository.findByIdAndUserId(campeonato.getId(), userTest.getId()))
+                .thenReturn(Optional.of(campeonato));
 
-        when(campeonatoRepository.findByIdAndUserId(campeonato.getId(), userTest.getId())).thenReturn(Optional.of(campeonato));
 
         service.registerResult(campeonato.getId(), partida.getId(), teamDTO, userTest.getId());
 
-        verify(campeonato).registerResult(eq(partida.getId()), argThat(team ->
-                team.getId().equals(teamDTO.id()) && team.getName().equals(teamDTO.name())
-        ));
+
+        assertThat(partida.isFinished()).isTrue();
+        assertThat(partida.getWinner()).isEqualTo(teamA);
     }
+
 
     @Tag("Unit Test")
     @Tag("Structural")
@@ -672,6 +676,25 @@ public class CampeonatoServiceTest {
         assertThatThrownBy( () ->
                 service.registerResult(campId, partidaId, teamDTO, userId)
         ).isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Tag("Unit Test")
+    @Tag("Structural")
+    @ParameterizedTest
+    @DisplayName("testando se registra resultado quando o time vencedor nao faz parte da partida")
+    @MethodSource("provide2Teams")
+    void testingIfRegisterResultWhenTeamNotExistsInPartida(List<Team> teams) {
+
+        Campeonato campeonato = service.createCampeonato("teste", teams, userTest.getId());
+        Partida partida = campeonato.getCurrentFase().getPartidas().getFirst();
+
+
+        TeamDTO teamDTO = new TeamDTO(UUID.randomUUID(),"teste");
+
+        when(campeonatoRepository.findByIdAndUserId(campeonato.getId(), userTest.getId()))
+                .thenReturn(Optional.of(campeonato));
+
+        assertThatThrownBy(() -> service.registerResult(campeonato.getId(), partida.getId(), teamDTO, userTest.getId())).isInstanceOf(IllegalArgumentException.class);
     }
 
 
