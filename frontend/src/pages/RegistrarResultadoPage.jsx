@@ -62,7 +62,6 @@ export default function RegistrarResultadoPage() {
             setSelectedFase(novaFase || null);
             setLoading(false);
         } catch (err) {
-            setError('Erro ao registrar resultado');
             setLoading(false);
         }
     };
