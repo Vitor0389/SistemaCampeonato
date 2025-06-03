@@ -12,7 +12,7 @@ public class Campeonato {
     @Id
     private UUID id;
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
     @JoinColumn(name = "campeonato_id")
     private List<Team> times;
     @OneToMany(mappedBy = "campeonato", cascade = CascadeType.ALL, orphanRemoval = true)

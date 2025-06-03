@@ -21,7 +21,7 @@ public class Partida {
     @ManyToOne
     @JoinColumn(name = "team_vencedor_id")
     private Team winner;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "fase_id")
     private Fase fase;
     private int chave;
