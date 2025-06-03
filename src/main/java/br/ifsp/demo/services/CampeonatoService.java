@@ -77,6 +77,7 @@ public class CampeonatoService {
         }
     }
 
+    @Transactional
     public void registerResult(UUID campId, UUID partidaId, TeamDTO teamDTO, UUID userId){
         Optional<Campeonato> campeonato = repository.findByIdAndUserId(campId, userId);
         if(campeonato.isPresent()){
