@@ -11,6 +11,7 @@ import br.ifsp.demo.security.user.JpaUserRepository;
 import br.ifsp.demo.security.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.Option;
 import java.util.List;
@@ -75,6 +76,7 @@ public class CampeonatoService {
             throw new NoSuchElementException("Campeonato que está tentando deletar não existe!");
         }
     }
+
     public void registerResult(UUID campId, UUID partidaId, TeamDTO teamDTO, UUID userId){
         Optional<Campeonato> campeonato = repository.findByIdAndUserId(campId, userId);
         if(campeonato.isPresent()){

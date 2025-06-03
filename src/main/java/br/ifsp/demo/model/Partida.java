@@ -21,13 +21,14 @@ public class Partida {
     @ManyToOne
     @JoinColumn(name = "team_vencedor_id")
     private Team winner;
+    private boolean isFinished;
     @ManyToOne
     @JoinColumn(name = "fase_id")
     private Fase fase;
     private int chave;
 
 
-    private boolean isFinished;
+
 
     public Partida(Team teamA, Team teamB){
         this.teamA = teamA;
@@ -48,7 +49,7 @@ public class Partida {
     public void setWinner(Team winner){
         if(winner.equals(teamA) || winner.equals(teamB)){
             this.winner = winner;
-            isFinished = true;
+            this.isFinished = true;
         }
         else{
             throw new IllegalArgumentException("Vencedor deve ser um dos times da partida!");

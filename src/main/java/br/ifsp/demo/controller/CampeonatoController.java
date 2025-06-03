@@ -9,6 +9,7 @@ import br.ifsp.demo.model.Fase;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.security.auth.AuthenticationInfoService;
 import br.ifsp.demo.services.CampeonatoService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

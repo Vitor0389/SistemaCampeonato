@@ -67,10 +67,6 @@ export default function RegistrarResultadoPage() {
         }
     };
 
-    console.log('campeonatos:', campeonatos);
-    console.log('fases:', fases);
-    if(selectedFase) console.log('selectedFase.partidas:', selectedFase.partidas);
-
     return (
         <div style={{ maxWidth: '600px', margin: 'auto' }}>
             <h2>Registrar Resultado de Partida</h2>
