@@ -1,7 +1,6 @@
 # Front-end do Sistema de Campeonatos
 
-Este projeto é o front-end da aplicação para gerenciamento de campeonatos, fases e resultados de partidas, desenvolvido em React.
-
+Esse readme ensina a configurar e rodar o FrontEnd da Aplicação.
 ---
 
 ## Pré-requisitos
