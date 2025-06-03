@@ -20,10 +20,10 @@ cd <NOME_DA_PASTA_DO_PROJETO>
 
 2. Instale as dependências:
 npm install
-# ou
+ou
 yarn install
 
 3. Para iniciar a aplicação:
 npm start
-# ou
+ou
 yarn start
