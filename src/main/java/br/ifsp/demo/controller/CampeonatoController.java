@@ -58,7 +58,7 @@ import java.util.UUID;
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        @PatchMapping("/{id}/resultado/partida/{idPartida}")
+        @PatchMapping("/{campId}/resultado/partida/{partidaId}")
         public ResponseEntity<Void> registrarResultadoPartida(
                 @PathVariable UUID campId, @PathVariable UUID partidaId, @RequestBody TeamDTO teamDTO) {
             UUID usuarioId = authService.getAuthenticatedUserId();

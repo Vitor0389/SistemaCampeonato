@@ -1,9 +1,6 @@
 package br.ifsp.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.servlet.http.Part;
 import lombok.Getter;
 import org.springframework.security.core.parameters.P;
@@ -15,13 +12,13 @@ import java.util.UUID;
 public class Partida {
     @Id
     private UUID uuid;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "team_a_id")
     private Team teamA;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "team_b_id")
     private Team teamB;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "team_vencedor_id")
     private Team winner;
     @OneToOne

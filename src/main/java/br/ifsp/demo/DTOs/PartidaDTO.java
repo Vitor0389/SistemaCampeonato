@@ -6,12 +6,12 @@ import br.ifsp.demo.model.Team;
 import java.util.UUID;
 
 public record PartidaDTO(
-        Team teamA,
-        Team teamB,
-        Team winner,
+        TeamDTO teamA,
+        TeamDTO teamB,
+        TeamDTO winner,
         UUID uuid
 ) {
-    public PartidaDTO(Team teamA, Team teamB, Team winner, UUID uuid) {
+    public PartidaDTO(TeamDTO teamA, TeamDTO teamB, TeamDTO winner, UUID uuid) {
         this.teamA = teamA;
         this.teamB = teamB;
         this.winner = winner;
@@ -19,6 +19,12 @@ public record PartidaDTO(
     }
 
     public PartidaDTO(Partida partida){
-        this(partida.getTeamA(), partida.getTeamB(), partida.getWinner(), partida.getId());
+        this(
+                new TeamDTO(partida.getTeamA()),
+                new TeamDTO(partida.getTeamB()),
+                partida.getWinner() != null ? new TeamDTO(partida.getWinner()) : null,
+                partida.getId()
+        );
     }
 }
+
