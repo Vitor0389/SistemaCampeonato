@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 
 export default function LoginPage() {
@@ -8,6 +9,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,6 +37,7 @@ export default function LoginPage() {
         });
         localStorage.setItem('token', result.data.token);
         alert('Login realizado com sucesso!');
+        navigate('/main');  // <-- redireciona para a main após login
       }
     } catch (err) {
       console.error(err);
