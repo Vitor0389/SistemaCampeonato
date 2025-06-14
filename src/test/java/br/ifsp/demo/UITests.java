@@ -1,5 +1,6 @@
 package br.ifsp.demo;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -86,12 +87,26 @@ public class UITests extends BaseSeleniumTest{
 
     @Test
     @DisplayName("Should exit main page")
+    @Tag("UiTest")
     public void shouldExitMainPage() {
         driver.get("http://localhost:3000/main");
         delay(1000);
 
         final WebElement exitButton = driver.findElement(By.xpath("//button[not(@class='btn')]"));
         exitButton.click();
+        delay(3000);
+    }
+
+    @Test
+    @DisplayName("Should open create championship page")
+    @Tag("UiTest")
+    public void shouldOpenCreteChampionshipPage() {
+        driver.get("http://localhost:3000/main");
+        delay(1000);
+
+        final WebElement createChampionshipBtn =
+                driver.findElement(By.xpath("//button[contains(text(), 'Criar Campeonato')]"));
+        createChampionshipBtn.click();
         delay(3000);
     }
 }
