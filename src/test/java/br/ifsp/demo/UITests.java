@@ -19,4 +19,36 @@ public class UITests extends BaseSeleniumTest{
         registerButton.click();
         delay(1000);
     }
+
+    @Test
+    @DisplayName("Should register account")
+    @Tag("UiTest")
+    public void shouldRegisterAccount() {
+        driver.get("http://localhost:3000/login");
+        final WebElement registerButton =
+                driver.findElement(By.xpath("//button[not(@type='submit')]"));
+        delay(500);
+        registerButton.click();
+        delay(500);
+
+        final WebElement inputName =
+                driver.findElement(By.xpath("//input[@placeholder='Nome']"));
+        final WebElement inputSurname =
+                driver.findElement(By.xpath("//input[@placeholder='Sobrenome']"));
+        final WebElement inputEmail =
+                driver.findElement(By.xpath("//input[@placeholder='E-mail']"));
+        final WebElement inputPassword =
+                driver.findElement(By.xpath("//input[@placeholder='Senha']"));
+
+        inputName.sendKeys("Pedro");
+        inputSurname.sendKeys("Candido");
+        inputEmail.sendKeys("pedro@email.com");
+        inputPassword.sendKeys("123456");
+        delay(1000);
+
+        registerButton.click();
+        delay(1000);
+    }
+
+
 }
