@@ -83,4 +83,15 @@ public class UITests extends BaseSeleniumTest{
         loginButton.click();
         delay(2000);
     }
+
+    @Test
+    @DisplayName("Should exit main page")
+    public void shouldExitMainPage() {
+        driver.get("http://localhost:3000/main");
+        delay(1000);
+
+        final WebElement exitButton = driver.findElement(By.xpath("//button[not(@class='btn')]"));
+        exitButton.click();
+        delay(3000);
+    }
 }
