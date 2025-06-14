@@ -109,4 +109,17 @@ public class UITests extends BaseSeleniumTest{
         createChampionshipBtn.click();
         delay(3000);
     }
+
+    @Test
+    @DisplayName("Should open create championship page")
+    @Tag("UiTest")
+    public void shouldOpenFindChampionshipPage() {
+        driver.get("http://localhost:3000/main");
+        delay(1000);
+
+        final WebElement createChampionshipBtn =
+                driver.findElement(By.xpath("//button[contains(text(), 'Buscar Campeonatos')]"));
+        createChampionshipBtn.click();
+        delay(3000);
+    }
 }
