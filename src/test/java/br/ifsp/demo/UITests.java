@@ -122,4 +122,17 @@ public class UITests extends BaseSeleniumTest{
         createChampionshipBtn.click();
         delay(3000);
     }
+
+    @Test
+    @DisplayName("Should open delete championship page")
+    @Tag("UiTest")
+    public void shouldOpenDeleteChampionshipPage() {
+        driver.get("http://localhost:3000/main");
+        delay(1000);
+
+        final WebElement createChampionshipBtn =
+                driver.findElement(By.xpath("//button[contains(text(), 'Deletar Campeonato')]"));
+        createChampionshipBtn.click();
+        delay(3000);
+    }
 }
