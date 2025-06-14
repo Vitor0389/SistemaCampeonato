@@ -59,6 +59,7 @@ public class UITests extends BaseSeleniumTest{
         final WebElement registerButton =
                 driver.findElement(By.xpath("//button[not(@type='submit')]"));
         delay(500);
+
         registerButton.click();
         delay(500);
 
@@ -71,18 +72,20 @@ public class UITests extends BaseSeleniumTest{
         final WebElement inputPassword =
                 driver.findElement(By.xpath("//input[@placeholder='Senha']"));
 
-        inputName.sendKeys("Pedro");
-        inputSurname.sendKeys("Candido");
-        inputEmail.sendKeys("pedro@email.com");
-        inputPassword.sendKeys("123456");
+        inputName.sendKeys("Matheus");
+        inputSurname.sendKeys("Carvalho");
+        inputEmail.sendKeys("matheus@email.com");
+        inputPassword.sendKeys("abcd");
         delay(1000);
+
         registerButton.click();
         delay(1000);
 
         final WebElement loginButton =
                 driver.findElement(By.xpath("//button[@type='submit']"));
+
         loginButton.click();
-        delay(2000);
+        delay(3000);
     }
 
     @Test
@@ -117,9 +120,9 @@ public class UITests extends BaseSeleniumTest{
         driver.get("http://localhost:3000/main");
         delay(1000);
 
-        final WebElement createChampionshipBtn =
+        final WebElement findChampionshipBtn =
                 driver.findElement(By.xpath("//button[contains(text(), 'Buscar Campeonatos')]"));
-        createChampionshipBtn.click();
+        findChampionshipBtn.click();
         delay(3000);
     }
 
@@ -130,9 +133,22 @@ public class UITests extends BaseSeleniumTest{
         driver.get("http://localhost:3000/main");
         delay(1000);
 
-        final WebElement createChampionshipBtn =
+        final WebElement deleteChampionshipBtn =
                 driver.findElement(By.xpath("//button[contains(text(), 'Deletar Campeonato')]"));
-        createChampionshipBtn.click();
+        deleteChampionshipBtn.click();
+        delay(3000);
+    }
+
+    @Test
+    @DisplayName("Should open register match result page")
+    @Tag("UiTest")
+    public void shouldRegisterMatchResultPage() {
+        driver.get("http://localhost:3000/main");
+        delay(1000);
+
+        final WebElement registerMatchResultBtn =
+                driver.findElement(By.xpath("//button[contains(text(), 'Registrar Resultado de Partida')]"));
+        registerMatchResultBtn.click();
         delay(3000);
     }
 }
