@@ -40,12 +40,11 @@ public class TeamControllerTest {
     @Test
     @DisplayName("Should return all saved teams")
     void shouldReturnAllSavedTeams() throws Exception {
-        mockMvc.perform(get("/api/v1/teams") // Faz a requisição GET
+        mockMvc.perform(get("/api/v1/teams")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(35)));
     }
-
 
     //TODO: CRIAR ISSUE DESSE TESTE, POST PEDE LISTA AO INVÉS DE UM ELEMENTO
     @Test
