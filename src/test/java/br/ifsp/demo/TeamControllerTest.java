@@ -62,4 +62,13 @@ public class TeamControllerTest {
         assertThat(teams).hasSize(36);
         assertThat(teams.get(36).getName()).isEqualTo("Paysandu");
     }
+
+    @Test
+    @DisplayName("Should delete all teams")
+    void shouldDeleteAllTeams() throws Exception {
+        mockMvc.perform(delete("/api/v1/teams"))
+                .andExpect(status().isNoContent());
+
+        assertThat(repository.findAll()).isEmpty();
+    }
 }
