@@ -5,9 +5,7 @@ import br.ifsp.demo.controller.TeamController;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.repository.TeamRepository;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +31,18 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
 
     @Autowired private TeamRepository teamRepository;
     @Autowired private TeamController controller;
+
+    private List<Team> teamsBackup;
+
+    @BeforeEach
+    public void setUp() {
+        teamsBackup = teamRepository.findAll();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        teamRepository.saveAll(teamsBackup);
+    }
 
     @Test
     @DisplayName("Should return all saved teams")
@@ -81,6 +91,8 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
     @Tag("IngrationTest")
     @Tag("ApiTest")
     void shouldReturnEmptyListWhenRepositoryIsEmpty() {
+        teamRepository.deleteAll();
+
         List<Team> responseTeams = given().contentType("application/json").port(port)
                 .when().get("api/v1/teams")
                 .then().statusCode(200)
