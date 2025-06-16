@@ -43,13 +43,11 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
                 .then().statusCode(200)
                 .extract().body().jsonPath().getList(".", Team.class);
 
-
         final List<UUID> responseIds = responseTeams.stream().map(Team::getId).toList();
         List<Team> databaseTeams = teamRepository.findAll();
         List<UUID> databaseIds = databaseTeams.stream().map(Team::getId).toList();
 
-        assertThat(responseIds).hasSize(databaseIds.size())
-                .containsExactlyInAnyOrderElementsOf(databaseIds);
+        assertThat(responseIds).hasSize(databaseIds.size()).containsExactlyInAnyOrderElementsOf(databaseIds);
     }
 
     @Test
@@ -64,5 +62,14 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
                 .then().statusCode(201)
                 .contentType(ContentType.JSON)
                 .extract().body().jsonPath().getList(".", TeamDTO.class);
+    }
+
+    @Test
+    @DisplayName("Should delete all teams")
+    @Tag("IntegrationTest")
+    void shouldDeleteAllTeams() {
+        given().contentType(ContentType.JSON)
+                .when().delete("api/v1/teams")
+                .then().statusCode(204);
     }
 }
