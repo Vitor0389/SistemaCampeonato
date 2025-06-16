@@ -37,6 +37,7 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
     @Test
     @DisplayName("Should return all saved teams")
     @Tag("IntegrationTest")
+    @Tag("ApiTest")
     void shouldReturnAllSavedTeams() {
         List<Team> responseTeams = given().contentType("application/json").port(port)
                 .when().get("api/v1/teams")
@@ -53,6 +54,7 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
     @Test
     @DisplayName("Should create a new team")
     @Tag("IntegrationTest")
+    @Tag("ApiTest")
     void shouldCreateNewTeam() {
         TeamDTO newTeamDTO = new TeamDTO(UUID.randomUUID(), "Paysandu");
         List<TeamDTO> teamDTOs = List.of(newTeamDTO);
@@ -67,9 +69,23 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
     @Test
     @DisplayName("Should delete all teams")
     @Tag("IntegrationTest")
+    @Tag("ApiTest")
     void shouldDeleteAllTeams() {
         given().contentType(ContentType.JSON)
                 .when().delete("api/v1/teams")
                 .then().statusCode(204);
+    }
+
+    @Test
+    @DisplayName("Should return empty list when repository is empty")
+    @Tag("IngrationTest")
+    @Tag("ApiTest")
+    void shouldReturnEmptyListWhenRepositoryIsEmpty() {
+        List<Team> responseTeams = given().contentType("application/json").port(port)
+                .when().get("api/v1/teams")
+                .then().statusCode(200)
+                .extract().body().jsonPath().getList(".", Team.class);
+
+        assertThat(responseTeams).isEmpty();
     }
 }
