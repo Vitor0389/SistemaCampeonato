@@ -92,7 +92,6 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
     @Tag("ApiTest")
     void shouldReturnEmptyListWhenRepositoryIsEmpty() {
         teamRepository.deleteAll();
-
         List<Team> responseTeams = given().contentType("application/json").port(port)
                 .when().get("api/v1/teams")
                 .then().statusCode(200)
