@@ -49,18 +49,11 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                         new TeamDTO(UUID.fromString("a4444444-4444-4444-4444-444444444444"), "Bayern Munich"))
         );
 
-        given()
-                .header("Authorization", "Bearer " + authToken)
-                .contentType(ContentType.JSON)
-                .body(requestDTO)
-                .when()
-                .post("/api/v1/campeonatos")
-                .then()
-                .statusCode(201)
-                .body("id", notNullValue())
-                .body("name", notNullValue())
-                .log().all();
+        given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON)
+                .body(requestDTO).when().post("/api/v1/campeonatos")
+                .then().statusCode(201).body("id", notNullValue()).body("name", notNullValue()).log().all();
     }
+
     @Test
     @DisplayName("Should return 400 when championship name is blank")
     void shouldReturnBadRequestWhenNameIsBlank() {
@@ -72,16 +65,11 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 )
         );
 
-        given()
-                .header("Authorization", "Bearer " + authToken)
-                .contentType(ContentType.JSON)
-                .body(requestDTO)
-                .when()
-                .post("/api/v1/campeonatos")
-                .then()
-                .statusCode(400)
-                .log().all();
+        given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON)
+                .body(requestDTO).when().post("/api/v1/campeonatos")
+                .then().statusCode(400).log().all();
     }
+
     @Test
     @DisplayName("Should return 400 when championship name is null")
     void shouldReturnBadRequestWhenNameIsNull() {
@@ -93,70 +81,49 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 )
         );
 
-        given()
-                .header("Authorization", "Bearer " + authToken)
-                .contentType(ContentType.JSON)
-                .body(requestDTO)
-                .when()
-                .post("/api/v1/campeonatos")
-                .then()
-                .statusCode(400)
-                .log().all();
+        given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON)
+                .body(requestDTO).when().post("/api/v1/campeonatos")
+                .then().statusCode(400).log().all();
     }
+
     @Test
     @DisplayName("Should return 400 when teams list is insufficient")
     void shouldReturnBadRequestWhenTeamsListIsInsufficient() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
                 "Campeonato com Poucos Times",
-                Collections.singletonList(new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"))
+                Collections.singletonList(
+                        new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"))
         );
 
-        given()
-                .header("Authorization", "Bearer " + authToken)
-                .contentType(ContentType.JSON)
-                .body(requestDTO)
-                .when()
-                .post("/api/v1/campeonatos")
-                .then()
-                .statusCode(400)
-                .log().all();
+        given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON)
+                .body(requestDTO).when().post("/api/v1/campeonatos")
+                .then().statusCode(400).log().all();
     }
+
     @Test
     @DisplayName("Should return 400 when teams list is empty")
     void shouldReturnBadRequestWhenTeamsListIsEmpty() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
-                "Campeonato Sem Times",
-                new ArrayList<>()
+                "Campeonato Sem Times", new ArrayList<>()
         );
 
-        given()
-                .header("Authorization", "Bearer " + authToken)
-                .contentType(ContentType.JSON)
-                .body(requestDTO)
-                .when()
-                .post("/api/v1/campeonatos")
-                .then()
-                .statusCode(400)
-                .log().all();
+        given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON)
+                .body(requestDTO).when().post("/api/v1/campeonatos")
+                .then().statusCode(400).log().all();
     }
+
     @Test
     @DisplayName("Should return 400 when teams list is null")
     void shouldReturnBadRequestWhenTeamsListIsNull() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
-                "Campeonato com Lista Nula de Times",
-                null
+                "Campeonato com Lista Nula de Times", null
         );
 
-        given()
-                .header("Authorization", "Bearer " + authToken)
-                .contentType(ContentType.JSON)
-                .body(requestDTO)
-                .when()
-                .post("/api/v1/campeonatos")
-                .then()
-                .statusCode(400)
-                .log().all();
+        given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON)
+                .body(requestDTO).when().post("/api/v1/campeonatos")
+                .then().statusCode(400).log().all();
     }
+
     @Test
     @DisplayName("Should create championship with eight teams")
     void shouldCreateChampionshipWithEightTeams() {
@@ -175,9 +142,10 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
         );
 
         given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON)
-                .body(requestDTO).when().post("/api/v1/campeonatos").then()
-                .statusCode(201).body("id", notNullValue()).body("name", notNullValue()).log().all();
+                .body(requestDTO).when().post("/api/v1/campeonatos")
+                .then().statusCode(201).body("id", notNullValue()).body("name", notNullValue()).log().all();
     }
+
     @Test
     @DisplayName("Should not create championship with not power of 2 teams")
     void shouldNotCreateChampionshipWithSixTeams(){
@@ -193,14 +161,9 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 )
         );
 
-        given()
-                .header("Authorization", "Bearer " + authToken)
-                .contentType(ContentType.JSON)
-                .body(requestDTO)
-                .when()
-                .post("/api/v1/campeonatos")
-                .then()
-                .statusCode(400)
-                .log().all();
+        given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON)
+                .body(requestDTO).when().post("/api/v1/campeonatos")
+                .then().statusCode(400).log().all();
     }
+
 }
