@@ -91,6 +91,29 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .log().all();
     }
     @Test
+    @DisplayName("Should return 400 when championship name is null")
+    void shouldReturnBadRequestWhenNameIsNull() {
+        // Create a DTO with a null name
+        CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
+                null, // Name is null
+                Arrays.asList(
+                        new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"),
+                        new TeamDTO(UUID.fromString("a2222222-2222-2222-2222-222222222222"), "Real Madrid")
+                )
+        );
+
+        // Perform the API request and assert the response
+        given()
+                .header("Authorization", "Bearer " + authToken)
+                .contentType(ContentType.JSON)
+                .body(requestDTO)
+                .when()
+                .post("/api/v1/campeonatos")
+                .then()
+                .statusCode(400)
+                .log().all();
+    }
+    @Test
     @DisplayName("Should return 400 when teams list is insufficient")
     void shouldReturnBadRequestWhenTeamsListIsInsufficient() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
