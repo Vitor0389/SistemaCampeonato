@@ -140,4 +140,22 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .statusCode(400)
                 .log().all();
     }
+    @Test
+    @DisplayName("Should return 400 when teams list is null")
+    void shouldReturnBadRequestWhenTeamsListIsNull() {
+        CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
+                "Campeonato com Lista Nula de Times",
+                null
+        );
+
+        given()
+                .header("Authorization", "Bearer " + authToken)
+                .contentType(ContentType.JSON)
+                .body(requestDTO)
+                .when()
+                .post("/api/v1/campeonatos")
+                .then()
+                .statusCode(400)
+                .log().all();
+    }
 }
