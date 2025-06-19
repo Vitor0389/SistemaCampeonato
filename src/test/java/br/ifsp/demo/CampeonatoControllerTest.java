@@ -90,5 +90,22 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .statusCode(400)
                 .log().all();
     }
+    @Test
+    @DisplayName("Should return 400 when teams list is insufficient")
+    void shouldReturnBadRequestWhenTeamsListIsInsufficient() {
+        CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
+                "Campeonato com Poucos Times",
+                Collections.singletonList(new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"))
+        );
 
+        given()
+                .header("Authorization", "Bearer " + authToken)
+                .contentType(ContentType.JSON)
+                .body(requestDTO)
+                .when()
+                .post("/api/v1/campeonatos")
+                .then()
+                .statusCode(400)
+                .log().all();
+    }
 }
