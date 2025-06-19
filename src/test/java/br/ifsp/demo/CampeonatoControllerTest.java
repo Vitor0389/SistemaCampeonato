@@ -178,4 +178,29 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .body(requestDTO).when().post("/api/v1/campeonatos").then()
                 .statusCode(201).body("id", notNullValue()).body("name", notNullValue()).log().all();
     }
+    @Test
+    @DisplayName("Should not create championship with not power of 2 teams")
+    void shouldNotCreateChampionshipWithSixTeams(){
+        CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
+                "Campeonato de Seis Times",
+                Arrays.asList(
+                        new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"),
+                        new TeamDTO(UUID.fromString("a2222222-2222-2222-2222-222222222222"), "Real Madrid"),
+                        new TeamDTO(UUID.fromString("a3333333-3333-3333-3333-333333333333"), "Barcelona"),
+                        new TeamDTO(UUID.fromString("a4444444-4444-4444-4444-444444444444"), "Bayern Munich"),
+                        new TeamDTO(UUID.fromString("a5555555-5555-5555-5555-555555555555"), "Liverpool"),
+                        new TeamDTO(UUID.fromString("a6666666-6666-6666-6666-666666666666"), "Chelsea")
+                )
+        );
+
+        given()
+                .header("Authorization", "Bearer " + authToken)
+                .contentType(ContentType.JSON)
+                .body(requestDTO)
+                .when()
+                .post("/api/v1/campeonatos")
+                .then()
+                .statusCode(400)
+                .log().all();
+    }
 }
