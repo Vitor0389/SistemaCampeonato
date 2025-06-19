@@ -5,21 +5,13 @@ import br.ifsp.demo.DTOs.TeamDTO;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.repository.TeamRepository;
 import br.ifsp.demo.security.user.User;
-import com.github.javafaker.Faker;
-import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.IntStream;
-
+import java.util.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -102,7 +94,6 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 )
         );
 
-        // Perform the API request and assert the response
         given()
                 .header("Authorization", "Bearer " + authToken)
                 .contentType(ContentType.JSON)
@@ -119,6 +110,24 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
                 "Campeonato com Poucos Times",
                 Collections.singletonList(new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"))
+        );
+
+        given()
+                .header("Authorization", "Bearer " + authToken)
+                .contentType(ContentType.JSON)
+                .body(requestDTO)
+                .when()
+                .post("/api/v1/campeonatos")
+                .then()
+                .statusCode(400)
+                .log().all();
+    }
+    @Test
+    @DisplayName("Should return 400 when teams list is empty")
+    void shouldReturnBadRequestWhenTeamsListIsEmpty() {
+        CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
+                "Campeonato Sem Times",
+                new ArrayList<>()
         );
 
         given()
