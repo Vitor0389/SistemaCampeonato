@@ -69,5 +69,26 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .body("name", notNullValue())
                 .log().all();
     }
+    @Test
+    @DisplayName("Should return 400 when championship name is blank")
+    void shouldReturnBadRequestWhenNameIsBlank() {
+        CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
+                "",
+                Arrays.asList(
+                        new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"),
+                        new TeamDTO(UUID.fromString("a2222222-2222-2222-2222-222222222222"), "Real Madrid")
+                )
+        );
+
+        given()
+                .header("Authorization", "Bearer " + authToken)
+                .contentType(ContentType.JSON)
+                .body(requestDTO)
+                .when()
+                .post("/api/v1/campeonatos")
+                .then()
+                .statusCode(400)
+                .log().all();
+    }
 
 }
