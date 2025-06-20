@@ -327,5 +327,49 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
         given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON).body(requestDTO)
                 .when().post("/api/v1/campeonatos").then().statusCode(400).log().all();
     }
+    @Test
+    @DisplayName("Should create championship with 32 teams successfully")
+    void shouldCreateChampionshipWith32TeamsSuccessfully() {
+        List<TeamDTO> teams = Arrays.asList(
+                new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"),
+                new TeamDTO(UUID.fromString("a2222222-2222-2222-2222-222222222222"), "Real Madrid"),
+                new TeamDTO(UUID.fromString("a3333333-3333-3333-3333-333333333333"), "Barcelona"),
+                new TeamDTO(UUID.fromString("a4444444-4444-4444-4444-444444444444"), "Bayern Munich"),
+                new TeamDTO(UUID.fromString("a5555555-5555-5555-5555-555555555555"), "Liverpool"),
+                new TeamDTO(UUID.fromString("a6666666-6666-6666-6666-666666666666"), "Chelsea"),
+                new TeamDTO(UUID.fromString("a7777777-7777-7777-7777-777777777777"), "Arsenal"),
+                new TeamDTO(UUID.fromString("a8888888-8888-8888-8888-888888888888"), "Juventus"),
+                new TeamDTO(UUID.fromString("a9999999-9999-9999-9999-999999999999"), "Paris Saint-Germain"),
+                new TeamDTO(UUID.fromString("b1111111-1111-1111-1111-111111111111"), "Manchester City"),
+                new TeamDTO(UUID.fromString("b2222222-2222-2222-2222-222222222222"), "AC Milan"),
+                new TeamDTO(UUID.fromString("b3333333-3333-3333-3333-333333333333"), "Inter Milan"),
+                new TeamDTO(UUID.fromString("b4444444-4444-4444-4444-444444444444"), "Atletico Madrid"),
+                new TeamDTO(UUID.fromString("b5555555-5555-5555-5555-555555555555"), "Borussia Dortmund"),
+                new TeamDTO(UUID.fromString("b6666666-6666-6666-6666-666666666666"), "Tottenham Hotspur"),
+                new TeamDTO(UUID.fromString("b7777777-7777-7777-7777-777777777777"), "Ajax"),
+                new TeamDTO(UUID.fromString("b8888888-8888-8888-8888-888888888888"), "Napoli"),
+                new TeamDTO(UUID.fromString("b9999999-9999-9999-9999-999999999999"), "RB Leipzig"),
+                new TeamDTO(UUID.fromString("c1111111-1111-1111-1111-111111111111"), "Sevilla"),
+                new TeamDTO(UUID.fromString("c2222222-2222-2222-2222-222222222222"), "Valencia"),
+                new TeamDTO(UUID.fromString("c3333333-3333-3333-3333-333333333333"), "Olympique Lyonnais"),
+                new TeamDTO(UUID.fromString("c4444444-4444-4444-4444-444444444444"), "Bayer Leverkusen"),
+                new TeamDTO(UUID.fromString("c5555555-5555-5555-5555-555555555555"), "AS Roma"),
+                new TeamDTO(UUID.fromString("c6666666-6666-6666-6666-666666666666"), "Lazio"),
+                new TeamDTO(UUID.fromString("c7777777-7777-7777-7777-777777777777"), "Monaco"),
+                new TeamDTO(UUID.fromString("c8888888-8888-8888-8888-888888888888"), "Porto"),
+                new TeamDTO(UUID.fromString("c9999999-9999-9999-9999-999999999999"), "Benfica"),
+                new TeamDTO(UUID.fromString("d1111111-1111-1111-1111-111111111111"), "Schalke 04"),
+                new TeamDTO(UUID.fromString("d2222222-2222-2222-2222-222222222222"), "Villarreal"),
+                new TeamDTO(UUID.fromString("d3333333-3333-3333-3333-333333333333"), "Zenit Saint Petersburg"),
+                new TeamDTO(UUID.fromString("d4444444-4444-4444-4444-444444444444"), "Olympique de Marseille"),
+                new TeamDTO(UUID.fromString("d5555555-5555-5555-5555-555555555555"), "Celtic")
+        );
+
+        CampeonatoRequestDTO request = new CampeonatoRequestDTO("Campeonato Completo", teams);
+
+        given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON).body(request)
+                .when().post("/api/v1/campeonatos").then().statusCode(201).body("id", notNullValue())
+                .body("name", equalTo("Campeonato Completo")).body("teams", hasSize(32)).log().all();
+    }
 
 }
