@@ -280,5 +280,22 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
         given().header("Authorization", "Bearer " + authToken).when().delete("/api/v1/campeonatos/{id}", fakeId)
                 .then().statusCode(404).log().all();
     }
+    @Test
+    @DisplayName("Should delete championship successfully")
+    void shouldDeleteChampionshipSuccessfully() {
+        CampeonatoRequestDTO request = new CampeonatoRequestDTO(
+                "Campeonato Deletavel",
+                Arrays.asList(
+                        new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"),
+                        new TeamDTO(UUID.fromString("a2222222-2222-2222-2222-222222222222"), "Real Madrid")
+                )
+        );
 
+        String campeonatoId = given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON)
+                .body(request).when().post("/api/v1/campeonatos").then()
+                .statusCode(201).extract().path("id");
+        UUID campeonatoUuid = UUID.fromString(campeonatoId);
+        given().header("Authorization", "Bearer " + authToken).when().delete("/api/v1/campeonatos/{id}", campeonatoUuid)
+                .then().statusCode(204);
+    }
 }
