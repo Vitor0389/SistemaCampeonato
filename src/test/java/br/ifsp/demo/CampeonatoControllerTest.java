@@ -191,4 +191,28 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .then().statusCode(200).body("$", hasSize(1)).body("[0].name", equalTo("Campeonato Unico"))
                 .log().all();
     }
+    @Test
+    @DisplayName("Should return phases of a valid championship")
+    void shouldReturnPhasesOfValidChampionship() {
+        CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
+                "Campeonato Unico",
+                Arrays.asList(
+                        new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"),
+                        new TeamDTO(UUID.fromString("a2222222-2222-2222-2222-222222222222"), "Real Madrid"),
+                        new TeamDTO(UUID.fromString("a3333333-3333-3333-3333-333333333333"), "Barcelona"),
+                        new TeamDTO(UUID.fromString("a4444444-4444-4444-4444-444444444444"), "Bayern Munich")
+                )
+        );
+
+        String campeonatoId =
+                given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON).body(requestDTO)
+                        .when().post("/api/v1/campeonatos").then().statusCode(201).extract().path("id");
+
+        UUID campeonatoidUuid = UUID.fromString(campeonatoId);
+
+        given().header("Authorization", "Bearer " + authToken).when().get("/api/v1/campeonatos/{id}", campeonatoidUuid)
+                .then().statusCode(200).body("$", not(empty())).body("[0].name", containsString("Fase"))
+                .body("[0].partidas", hasSize(2)).log().all();
+    }
+
 }
