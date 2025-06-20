@@ -1,10 +1,8 @@
 package br.ifsp.demo;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 
 public class UITests extends BaseSeleniumTest{
@@ -149,6 +147,26 @@ public class UITests extends BaseSeleniumTest{
         final WebElement registerMatchResultBtn =
                 driver.findElement(By.xpath("//button[contains(text(), 'Registrar Resultado de Partida')]"));
         registerMatchResultBtn.click();
+        delay(3000);
+    }
+
+    @Test
+    @DisplayName("Should modify main page window size to test responsiveness")
+    @Tag("UiTest")
+    public void shouldModifyMainPageWindowSizeToTestResponsiveness() {
+        driver.get("http://localhost:3000/main");
+        delay(1000);
+
+        driver.manage().window().maximize();
+        delay(3000);
+
+        driver.manage().window().fullscreen();
+        delay(3000);
+
+        driver.manage().window().minimize();
+        delay(3000);
+
+        driver.manage().window().setSize(new Dimension(200, 800));
         delay(3000);
     }
 }
