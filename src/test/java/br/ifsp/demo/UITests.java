@@ -1,9 +1,16 @@
 package br.ifsp.demo;
 
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class UITests extends BaseSeleniumTest{
 
@@ -83,7 +90,38 @@ public class UITests extends BaseSeleniumTest{
                 driver.findElement(By.xpath("//button[@type='submit']"));
 
         loginButton.click();
-        delay(3000);
+        delay(2000);
+    }
+
+    @Test
+    @DisplayName("Should log in with an existing account")
+    @Tag("UiTest")
+    public void shouldLogInWithExistingAccount() {
+        driver.get("http://localhost:3000/login");
+        delay(1000);
+
+        final WebElement inputEmail =
+                driver.findElement(By.xpath("//input[@placeholder='E-mail']"));
+        final WebElement inputPassword =
+                driver.findElement(By.xpath("//input[@placeholder='Senha']"));
+
+        inputEmail.sendKeys("abc@email.com");
+        inputPassword.sendKeys("123");
+        delay(800);
+
+        final WebElement loginButton =
+                driver.findElement(By.xpath("//button[@type='submit']"));
+
+        loginButton.click();
+        delay(2000);
+
+        final Alert alert = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.alertIsPresent());
+        final String alertText = alert.getText();
+
+        alert.accept();
+        assertThat(alertText).isEqualTo("Login realizado com sucesso!");
+        delay(1000);
     }
 
     @Test
