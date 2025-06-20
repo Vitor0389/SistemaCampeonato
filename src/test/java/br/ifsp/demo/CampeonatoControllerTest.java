@@ -165,5 +165,11 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .body(requestDTO).when().post("/api/v1/campeonatos")
                 .then().statusCode(400).log().all();
     }
+    @Test
+    @DisplayName("Should return empty list when no championships are registered")
+    void shouldReturnEmptyListWhenNoChampionshipsRegistered() {
+        given().header("Authorization", "Bearer " + authToken).when().get("/api/v1/campeonatos")
+                .then().statusCode(200).body("$", empty()).log().all();
+    }
 
 }
