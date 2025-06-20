@@ -2,7 +2,6 @@ package br.ifsp.demo;
 
 import br.ifsp.demo.security.auth.AuthRequest;
 import br.ifsp.demo.security.auth.AuthResponse;
-import br.ifsp.demo.security.builder.EntityBuilder;
 import br.ifsp.demo.security.user.JpaUserRepository;
 import br.ifsp.demo.security.user.User;
 import io.restassured.RestAssured;
@@ -20,12 +19,13 @@ import static io.restassured.RestAssured.baseURI;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT) // fixes the Spring Boot port
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BaseApiIntegrationTest {
+
     @LocalServerPort protected int port = 8080;
     @Autowired private JpaUserRepository UserRepository;
 
     @BeforeEach
     public void generalSetup() {
-        baseURI = "http://localhost:8080";
+        RestAssured.baseURI = "http://localhost:8080";
     }
 
     @AfterEach
