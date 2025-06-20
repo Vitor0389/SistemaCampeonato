@@ -145,6 +145,46 @@ public class UITests extends BaseSeleniumTest{
     }
 
     @Test
+    @DisplayName("Should not log in with invalid e-mail")
+    @Tag("UiTest")
+    public void shouldNotLogInWithInvalidEmail() {
+        driver.get("http://localhost:3000/login");
+        delay(1000);
+
+        final WebElement inputEmail =
+                driver.findElement(By.xpath("//input[@placeholder='E-mail']"));
+        final WebElement inputPassword =
+                driver.findElement(By.xpath("//input[@placeholder='Senha']"));
+        final WebElement loginButton =
+                driver.findElement(By.xpath("//button[@type='submit']"));
+
+        loginButton.click();
+        delay(1000);
+
+
+        inputPassword.sendKeys("teste");
+        delay(2000);
+        loginButton.click();
+        delay(2000);
+        inputEmail.clear();
+        delay(2000);
+
+        inputEmail.sendKeys("teste@");
+        delay(2000);
+        loginButton.click();
+        delay(2000);
+        inputEmail.clear();
+        delay(2000);
+
+        inputEmail.sendKeys("teste@email.com");
+        delay(2000);
+        loginButton.click();
+        delay(2000);
+        inputEmail.clear();
+        delay(2000);
+    }
+
+    @Test
     @DisplayName("Should log in with an existing account")
     @Tag("UiTest")
     public void shouldLogInWithExistingAccount() {
