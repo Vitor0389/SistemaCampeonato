@@ -6,10 +6,7 @@ import br.ifsp.demo.model.Team;
 import br.ifsp.demo.repository.TeamRepository;
 import br.ifsp.demo.security.user.User;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 import static io.restassured.RestAssured.given;
@@ -38,6 +35,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
     }
 
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should create championship with valid data and authenticated user")
     void shouldCreateChampionshipWithValidDataAndAuthenticatedUser() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
@@ -55,6 +54,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
     }
 
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should return 400 when championship name is blank")
     void shouldReturnBadRequestWhenNameIsBlank() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
@@ -71,6 +72,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
     }
 
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should return 400 when championship name is null")
     void shouldReturnBadRequestWhenNameIsNull() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
@@ -87,6 +90,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
     }
 
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should return 400 when teams list is insufficient")
     void shouldReturnBadRequestWhenTeamsListIsInsufficient() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
@@ -101,6 +106,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
     }
 
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should return 400 when teams list is empty")
     void shouldReturnBadRequestWhenTeamsListIsEmpty() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
@@ -113,6 +120,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
     }
 
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should return 400 when teams list is null")
     void shouldReturnBadRequestWhenTeamsListIsNull() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
@@ -125,6 +134,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
     }
 
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should create championship with eight teams")
     void shouldCreateChampionshipWithEightTeams() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
@@ -147,6 +158,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
     }
 
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should not create championship with not power of 2 teams")
     void shouldNotCreateChampionshipWithSixTeams(){
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
@@ -166,12 +179,16 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .then().statusCode(400).log().all();
     }
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should return empty list when no championships are registered")
     void shouldReturnEmptyListWhenNoChampionshipsRegistered() {
         given().header("Authorization", "Bearer " + authToken).when().get("/api/v1/campeonatos")
                 .then().statusCode(200).body("$", empty()).log().all();
     }
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should return one championship when one is registered")
     void shouldReturnOneChampionshipWhenOneIsRegistered() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
@@ -192,6 +209,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .log().all();
     }
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should return phases of a valid championship")
     void shouldReturnPhasesOfValidChampionship() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
@@ -215,6 +234,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .body("[0].partidas", hasSize(2)).log().all();
     }
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should return 404 when championship does not exist")
     void shouldReturnNotFoundWhenChampionshipDoesNotExist() {
         UUID fakeId = UUID.randomUUID();
@@ -222,6 +243,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .when().get("/api/v1/campeonatos/{id}", fakeId).then().statusCode(404).log().all();
     }
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should register result of a match with valid data")
     void shouldRegisterMatchResultSuccessfully() {
         CampeonatoRequestDTO request = new CampeonatoRequestDTO(
@@ -248,6 +271,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .then().statusCode(204).log().all();
     }
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should return 400 when winner does not belong to the match")
     void shouldReturnBadRequestWhenWinnerIsNotInMatch(){
         CampeonatoRequestDTO request = new CampeonatoRequestDTO(
@@ -274,6 +299,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .then().statusCode(400).log().all();
     }
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should return 404 when trying to delete a non-existing championship")
     void shouldReturnNotFoundWhenDeletingNonExistingChampionship() {
         UUID fakeId = UUID.randomUUID();
@@ -281,6 +308,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .then().statusCode(404).log().all();
     }
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should delete championship successfully")
     void shouldDeleteChampionshipSuccessfully() {
         CampeonatoRequestDTO request = new CampeonatoRequestDTO(
@@ -299,6 +328,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .then().statusCode(204);
     }
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should return 400 when teams are duplicated")
     void shouldReturnBadRequestWhenTeamsAreDuplicated() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
@@ -315,6 +346,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .post("/api/v1/campeonatos").then().statusCode(400).log().all();
     }
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should return 400 when a team has a null ID")
     void shouldReturnBadRequestWhenTeamIdIsNull() {
         CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
@@ -328,6 +361,8 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .when().post("/api/v1/campeonatos").then().statusCode(400).log().all();
     }
     @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
     @DisplayName("Should create championship with 32 teams successfully")
     void shouldCreateChampionshipWith32TeamsSuccessfully() {
         List<TeamDTO> teams = Arrays.asList(
