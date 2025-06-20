@@ -247,5 +247,31 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .when().patch("/api/v1/campeonatos/{campId}/resultado/partida/{partidaId}", campeonatoId, partidaId)
                 .then().statusCode(204).log().all();
     }
+    @Test
+    @DisplayName("Should return 400 when winner does not belong to the match")
+    void shouldReturnBadRequestWhenWinnerIsNotInMatch(){
+        CampeonatoRequestDTO request = new CampeonatoRequestDTO(
+                "Copa Patch",
+                Arrays.asList(
+                        new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"),
+                        new TeamDTO(UUID.fromString("a2222222-2222-2222-2222-222222222222"), "Real Madrid")
+                )
+        );
+
+        String campeonatoIdStr = given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON).body(request).when()
+                .post("/api/v1/campeonatos").then().statusCode(201).extract().path("id");
+
+        UUID campeonatoId = UUID.fromString(campeonatoIdStr);
+
+        String partidaIdStr = given().header("Authorization", "Bearer " + authToken).when().get("/api/v1/campeonatos/" + campeonatoId)
+                .then().statusCode(200).extract().path("[0].partidas[0].uuid");
+        UUID partidaId = UUID.fromString(partidaIdStr);
+
+        TeamDTO teamForaDaPartida  = new TeamDTO(UUID.fromString("a3333333-3333-3333-3333-333333333333"), "Barcelona");
+
+        given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON).body(teamForaDaPartida)
+                .when().patch("/api/v1/campeonatos/{campId}/resultado/partida/{partidaId}", campeonatoId, partidaId)
+                .then().statusCode(400).log().all();
+    }
 
 }
