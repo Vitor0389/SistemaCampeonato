@@ -214,5 +214,13 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .then().statusCode(200).body("$", not(empty())).body("[0].name", containsString("Fase"))
                 .body("[0].partidas", hasSize(2)).log().all();
     }
+    @Test
+    @DisplayName("Should return 404 when championship does not exist")
+    void shouldReturnNotFoundWhenChampionshipDoesNotExist() {
+        UUID fakeId = UUID.randomUUID();
+        given().header("Authorization", "Bearer " + authToken)
+                .when().get("/api/v1/campeonatos/{id}", fakeId).then().statusCode(404).log().all();
+    }
+
 
 }
