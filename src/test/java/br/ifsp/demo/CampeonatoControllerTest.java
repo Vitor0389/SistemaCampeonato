@@ -273,5 +273,12 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
                 .when().patch("/api/v1/campeonatos/{campId}/resultado/partida/{partidaId}", campeonatoId, partidaId)
                 .then().statusCode(400).log().all();
     }
+    @Test
+    @DisplayName("Should return 404 when trying to delete a non-existing championship")
+    void shouldReturnNotFoundWhenDeletingNonExistingChampionship() {
+        UUID fakeId = UUID.randomUUID();
+        given().header("Authorization", "Bearer " + authToken).when().delete("/api/v1/campeonatos/{id}", fakeId)
+                .then().statusCode(404).log().all();
+    }
 
 }
