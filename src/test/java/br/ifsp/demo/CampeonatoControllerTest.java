@@ -298,4 +298,20 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
         given().header("Authorization", "Bearer " + authToken).when().delete("/api/v1/campeonatos/{id}", campeonatoUuid)
                 .then().statusCode(204);
     }
+    @Test
+    @DisplayName("Should return 400 when teams are duplicated")
+    void shouldReturnBadRequestWhenTeamsAreDuplicated() {
+        CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
+                "Campeonato com Times Duplicados",
+                Arrays.asList(
+                        new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"),
+                        new TeamDTO(UUID.fromString("a2222222-2222-2222-2222-222222222222"), "Real Madrid"),
+                        new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"),
+                        new TeamDTO(UUID.fromString("a3333333-3333-3333-3333-333333333333"), "Barcelona")
+                )
+        );
+
+        given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON).body(requestDTO).when()
+                .post("/api/v1/campeonatos").then().statusCode(400).log().all();
+    }
 }
