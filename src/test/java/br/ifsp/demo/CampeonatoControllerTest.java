@@ -314,4 +314,18 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
         given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON).body(requestDTO).when()
                 .post("/api/v1/campeonatos").then().statusCode(400).log().all();
     }
+    @Test
+    @DisplayName("Should return 400 when a team has a null ID")
+    void shouldReturnBadRequestWhenTeamIdIsNull() {
+        CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
+                "Campeonato com Time com ID Nulo",
+                Arrays.asList(
+                        new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"),
+                        new TeamDTO(null, "Real Madrid")
+                )
+        );
+        given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON).body(requestDTO)
+                .when().post("/api/v1/campeonatos").then().statusCode(400).log().all();
+    }
+
 }
