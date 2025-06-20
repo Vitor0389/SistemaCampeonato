@@ -26,6 +26,8 @@ public class UITests extends BaseSeleniumTest{
         delay(1000);
     }
 
+
+    // ISSUE: alert não aparece para confirmar o registro da conta
     @Test
     @DisplayName("Should register account")
     @Tag("UiTest")
@@ -46,16 +48,25 @@ public class UITests extends BaseSeleniumTest{
         final WebElement inputPassword =
                 driver.findElement(By.xpath("//input[@placeholder='Senha']"));
 
-        inputName.sendKeys("Pedro");
-        inputSurname.sendKeys("Candido");
-        inputEmail.sendKeys("pedro@email.com");
-        inputPassword.sendKeys("123456");
+        inputName.sendKeys("10");
+        inputSurname.sendKeys("10");
+        inputEmail.sendKeys("10@email.com");
+        inputPassword.sendKeys("10");
         delay(1000);
 
         registerButton.click();
         delay(1000);
+
+        final Alert alert = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.alertIsPresent());
+        final String alertText = alert.getText();
+
+        alert.accept();
+        assertThat(alertText).isEqualTo("Usuário registrado! Agora faça o login.");
+        delay(1000);
     }
 
+    // ISSUE: Consegue ir para tela de login sem ter clicado no alert
     @Test
     @DisplayName("Should register account and login")
     @Tag("UiTest")
@@ -84,6 +95,14 @@ public class UITests extends BaseSeleniumTest{
         delay(1000);
 
         registerButton.click();
+        delay(2000);
+
+        final Alert alert = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.alertIsPresent());
+        final String alertText = alert.getText();
+
+        alert.accept();
+        assertThat(alertText).isEqualTo("Usuário registrado! Agora faça o login.");
         delay(1000);
 
         final WebElement loginButton =
