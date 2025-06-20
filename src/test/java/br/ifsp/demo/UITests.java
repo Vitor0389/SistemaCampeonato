@@ -113,6 +113,14 @@ public class UITests extends BaseSeleniumTest{
     }
 
     @Test
+    @DisplayName("Should not log in if any input is null")
+    @Tag("UiTest")
+    public void shouldNotLogInIfAnyInputIsNull() {
+        driver.get("http://localhost:3000/login");
+
+    }
+
+    @Test
     @DisplayName("Should log in with an existing account")
     @Tag("UiTest")
     public void shouldLogInWithExistingAccount() {
