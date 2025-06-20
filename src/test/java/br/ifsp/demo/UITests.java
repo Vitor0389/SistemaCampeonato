@@ -117,7 +117,31 @@ public class UITests extends BaseSeleniumTest{
     @Tag("UiTest")
     public void shouldNotLogInIfAnyInputIsNull() {
         driver.get("http://localhost:3000/login");
+        delay(1000);
 
+        final WebElement inputEmail =
+                driver.findElement(By.xpath("//input[@placeholder='E-mail']"));
+        final WebElement inputPassword =
+                driver.findElement(By.xpath("//input[@placeholder='Senha']"));
+        final WebElement loginButton =
+                driver.findElement(By.xpath("//button[@type='submit']"));
+
+        loginButton.click();
+        delay(1000);
+
+        inputPassword.sendKeys("abcd");
+        delay(2000);
+        loginButton.click();
+        delay(2000);
+        inputPassword.clear();
+        delay(2000);
+
+        inputEmail.sendKeys("abc@email.com");
+        delay(1000);
+        loginButton.click();
+        delay(1000);
+        inputEmail.clear();
+        delay(2000);
     }
 
     @Test
