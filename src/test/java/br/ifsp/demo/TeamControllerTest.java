@@ -134,4 +134,17 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
         given().contentType(ContentType.JSON).port(port).body(List.of())
                 .when().post("/api/v1/teams").then().statusCode(400);
     }
+    @Test
+    @DisplayName("Should not create duplicated team")
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
+    void shouldNotCreateDuplicatedTeam() {
+        UUID duplicatedId = UUID.randomUUID();
+        TeamDTO team1 = new TeamDTO(duplicatedId, "Team Duplicated");
+        TeamDTO team2 = new TeamDTO(duplicatedId, "Team Duplicated");
+
+        given().contentType("application/json").port(port).body(List.of(team1, team2))
+                .when().post("/api/v1/teams").then().statusCode(400);
+    }
+
 }
