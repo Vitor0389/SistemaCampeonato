@@ -116,4 +116,14 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
                 .when().post("/api/v1/teams")
                 .then().statusCode(400);
     }
+    @Test
+    @DisplayName("Should not create a team with null name")
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
+    void shouldReturnBadRequestWhenNameIsNull() {
+        TeamDTO team = new TeamDTO(UUID.randomUUID(), null);
+
+        given().contentType(ContentType.JSON).body(List.of(team))
+                .when().post("/api/v1/teams").then().statusCode(400);
+    }
 }
