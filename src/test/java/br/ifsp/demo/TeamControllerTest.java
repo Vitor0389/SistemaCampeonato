@@ -126,4 +126,12 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
         given().contentType(ContentType.JSON).body(List.of(team))
                 .when().post("/api/v1/teams").then().statusCode(400);
     }
+    @Test
+    @DisplayName("Should not create a team when sending empty list")
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
+    void shouldReturnBadRequestWhenEmptyListIsSent() {
+        given().contentType(ContentType.JSON).port(port).body(List.of())
+                .when().post("/api/v1/teams").then().statusCode(400);
+    }
 }
