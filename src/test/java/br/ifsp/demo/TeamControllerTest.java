@@ -131,7 +131,7 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
     @Tag("IntegrationTest")
     @Tag("ApiTest")
     void shouldReturnBadRequestWhenEmptyListIsSent() {
-        given().contentType(ContentType.JSON).port(port).body(List.of())
+        given().contentType(ContentType.JSON).body(List.of())
                 .when().post("/api/v1/teams").then().statusCode(400);
     }
     @Test
@@ -143,7 +143,20 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
         TeamDTO team1 = new TeamDTO(duplicatedId, "Team Duplicated");
         TeamDTO team2 = new TeamDTO(duplicatedId, "Team Duplicated");
 
-        given().contentType("application/json").port(port).body(List.of(team1, team2))
+        given().contentType("application/json").body(List.of(team1, team2))
+                .when().post("/api/v1/teams").then().statusCode(400);
+    }
+    @Test
+    @DisplayName("Should not create duplicate names")
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
+    void shouldAllowDuplicateNames() {
+        List<TeamDTO> teams = List.of(
+                new TeamDTO(UUID.randomUUID(), "São Paulo"),
+                new TeamDTO(UUID.randomUUID(), "São Paulo")
+        );
+
+        given().contentType(ContentType.JSON).body(teams)
                 .when().post("/api/v1/teams").then().statusCode(400);
     }
 
