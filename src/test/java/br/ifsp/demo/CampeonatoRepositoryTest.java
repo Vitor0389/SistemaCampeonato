@@ -104,4 +104,11 @@ public class CampeonatoRepositoryTest {
 
         assertThat(campeonatos).isEmpty();
     }
+    @Test
+    @DisplayName("findByIdAndUserId Should Return Empty If Id Not Exists")
+    void findByIdAndUserIdShouldReturnEmptyIfIdNotExists() {
+        Optional<Campeonato> resultado = campRepository.findByIdAndUserId(UUID.randomUUID(), testUser.getId());
+
+        assertThat(resultado).isEmpty();
+    }
 }
