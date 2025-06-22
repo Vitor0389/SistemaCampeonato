@@ -80,4 +80,5 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
 
         assertThat(createPage.getErrorMsg()).isEqualTo("Erro ao criar campeonato");
     }
+
 }
