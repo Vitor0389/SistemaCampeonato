@@ -97,4 +97,11 @@ public class CampeonatoRepositoryTest {
                 .extracting(Campeonato::getName)
                 .isEqualTo("Campeonato Visível");
     }
+    @Test
+    @DisplayName("findAllByUserId Should Return Empty List When User Has No Championships")
+    void findAllByUserIdShouldReturnEmptyListWhenUserHasNoChampionships() {
+        List<Campeonato> campeonatos = campRepository.findAllByUserId(testUser.getId());
+
+        assertThat(campeonatos).isEmpty();
+    }
 }
