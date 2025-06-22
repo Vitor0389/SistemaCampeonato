@@ -81,4 +81,20 @@ public class CampeonatoRepositoryTest {
 
         assertThat(resultado).isNotPresent();
     }
+    @Test
+    @DisplayName("findByIdAndUserId Should Return Championship When Match")
+    void findByIdAndUserIdShouldReturnChampionshipWhenMatch() {
+        List<Team> teams = createAndPersistTeams("A", "B", "C", "D");
+        Campeonato campeonato = Campeonato.createCampeonato("Campeonato Visível", teams);
+        campeonato.setUser(testUser);
+        campRepository.save(campeonato);
+
+        Optional<Campeonato> resultado = campRepository.findByIdAndUserId(campeonato.getId(), testUser.getId());
+
+        assertThat(resultado)
+                .isPresent()
+                .get()
+                .extracting(Campeonato::getName)
+                .isEqualTo("Campeonato Visível");
+    }
 }
