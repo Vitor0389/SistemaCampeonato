@@ -19,6 +19,9 @@ public class CreateChampionshipPageObject extends BasePageObject {
     @FindBy(xpath = "//button[@type='submit' and text()='Criar']")
     private WebElement createBtn;
 
+    @FindBy(xpath = "//p[text()='Erro ao criar campeonato']")
+    private WebElement errorMsg;
+
     public CreateChampionshipPageObject(WebDriver driver) {
         super(driver);
     }
@@ -45,5 +48,9 @@ public class CreateChampionshipPageObject extends BasePageObject {
 
     public void clickCreateBtn() {
         createBtn.click();
+    }
+
+    public String getErrorMsg() {
+        return errorMsg.getText();
     }
 }
