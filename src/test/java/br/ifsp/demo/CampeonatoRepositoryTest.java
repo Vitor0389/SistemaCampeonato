@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
@@ -67,5 +68,17 @@ public class CampeonatoRepositoryTest {
         List<Campeonato> encontrados = campRepository.findAllByUserId(testUser.getId());
 
         assertThat(encontrados).isNotNull().hasSize(1).extracting(Campeonato::getName).containsExactly("Campeonato 1");
+    }
+    @Test
+    @DisplayName("findByIdAndUserId Should Return Empty When User Id Mismatch")
+    void findByIdAndUserIdShouldReturnEmptyWhenUserIdMismatch() {
+        List<Team> teams = createAndPersistTeams("A", "B", "C", "D");
+        Campeonato campeonato = Campeonato.createCampeonato("Campeonato Privado", teams);
+        campeonato.setUser(testUser);
+        campRepository.save(campeonato);
+
+        Optional<Campeonato> resultado = campRepository.findByIdAndUserId(campeonato.getId(), anotherUser.getId());
+
+        assertThat(resultado).isNotPresent();
     }
 }
