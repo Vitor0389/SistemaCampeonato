@@ -1,5 +1,6 @@
 package br.ifsp.demo;
 
+import br.ifsp.demo.model.Campeonato;
 import br.ifsp.demo.model.Team;
 import br.ifsp.demo.repository.CampeonatoRepository;
 import br.ifsp.demo.repository.TeamRepository;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -50,5 +52,20 @@ public class CampeonatoRepositoryTest {
                 .map(n -> new Team(UUID.randomUUID(), n)).toList();
         return teamRepository.saveAll(teams);
     }
+    @Test
+    @DisplayName("findAllByUserId Should Return Only Users Championships")
+    void findAllByUserIdShouldReturnOnlyUsersChampionships() {
+        List<Team> teams1 = createAndPersistTeams("A", "B", "C", "D");
+        Campeonato campeonato1 = Campeonato.createCampeonato("Campeonato 1", teams1);
+        campeonato1.setUser(testUser);
+        campRepository.save(campeonato1);
 
+        List<Team> teams2 = createAndPersistTeams("E", "F", "G", "H");
+        Campeonato campeonato2 = Campeonato.createCampeonato("Campeonato 2", teams2);
+        campeonato2.setUser(anotherUser);
+        campRepository.save(campeonato2);
+        List<Campeonato> encontrados = campRepository.findAllByUserId(testUser.getId());
+
+        assertThat(encontrados).isNotNull().hasSize(1).extracting(Campeonato::getName).containsExactly("Campeonato 1");
+    }
 }
