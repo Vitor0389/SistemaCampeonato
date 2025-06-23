@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.List;
+
 public class DeleteChampionshipPageObject extends BasePageObject{
 
     private static final String PAGE_URL = "http://localhost:3000/deletar";
@@ -15,6 +17,12 @@ public class DeleteChampionshipPageObject extends BasePageObject{
 
     @FindBy(xpath = "//p[@style='color: green;']")
     private WebElement successMsg;
+
+    @FindBy(xpath = "//ul/li")
+    private List<WebElement> championshipListItems;
+
+    @FindBy(xpath = "//ul/li[1]/button[text()='Deletar']")
+    private WebElement firstDeleteButton;
 
     public DeleteChampionshipPageObject(WebDriver driver) {
         super(driver);
@@ -46,5 +54,18 @@ public class DeleteChampionshipPageObject extends BasePageObject{
         } catch (Exception e) {
             return "";
         }
+    }
+
+    public void deleteAllChampionships() {
+        List<WebElement> currentItems = driver.findElements(By.xpath("//ul/li"));
+        while (!currentItems.isEmpty()) {
+            currentItems.getFirst().findElement(By.tagName("button")).click();
+            wait.until(ExpectedConditions.numberOfElementsToBeLessThan(By.xpath("//ul/li"), currentItems.size()));
+            currentItems = driver.findElements(By.xpath("//ul/li"));
+        }
+    }
+
+    public boolean championshipListIsEmpty() {
+        return driver.findElements(By.xpath("//ul/li")).isEmpty();
     }
 }
