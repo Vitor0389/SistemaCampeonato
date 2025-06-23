@@ -463,6 +463,24 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
         given().header("Authorization", "Bearer " + authToken).contentType("application/xml").body(xmlBody)
                 .when().post("/api/v1/campeonatos").then().statusCode(415).log().all();
     }
+    @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
+    @DisplayName("Should not permit SQL injection is attempted in name")
+    void shouldNotPermitSqlInjectionInName() {
+        String sqlInjection = "'; DROP TABLE tableTest; --";
+
+        CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
+                sqlInjection,
+                Arrays.asList(
+                        new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"),
+                        new TeamDTO(UUID.fromString("a2222222-2222-2222-2222-222222222222"), "Real Madrid")
+                )
+        );
+
+        given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON).body(requestDTO)
+                .when().post("/api/v1/campeonatos").then().statusCode(400).log().all();
+    }
 
 
 }
