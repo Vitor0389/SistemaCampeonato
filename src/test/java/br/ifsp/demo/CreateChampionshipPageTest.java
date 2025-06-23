@@ -55,11 +55,11 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
     }
 
     @Test
-    @DisplayName("Should create championship with all teams")
+    @DisplayName("Should create championship with 32 teams")
     @Tag("UiTest")
     void shouldCreateChampionshipWithAllTeams() {
-        createPage.writeChampionshipName("All Teams Championship");
-        createPage.selectAllTeams();
+        createPage.writeChampionshipName("32 Teams Championship");
+        createPage.selectNumberOfTeams(32);
         createPage.clickCreateBtn();
 
         delay(1000);
@@ -83,6 +83,8 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
 
         assertThat(createPage.getErrorMsg()).isEqualTo("Erro ao criar campeonato");
     }
+
+
 
     @Test
     @DisplayName("Should not create a championship with empty name")
