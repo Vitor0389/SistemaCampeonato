@@ -440,5 +440,29 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
         given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON).body(requestDTO)
                 .when().post("/api/v1/campeonatos").then().statusCode(400).log().all();
     }
+    @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
+    @DisplayName("Should return 415 when sending XML instead of JSON")
+    void shouldReturnUnsupportedMediaTypeWhenSendingXml() {
+        String xmlBody = """
+        <campeonatoRequestDTO>
+            <name>Campeonato XML</name>
+            <teams>
+                <teamDTO>
+                    <id>a1111111-1111-1111-1111-111111111111</id>
+                    <name>Manchester United</name>
+                </teamDTO>
+                <teamDTO>
+                    <id>a2222222-2222-2222-2222-222222222222</id>
+                    <name>Real Madrid</name>
+                </teamDTO>
+            </teams>
+        </campeonatoRequestDTO>
+    """;
+        given().header("Authorization", "Bearer " + authToken).contentType("application/xml").body(xmlBody)
+                .when().post("/api/v1/campeonatos").then().statusCode(415).log().all();
+    }
+
 
 }
