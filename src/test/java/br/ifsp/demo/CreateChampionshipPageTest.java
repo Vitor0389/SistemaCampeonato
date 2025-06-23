@@ -49,6 +49,21 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
         createPage.writeChampionshipName(championshipName);
         createPage.selectTeams(teams);
         createPage.clickCreateBtn();
+
+        delay(1000);
+        assertThat(createPage.getSuccessMsg()).isEqualTo("Campeonato criado com sucesso!");
+    }
+
+    @Test
+    @DisplayName("Should create championship with all teams")
+    @Tag("UiTest")
+    void shouldCreateChampionshipWithAllTeams() {
+        createPage.writeChampionshipName("All Teams Championship");
+        createPage.selectAllTeams();
+        createPage.clickCreateBtn();
+
+        delay(1000);
+        assertThat(createPage.getSuccessMsg()).isEqualTo("Campeonato criado com sucesso!");
     }
 
     @Test
@@ -73,7 +88,6 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
     @DisplayName("Should not create a championship with empty name")
     @Tag("UiTest")
     void shouldNotCreateChampionshipWithEmptyName() {
-
         List<String> teams = List.of(
                 "Manchester United",
                 "Real Madrid",
