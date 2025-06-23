@@ -52,4 +52,38 @@ public class DeleteChampionshipPageTest extends BaseSeleniumTest{
         assertThat(deletePage.getSuccessMsg()).isEqualTo("Campeonato deletado com sucesso!");
         assertThat(deletePage.championshipIsPresent(championshipName)).isFalse();
     }
+
+    @Test
+    @DisplayName("Should delete all existing championships")
+    void shouldDeleteAllExistingChampionships() {
+        CreateChampionshipPageObject createPage = homePage.clickCreateChampionshipBtn();
+        assertTrue(createPage.verifyActualPage());
+        delay(1000);
+
+        createPage.writeChampionshipName("champ1");
+        createPage.selectNumberOfTeams(2);
+        createPage.clickCreateBtn();
+        delay(1000);
+
+        createPage.writeChampionshipName("champ2");
+        createPage.selectNumberOfTeams(4);
+        createPage.clickCreateBtn();
+        delay(1000);
+
+        createPage.writeChampionshipName("champ3");
+        createPage.selectNumberOfTeams(8);
+        createPage.clickCreateBtn();
+        delay(1000);
+
+        driver.navigate().back();
+
+        DeleteChampionshipPageObject deletePage = homePage.clickDeleteChampionshipBtn();
+        assertTrue(deletePage.verifyActualPage());
+
+        assertThat(deletePage.championshipListIsEmpty()).isFalse();
+
+        deletePage.deleteAllChampionships();
+
+        assertThat(deletePage.championshipListIsEmpty()).isTrue();
+    }
 }
