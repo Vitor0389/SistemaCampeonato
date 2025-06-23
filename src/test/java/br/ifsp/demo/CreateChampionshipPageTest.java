@@ -64,6 +64,30 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
         assertThat(createPage.getSuccessMsg()).isEqualTo("Campeonato criado com sucesso!");
     }
 
+    // ISSUE: não cria campeonato com 6 times
+    @Test
+    @DisplayName("Should create championship with 6 teams")
+    @Tag("UiTest")
+    void shouldCreateChampionshipWith6Teams() {
+        createPage.writeChampionshipName("6 Teams Championship");
+        createPage.selectNumberOfTeams(6);
+        createPage.clickCreateBtn();
+        delay(1000);
+
+        WebElement successMessage = null;
+        try {
+            successMessage = new WebDriverWait(driver, Duration.ofSeconds(5))
+                    .until(ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//p[@style='color: green;']")
+                    ));
+        } catch (TimeoutException ignored) {
+        }
+
+        assertThat(successMessage).isNotNull();
+        assert successMessage != null;
+        assertThat(successMessage.getText()).contains("Campeonato criado com sucesso!");
+    }
+
     @Test
     @DisplayName("Should not create a championship with an odd number of teams")
     @Tag("UiTest")
