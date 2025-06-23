@@ -24,6 +24,9 @@ public class DeleteChampionshipPageObject extends BasePageObject{
     @FindBy(xpath = "//ul/li[1]/button[text()='Deletar']")
     private WebElement firstDeleteButton;
 
+    @FindBy(xpath = "//p[text()='Você ainda não tem campeonatos cadastrados.']")
+    private WebElement emptyChampionshipListMessage;
+
     public DeleteChampionshipPageObject(WebDriver driver) {
         super(driver);
     }
@@ -67,5 +70,9 @@ public class DeleteChampionshipPageObject extends BasePageObject{
 
     public boolean championshipListIsEmpty() {
         return driver.findElements(By.xpath("//ul/li")).isEmpty();
+    }
+
+    public String getChampionshipEmptyMessage() {
+        return emptyChampionshipListMessage.getText();
     }
 }
