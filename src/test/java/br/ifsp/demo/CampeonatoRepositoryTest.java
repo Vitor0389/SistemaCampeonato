@@ -54,6 +54,8 @@ public class CampeonatoRepositoryTest {
         return teamRepository.saveAll(teams);
     }
     @Test
+    @Tag("PersistenceTest")
+    @Tag("IntegrationTest")
     @DisplayName("findAllByUserId Should Return Only Users Championships")
     void findAllByUserIdShouldReturnOnlyUsersChampionships() {
         List<Team> teams1 = createAndPersistTeams("A", "B", "C", "D");
@@ -70,6 +72,8 @@ public class CampeonatoRepositoryTest {
         assertThat(encontrados).isNotNull().hasSize(1).extracting(Campeonato::getName).containsExactly("Campeonato 1");
     }
     @Test
+    @Tag("PersistenceTest")
+    @Tag("IntegrationTest")
     @DisplayName("findByIdAndUserId Should Return Empty When User Id Mismatch")
     void findByIdAndUserIdShouldReturnEmptyWhenUserIdMismatch() {
         List<Team> teams = createAndPersistTeams("A", "B", "C", "D");
@@ -82,6 +86,8 @@ public class CampeonatoRepositoryTest {
         assertThat(resultado).isNotPresent();
     }
     @Test
+    @Tag("PersistenceTest")
+    @Tag("IntegrationTest")
     @DisplayName("findByIdAndUserId Should Return Championship When Match")
     void findByIdAndUserIdShouldReturnChampionshipWhenMatch() {
         List<Team> teams = createAndPersistTeams("A", "B", "C", "D");
@@ -98,6 +104,8 @@ public class CampeonatoRepositoryTest {
                 .isEqualTo("Campeonato Visível");
     }
     @Test
+    @Tag("PersistenceTest")
+    @Tag("IntegrationTest")
     @DisplayName("findAllByUserId Should Return Empty List When User Has No Championships")
     void findAllByUserIdShouldReturnEmptyListWhenUserHasNoChampionships() {
         List<Campeonato> campeonatos = campRepository.findAllByUserId(testUser.getId());
@@ -105,6 +113,8 @@ public class CampeonatoRepositoryTest {
         assertThat(campeonatos).isEmpty();
     }
     @Test
+    @Tag("PersistenceTest")
+    @Tag("IntegrationTest")
     @DisplayName("findByIdAndUserId Should Return Empty If Id Not Exists")
     void findByIdAndUserIdShouldReturnEmptyIfIdNotExists() {
         Optional<Campeonato> resultado = campRepository.findByIdAndUserId(UUID.randomUUID(), testUser.getId());
