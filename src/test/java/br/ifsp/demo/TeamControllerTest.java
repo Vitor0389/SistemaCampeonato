@@ -172,4 +172,17 @@ public class TeamControllerTest extends BaseApiIntegrationTest{
                 .when().post("/api/v1/teams")
                 .then().statusCode(400);
     }
+    @Test
+    @DisplayName("Should not create a team with special characters in name")
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
+    void shouldNotCreateTeamWithSpecialCharactersInName() {
+        UUID teamId = UUID.randomUUID();
+        TeamDTO newTeamDTO = new TeamDTO(teamId, "@!#$");
+        List<TeamDTO> teamDTOs = List.of(newTeamDTO);
+
+        given().contentType("application/json").body(teamDTOs)
+                .when().post("/api/v1/teams")
+                .then().statusCode(400);
+    }
 }
