@@ -34,16 +34,14 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
 
 
     @Test
-    @DisplayName("Should create championship with four teams")
+    @DisplayName("Should create championship with at least two teams")
     @Tag("UiTest")
-    void shouldCreateChampionshipWith4Teams() {
-        String championshipName = "EuroChampionship4Teams";
+    void shouldCreateChampionshipWithAtLeastTwoTeams() {
+        String championshipName = "2 teams championship";
 
         List<String> teams = List.of(
                 "Manchester United",
-                "Real Madrid",
-                "Juventus",
-                "Bayern Munich"
+                "Real Madrid"
         );
 
         createPage.writeChampionshipName(championshipName);
@@ -148,6 +146,7 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
         assertThat(errorMessage.getText()).contains("Erro ao criar campeonato");
     }
 
+    // ISSUE: cria campeonato com nome em branco
     @Test
     @DisplayName("Should not create championship with blank name")
     @Tag("UiTest")
