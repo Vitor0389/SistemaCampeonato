@@ -58,5 +58,53 @@ public class RegisterMatchResultPageTest extends BaseSeleniumTest{
         delay(1000);
     }
 
+    // ISSUE:
+    @Test
+    @DisplayName("Should not be able to click on the other team when choosing winner")
+    void shouldNotBeAbleToClickOnOtherTeamWhenChoosingWinner() {
+        CreateChampionshipPageObject createPage = homePage.clickCreateChampionshipBtn();
+        assertTrue(createPage.verifyActualPage());
+        delay(1000);
+
+        String championshipName = "Championship Test";
+        List<String> times = List.of("Real Madrid", "Barcelona", "Manchester United", "Bayern Munich");
+        delay(1000);
+
+        createPage.writeChampionshipName(championshipName);
+        createPage.selectTeams(times);
+        createPage.clickCreateBtn();
+        delay(1000);
+
+        driver.navigate().back();
+
+        RegisterMatchResultPageObject registerPage = homePage.clickRegisterMatchResultBtn();
+        assertThat(registerPage.verifyActualPage()).isTrue();
+        delay(1000);
+
+        registerPage.selectChampionship(championshipName);
+        delay(1000);
+
+        registerPage.clickPhase("Fase Inicial");
+        delay(1000);
+
+        registerPage.selectWinner("Real Madrid", "Manchester United");
+        delay(2000);
+
+        registerPage.selectWinner("Manchester United", "Real Madrid");
+        delay(2000);
+
+        registerPage.selectWinner("Bayern Munich", "Barcelona");
+        delay(2000);
+
+        registerPage.clickPhase("Fase 2");
+        delay(1000);
+
+        registerPage.selectWinner("Bayern Munich", "Real Madrid");
+        delay(2000);
+
+        assertThat(registerPage.getWinnerOfMatch("Bayern Munich", "Real Madrid")).isEqualTo("Vencedor: Bayern Munich");
+        delay(1000);
+    }
+
 
 }
