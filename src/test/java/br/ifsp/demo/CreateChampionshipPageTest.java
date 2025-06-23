@@ -64,19 +64,27 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
         assertThat(createPage.getSuccessMsg()).isEqualTo("Campeonato criado com sucesso!");
     }
 
-    // ISSUE: não cria campeonato com 6 times
+    // ISSUE: não cria campeonato com quantidade ímpar de pares de times
     @Test
-    @DisplayName("Should create championship with 6 teams")
+    @DisplayName("Should create championship with 6 and 10 teams")
     @Tag("UiTest")
-    void shouldCreateChampionshipWith6Teams() {
+    void shouldCreateChampionshipWith6and10Teams() {
         createPage.writeChampionshipName("6 Teams Championship");
         createPage.selectNumberOfTeams(6);
         createPage.clickCreateBtn();
         delay(1000);
 
+        createPage.clearChampionshipName();
+        delay(1000);
+
+        createPage.writeChampionshipName("10 Teams Championship");
+        createPage.selectNumberOfTeams(10);
+        createPage.clickCreateBtn();
+        delay(1000);
+
         WebElement successMessage = null;
         try {
-            successMessage = new WebDriverWait(driver, Duration.ofSeconds(5))
+            successMessage = new WebDriverWait(driver, Duration.ofSeconds(3))
                     .until(ExpectedConditions.visibilityOfElementLocated(
                             By.xpath("//p[@style='color: green;']")
                     ));
@@ -157,7 +165,7 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
 
         WebElement errorMessage = null;
         try {
-            errorMessage = new WebDriverWait(driver, Duration.ofSeconds(5))
+            errorMessage = new WebDriverWait(driver, Duration.ofSeconds(3))
                     .until(ExpectedConditions.visibilityOfElementLocated(
                             By.xpath("//p[@style='color: red;']")
                     ));
@@ -187,7 +195,7 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
 
         WebElement errorMessage = null;
         try {
-            errorMessage = new WebDriverWait(driver, Duration.ofSeconds(5))
+            errorMessage = new WebDriverWait(driver, Duration.ofSeconds(3))
                     .until(ExpectedConditions.visibilityOfElementLocated(
                             By.xpath("//p[@style='color: red;']")
                     ));
