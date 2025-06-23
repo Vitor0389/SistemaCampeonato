@@ -84,7 +84,18 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
         assertThat(createPage.getErrorMsg()).isEqualTo("Erro ao criar campeonato");
     }
 
+    @Test
+    @DisplayName("Should not create a championship with more than 32 teams")
+    @Tag("UiTest")
+    void shouldNotCreateChampionshipWithMoreThan32Teams() {
+        String championshipName = "All Teams Championship";
+        createPage.writeChampionshipName(championshipName);
+        createPage.selectAllTeams();
+        createPage.clickCreateBtn();
+        delay(1000);
 
+        assertThat(createPage.getErrorMsg()).isEqualTo("Erro ao criar campeonato");
+    }
 
     @Test
     @DisplayName("Should not create a championship with empty name")
