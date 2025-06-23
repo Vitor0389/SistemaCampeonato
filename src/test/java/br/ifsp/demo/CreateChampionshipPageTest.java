@@ -147,4 +147,33 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
         assert errorMessage != null;
         assertThat(errorMessage.getText()).contains("Erro ao criar campeonato");
     }
+
+    @Test
+    @DisplayName("Should not create championship with blank name")
+    @Tag("UiTest")
+    void shouldNotCreateChampionshipWithBlankName() {
+        List<String> teams = List.of(
+                "Manchester United",
+                "Real Madrid"
+        );
+
+        createPage.writeChampionshipName("ㅤㅤ");
+        createPage.selectTeams(teams);
+        createPage.clickCreateBtn();
+        delay(1000);
+
+        WebElement errorMessage = null;
+        try {
+            errorMessage = new WebDriverWait(driver, Duration.ofSeconds(5))
+                    .until(ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//p[@style='color: red;']")
+                    ));
+        } catch (TimeoutException ignored) {
+        }
+
+        assertThat(errorMessage).isNotNull();
+
+        assert errorMessage != null;
+        assertThat(errorMessage.getText()).contains("Erro ao criar campeonato");
+    }
 }
