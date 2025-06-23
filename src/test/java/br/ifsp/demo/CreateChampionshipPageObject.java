@@ -40,6 +40,10 @@ public class CreateChampionshipPageObject extends BasePageObject {
         inputChampionshipName.sendKeys(nome);
     }
 
+    public void clearChampionshipName() {
+        inputChampionshipName.clear();
+    }
+
     public void selectTeam(String nomeDoTime) {
         String xpathTime = String.format("//label[contains(., '%s')]/input[@type='checkbox']", nomeDoTime);
         WebElement checkboxTime = driver.findElement(By.xpath(xpathTime));
