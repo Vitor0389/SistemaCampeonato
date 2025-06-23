@@ -2,6 +2,7 @@ package br.ifsp.demo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class DeleteChampionshipPageTest extends BaseSeleniumTest{
 
     @Test
     @DisplayName("Should create and delete a championship")
+    @Tag("UiTest")
     void shouldCreateAndThenDeleteAChampionship() {
         CreateChampionshipPageObject createPage = homePage.clickCreateChampionshipBtn();
         assertTrue(createPage.verifyActualPage());
@@ -55,6 +57,7 @@ public class DeleteChampionshipPageTest extends BaseSeleniumTest{
 
     @Test
     @DisplayName("Should delete all existing championships")
+    @Tag("UiTest")
     void shouldDeleteAllExistingChampionships() {
         CreateChampionshipPageObject createPage = homePage.clickCreateChampionshipBtn();
         assertTrue(createPage.verifyActualPage());
@@ -85,5 +88,17 @@ public class DeleteChampionshipPageTest extends BaseSeleniumTest{
         deletePage.deleteAllChampionships();
 
         assertThat(deletePage.championshipListIsEmpty()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Should show no team to delete")
+    @Tag("UiTest")
+    void shouldShowNoTeamToDelete() {
+        DeleteChampionshipPageObject deletePage = homePage.clickDeleteChampionshipBtn();
+        assertTrue(deletePage.verifyActualPage());
+        delay(1000);
+
+        assertThat(deletePage.championshipListIsEmpty()).isTrue();
+        assertThat(deletePage.getChampionshipEmptyMessage()).isEqualTo("Você ainda não tem campeonatos cadastrados.");
     }
 }
