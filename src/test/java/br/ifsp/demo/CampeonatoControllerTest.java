@@ -499,6 +499,32 @@ public class CampeonatoControllerTest extends BaseApiIntegrationTest{
         given().header("Authorization", "Bearer " + authToken).contentType(ContentType.JSON).body(requestDTO)
                 .when().post("/api/v1/campeonatos").then().statusCode(400).log().all();
     }
+    @Test
+    @Tag("IntegrationTest")
+    @Tag("ApiTest")
+    @DisplayName("Should not allow user to access another user's championship")
+    void shouldNotAllowUserToAccessAnotherUsersChampionship() {
+        User owner = registerUser("ownerPassword123");
+        String ownerToken = authenticate(owner.getEmail(), "ownerPassword123");
+
+        CampeonatoRequestDTO requestDTO = new CampeonatoRequestDTO(
+                "Campeonato Dono",
+                Arrays.asList(
+                        new TeamDTO(UUID.fromString("a1111111-1111-1111-1111-111111111111"), "Manchester United"),
+                        new TeamDTO(UUID.fromString("a2222222-2222-2222-2222-222222222222"), "Real Madrid")
+                )
+        );
+
+        String campeonatoId =
+                given().header("Authorization", "Bearer " + ownerToken).contentType(ContentType.JSON).body(requestDTO).when()
+                        .post("/api/v1/campeonatos").then().statusCode(201).extract().path("id");
+
+        User otherUser = registerUser("otherPassword456");
+        String otherToken = authenticate(otherUser.getEmail(), "otherPassword456");
+
+        given().header("Authorization", "Bearer " + otherToken).when().get("/api/v1/campeonatos/" + campeonatoId)
+                .then().statusCode(403).log().all();
+    }
 
 
 }
