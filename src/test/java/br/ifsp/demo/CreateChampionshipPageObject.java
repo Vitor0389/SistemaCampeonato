@@ -22,6 +22,9 @@ public class CreateChampionshipPageObject extends BasePageObject {
     @FindBy(xpath = "//p[@style='color: red;']")
     private WebElement errorMsg;
 
+    @FindBy(xpath = "//ul//input[@type='checkbox']")
+    private List<WebElement> allTeamCheckboxes;
+
     public CreateChampionshipPageObject(WebDriver driver) {
         super(driver);
     }
@@ -43,6 +46,14 @@ public class CreateChampionshipPageObject extends BasePageObject {
     public void selectTeams(List<String> nomesDosTimes) {
         for (String nome : nomesDosTimes) {
             selectTeam(nome);
+        }
+    }
+
+    public void selectAllTeams() {
+        for (WebElement checkbox : allTeamCheckboxes) {
+            if (!checkbox.isSelected()) {
+                checkbox.click();
+            }
         }
     }
 
