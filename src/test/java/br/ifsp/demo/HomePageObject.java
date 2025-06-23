@@ -13,6 +13,9 @@ public class HomePageObject extends BasePageObject {
     @FindBy(xpath = "//button[text()='Criar Campeonato']")
     private WebElement createChampionshipBtn;
 
+    @FindBy(xpath = "//button[text()='Deletar Campeonato']")
+    private WebElement deleteChampionshipBtn;
+
     @FindBy(xpath = "//button[contains(@class, 'logout') and text()='Sair']")
     private WebElement exitBtn;
 
@@ -27,6 +30,11 @@ public class HomePageObject extends BasePageObject {
     public CreateChampionshipPageObject clickCreateChampionshipBtn() {
         createChampionshipBtn.click();
         return new CreateChampionshipPageObject(driver);
+    }
+
+    public DeleteChampionshipPageObject clickDeleteChampionshipBtn() {
+        deleteChampionshipBtn.click();
+        return new DeleteChampionshipPageObject(driver);
     }
 
     public LoginPageObject clickExitBtn() {
