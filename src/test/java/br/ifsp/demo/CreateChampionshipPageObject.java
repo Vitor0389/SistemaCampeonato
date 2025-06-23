@@ -60,6 +60,17 @@ public class CreateChampionshipPageObject extends BasePageObject {
         }
     }
 
+    public void selectNumberOfTeams(int count) {
+        int limit = Math.min(count, allTeamCheckboxes.size());
+
+        for (int i = 0; i < limit; i++) {
+            WebElement checkbox = allTeamCheckboxes.get(i);
+            if (!checkbox.isSelected()) {
+                checkbox.click();
+            }
+        }
+    }
+
     public void clickCreateBtn() {
         createBtn.click();
     }
