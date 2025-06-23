@@ -69,6 +69,24 @@ public class CreateChampionshipPageTest extends BaseSeleniumTest {
         assertThat(createPage.getErrorMsg()).isEqualTo("Erro ao criar campeonato");
     }
 
+    @Test
+    @DisplayName("Should not create a championship with empty name")
+    @Tag("UiTest")
+    void shouldNotCreateChampionshipWithEmptyName() {
+
+        List<String> teams = List.of(
+                "Manchester United",
+                "Real Madrid",
+                "Juventus"
+        );
+
+        createPage.writeChampionshipName("");
+        createPage.selectTeams(teams);
+        createPage.clickCreateBtn();
+
+        assertThat(createPage.getErrorMsg()).isEqualTo("Nome do campeonato é obrigatório");
+    }
+
     // ISSUE: cria campeonato com nome com caracteres especiais
     @Test
     @DisplayName("Creating championship with name with special characters")

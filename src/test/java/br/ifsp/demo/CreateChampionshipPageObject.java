@@ -19,7 +19,7 @@ public class CreateChampionshipPageObject extends BasePageObject {
     @FindBy(xpath = "//button[@type='submit' and text()='Criar']")
     private WebElement createBtn;
 
-    @FindBy(xpath = "//p[text()='Erro ao criar campeonato']")
+    @FindBy(xpath = "//p[@style='color: red;']")
     private WebElement errorMsg;
 
     public CreateChampionshipPageObject(WebDriver driver) {
