@@ -22,6 +22,9 @@ public class CreateChampionshipPageObject extends BasePageObject {
     @FindBy(xpath = "//p[@style='color: red;']")
     private WebElement errorMsg;
 
+    @FindBy(xpath = "//p[@style='color: green;']")
+    private WebElement successMsg;
+
     @FindBy(xpath = "//ul//input[@type='checkbox']")
     private List<WebElement> allTeamCheckboxes;
 
@@ -63,5 +66,9 @@ public class CreateChampionshipPageObject extends BasePageObject {
 
     public String getErrorMsg() {
         return errorMsg.getText();
+    }
+
+    public String getSuccessMsg() {
+        return successMsg.getText();
     }
 }
