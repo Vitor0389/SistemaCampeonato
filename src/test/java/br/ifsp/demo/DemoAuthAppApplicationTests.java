@@ -10,7 +10,4 @@ class DemoAuthAppApplicationTests {
     @Test
     void contextLoads() {
     }
-
-
-
 }
